@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.image.ImageView?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.HomeController"
+            prefHeight="600.0" prefWidth="700.0" style="
+            -fx-background-image:url('/views/004.jpg');
+            -fx-background-repeat: no-repeat;
+            -fx-background-size: 100% 100%;">
+
+    <HBox AnchorPane.bottomAnchor="100" alignment="CENTER" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10" spacing="30">
+    <Button fx:id="under_graduates" text="Under Graduates" onAction="#onUnderGradClicked"/>
+    <Button fx:id="post_graduates" text="Post Graduates" onAction="#onPostGradClicked"/>
+    </HBox>
+
+    <Button fx:id="exit" text="Exit" AnchorPane.leftAnchor="10" AnchorPane.bottomAnchor="10"/>
+</AnchorPane>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.collections.FXCollections?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.DashboardController"
+            prefHeight="600" prefWidth="900.0">
+    <HBox spacing="10" AnchorPane.bottomAnchor="10" AnchorPane.leftAnchor="10"
+          AnchorPane.rightAnchor="10" AnchorPane.topAnchor="10">
+    <VBox xmlns:fx="http://javafx.com/fxml" spacing="10" AnchorPane.leftAnchor="10"
+          AnchorPane.bottomAnchor="10" AnchorPane.topAnchor="10">
+
+
+        <Label text="Courses"></Label>
+
+        <ListView prefHeight="200" >
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Physics"/>
+                    <String fx:value="Circuits"/>
+                    <String fx:value="Programming"/>
+                    <String fx:value="Logic circuits"/>
+                    <String fx:value="Image processing "/>
+                </FXCollections>
+            </items>
+        </ListView>
+
+        <HBox spacing="10">
+            <Button text="Add" fx:id="add_course"></Button>
+            <Button text="Edit" fx:id="edit_course"></Button>
+            <Button text="Delete" fx:id="delete_course"></Button>
+            <Button text="Generate exam" fx:id="generate_exam" onAction="#onGenerateExamClicked"></Button>
+
+        </HBox>
+        <Separator orientation="HORIZONTAL" />
+        <Label text="Chapters"></Label>
+
+            <ListView prefHeight="200">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Chapter one"/>
+                        <String fx:value="Chapter Two"/>
+                        <String fx:value="Chapter Three"/>
+                        <String fx:value="Chapter Four"/>
+                        <String fx:value="Chapter Five"/>
+                    </FXCollections>
+                </items>
+            </ListView>
+
+        <HBox spacing="10">
+            <Button text="Add" fx:id="add_chapter"></Button>
+            <Button text="Edit" fx:id="edit_chapter"></Button>
+            <Button text="Delete" fx:id="delete_chapter"></Button>
+
+        </HBox>
+
+</VBox>
+
+        <Separator orientation="VERTICAL"></Separator>
+
+        <AnchorPane fx:id="right_content" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10"
+                    AnchorPane.bottomAnchor="10" AnchorPane.topAnchor="10">
+
+        </AnchorPane>
+
+
+    </HBox>
+
+
+    <HBox AnchorPane.leftAnchor="10" AnchorPane.bottomAnchor="10">
+        <Button text="Home" fx:id="back_to_home" onAction="#onHomeClicked" ></Button>
+    </HBox>
+</AnchorPane>

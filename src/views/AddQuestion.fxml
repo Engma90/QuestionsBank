@@ -1,0 +1,92 @@
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.GridPane?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import controllers.AddQuestionController ?>
+<?import javafx.scene.web.HTMLEditor?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ToggleGroup?>
+
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ComboBox?>
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane fx:controller="controllers.AddQuestionController"
+            xmlns:fx="http://javafx.com/fxml" prefHeight="700" prefWidth="700">
+
+    <VBox fx:id="container" spacing="10" AnchorPane.topAnchor="10" AnchorPane.leftAnchor="10" AnchorPane.bottomAnchor="10"
+          AnchorPane.rightAnchor="10">
+        <HTMLEditor fx:id="html_editor"  AnchorPane.topAnchor="10" AnchorPane.leftAnchor="10"
+                    AnchorPane.bottomAnchor="10" AnchorPane.rightAnchor="10"/>
+        <HBox spacing="10">
+            <Label text="Type"/>
+            <RadioButton text="MCQ" fx:id="radio_mcq"/>
+            <RadioButton text="True/False" fx:id="radio_true_false"/>
+        </HBox>
+        <HBox spacing="10">
+        <ComboBox value="Difficulty">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:id="easy" fx:value="Easy"/>
+                    <String fx:id="medium" fx:value="Medium"/>
+                    <String fx:id="hard" fx:value="Hard"/>
+                </FXCollections>
+            </items>
+        </ComboBox>
+        <ComboBox value="Weight">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:id="wlow" fx:value="Low"/>
+                    <String fx:id="wmedium" fx:value="Medium"/>
+                    <String fx:id="whigh" fx:value="high"/>
+                </FXCollections>
+            </items>
+        </ComboBox>
+        </HBox>
+        <VBox fx:id="mcq_ui_group" spacing="10">
+            <HBox spacing="10">
+                <Label text="A"></Label>
+                <TextField prefWidth="500" fx:id="txt_answer_a"></TextField>
+                <RadioButton fx:id="radio_answer_a"></RadioButton>
+            </HBox>
+            <HBox spacing="10">
+                <Label text="B"></Label>
+                <TextField prefWidth="500" fx:id="txt_answer_b"></TextField>
+                <RadioButton fx:id="radio_answer_b"></RadioButton>
+            </HBox>
+            <HBox spacing="10">
+                <Label text="C"></Label>
+                <TextField prefWidth="500" fx:id="txt_answer_c"></TextField>
+                <RadioButton fx:id="radio_answer_c"></RadioButton>
+            </HBox>
+            <HBox spacing="10">
+                <Label text="D"></Label>
+                <TextField prefWidth="500" fx:id="txt_answer_d"></TextField>
+                <RadioButton fx:id="radio_answer_d"></RadioButton>
+            </HBox>
+        </VBox>
+
+        <VBox fx:id="true_false_ui_group">
+            <HBox spacing="10">
+                <Label text="True"></Label>
+
+                <RadioButton fx:id="radio_answer_true"></RadioButton>
+            </HBox>
+            <HBox spacing="10">
+                <Label text="False"></Label>
+
+                <RadioButton fx:id="radio_answer_false"></RadioButton>
+            </HBox>
+        </VBox>
+
+        <HBox AnchorPane.leftAnchor="10" AnchorPane.bottomAnchor="10"
+              AnchorPane.rightAnchor="10" alignment="CENTER">
+            <Button fx:id="saveBtn" text="Save" onAction="#onSave" prefHeight="50" prefWidth="100"/>
+        </HBox>
+    </VBox>
+
+</AnchorPane>

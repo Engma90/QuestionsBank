@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.collections.FXCollections?>
+<?import models.QuestionModel?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.QuestionsController"
+            prefWidth="600" prefHeight="600"
+            >
+    <VBox spacing="10" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10"
+          AnchorPane.bottomAnchor="10" AnchorPane.topAnchor="10">
+    <TableView fx:id="questions_table" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10"
+               AnchorPane.bottomAnchor="10" AnchorPane.topAnchor="10" >
+        <columns>
+            <TableColumn text="Question" fx:id="question"  >
+                <cellValueFactory><PropertyValueFactory property="question" />
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn text="Type" fx:id="question_type">
+                <cellValueFactory><PropertyValueFactory property="type" />
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn text="Difficulty" fx:id="question_diff">
+                <cellValueFactory><PropertyValueFactory property="diff" />
+                </cellValueFactory>
+            </TableColumn>
+        </columns>
+        <items>
+            <FXCollections fx:factory="observableArrayList">
+                <QuestionModel question ="The IETF standards documents are called" diff="Medium"
+                               type="MCQ"/>
+                <QuestionModel question ="The structure or format of data is called" type="MCQ"
+                               diff="Easy"/>
+                <QuestionModel question =" Which of this is not a network edge device?" type="MCQ"
+                               diff="Hard"/>
+                <QuestionModel question ="washington is the capital of USA" type="True/False"
+                               diff="Easy"/>
+            </FXCollections>
+        </items>
+    </TableView>
+    <HBox spacing="20">
+        <Button fx:id="add" text="Add" onAction="#onAddClicked"></Button>
+        <Button fx:id="edit" text="Edit"></Button>
+        <Button fx:id="delete" onAction="#onDeleteClicked" text="Delete"></Button>
+        <Button fx:id="import_csv" text="Import CSV"></Button>
+        <Button fx:id="export_csv" text="Export CSV"></Button>
+
+    </HBox>
+    </VBox>
+</AnchorPane>

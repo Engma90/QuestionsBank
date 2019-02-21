@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.collections.FXCollections?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.GenerateExamController"
+            prefHeight="400.0" prefWidth="300.0">
+    <VBox spacing="10" AnchorPane.leftAnchor="20" AnchorPane.topAnchor="20"
+          AnchorPane.rightAnchor="20" AnchorPane.bottomAnchor="20">
+    <ComboBox value="Number of models" fx:id="number_of_models">
+        <items>
+            <FXCollections fx:factory="observableArrayList">
+                <String fx:id="option1" fx:value="1"/>
+                <String fx:id="option2" fx:value="2"/>
+                <String fx:id="option3" fx:value="3"/>
+                <String fx:id="option4" fx:value="4"/>
+                <String fx:id="option5" fx:value="5"/>
+                <String fx:id="option6" fx:value="6"/>
+
+            </FXCollections>
+        </items>
+    </ComboBox>
+        <VBox fx:id="same_or_different" spacing="5">
+        <RadioButton fx:id="radio_same" text="Same questions"/>
+        <RadioButton fx:id="radio_different" text="Different questions"/>
+        </VBox>
+
+    <VBox fx:id="shuffle" spacing="5">
+        <RadioButton fx:id="radio_shuffle_answers" text="Shuffle answers"/>
+        <RadioButton fx:id="radio_shuffle_questions" text="Shuffle question"/>
+        <RadioButton fx:id="radio_both" text="Both"/>
+    </VBox>
+        <Separator/>
+        <Label text="Exam content"/>
+        <CheckBox text="Chapter 1"/>
+        <CheckBox text="Chapter 2"/>
+        <CheckBox text="Chapter 3"/>
+    </VBox>
+    <HBox spacing="20" AnchorPane.bottomAnchor="10"  AnchorPane.rightAnchor="10"
+          AnchorPane.leftAnchor="10" alignment="CENTER">
+        <Button text="Generate" fx:id="generate"/>
+        <Button text="Cancel" fx:id="cancel"/>
+    </HBox>
+</AnchorPane>
