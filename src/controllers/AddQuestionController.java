@@ -9,10 +9,6 @@ import javafx.scene.control.ToggleGroup;
 
 import javafx.scene.layout.VBox;
 import javafx.scene.web.HTMLEditor;
-import org.docx4j.convert.in.xhtml.XHTMLImporterImpl;
-import org.docx4j.model.structure.PageSizePaper;
-import org.docx4j.openpackaging.exceptions.Docx4JException;
-import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 
 
 import java.io.FileOutputStream;
@@ -49,21 +45,18 @@ public class AddQuestionController  implements Initializable {
         radio_answer_false.setToggleGroup(true_false_answer_group);
 
 
-        radio_mcq.selectedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> obs, Boolean wasPreviouslySelected, Boolean isNowSelected) {
-                if (isNowSelected) {
-                    mcq_ui_group.setVisible(true);
-                    mcq_ui_group.setManaged(true);
-                    true_false_ui_group.setVisible(false);
-                    true_false_ui_group.setManaged(false);
+        radio_mcq.selectedProperty().addListener((obs, wasPreviouslySelected, isNowSelected) -> {
+            if (isNowSelected) {
+                mcq_ui_group.setVisible(true);
+                mcq_ui_group.setManaged(true);
+                true_false_ui_group.setVisible(false);
+                true_false_ui_group.setManaged(false);
 
-                } else {
-                    mcq_ui_group.setVisible(false);
-                    mcq_ui_group.setManaged(false);
-                    true_false_ui_group.setVisible(true);
-                    true_false_ui_group.setManaged(true);
-                }
+            } else {
+                mcq_ui_group.setVisible(false);
+                mcq_ui_group.setManaged(false);
+                true_false_ui_group.setVisible(true);
+                true_false_ui_group.setManaged(true);
             }
         });
         radio_mcq.setSelected(true);
@@ -71,35 +64,23 @@ public class AddQuestionController  implements Initializable {
 
     public void onSave() {
         String Q = html_editor.getHtmlText();
+
         try {
-            Save(Q);
             Save_to_file(Q);
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (Docx4JException e) {
-            e.printStackTrace();
         }
+
     }
 
-    public void Save_to_file(String s) throws IOException {
+    private void Save_to_file(String s) throws IOException {
 
         FileOutputStream outputStream = new FileOutputStream("test_file.html");
         byte[] strToBytes = s.getBytes();
         outputStream.write(strToBytes);
         outputStream.close();
     }
-    public static void Save(String s) throws Docx4JException {
 
-        // To docx, with content controls
-        WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.createPackage(PageSizePaper.A4,false);
-
-        XHTMLImporterImpl XHTMLImporter = new XHTMLImporterImpl(wordMLPackage);
-
-        wordMLPackage.getMainDocumentPart().getContent().addAll(
-                XHTMLImporter.convert( s, null) );
-
-        wordMLPackage.save(new java.io.File("D://sample.docx"));
-    }
 
 }
 

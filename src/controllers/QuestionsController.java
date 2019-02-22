@@ -35,7 +35,7 @@ public class QuestionsController   implements Initializable {
     public void onAddClicked(){
         Parent root;
         try {
-            root = FXMLLoader.load(getClass().getResource("../views/AddQuestion.fxml"));
+            root = FXMLLoader.load(getClass().getResource("/views/AddQuestion.fxml"));
             Stage stage = new Stage();
             stage.initModality(Modality.WINDOW_MODAL);
             stage.initOwner(questions_table.getScene().getWindow());

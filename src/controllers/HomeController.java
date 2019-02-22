@@ -21,7 +21,7 @@ public class HomeController implements Initializable {
 
     }
     public void onUnderGradClicked() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/Dashboard.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Dashboard.fxml"));
 
         Stage current_stage = (Stage) under_graduates.getScene().getWindow();
         current_stage.setTitle("Dashboard-under graduates");
@@ -31,7 +31,7 @@ public class HomeController implements Initializable {
 
     }
     public void onPostGradClicked() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/Dashboard.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Dashboard.fxml"));
 
         Stage current_stage = (Stage) under_graduates.getScene().getWindow();
         current_stage.setTitle("Dashboard-post graduates");

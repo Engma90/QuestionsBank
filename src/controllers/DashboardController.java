@@ -7,6 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
@@ -23,17 +24,17 @@ public class DashboardController implements Initializable {
     public AnchorPane right_content;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        AnchorPane pnlOne = null;
-
+        AnchorPane pnlOne;
         try {
-            pnlOne = FXMLLoader.load(this.getClass().getResource("../views/Questions.fxml"));
+            pnlOne = FXMLLoader.load(this.getClass().getResource("/views/Questions.fxml"));
             right_content.getChildren().setAll(pnlOne);
         } catch (IOException e) {
-            e.printStackTrace();
+           Alert  alert = new Alert(Alert.AlertType.ERROR, e.toString());
+            alert.show();
         }
     }
     public void onHomeClicked() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/Home.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Home.fxml"));
         Stage current_stage = (Stage) back_to_home.getScene().getWindow();
         current_stage.setTitle("Home");
         Scene scene = new Scene(loader.load());
@@ -43,7 +44,7 @@ public class DashboardController implements Initializable {
     public void onGenerateExamClicked(){
         Parent root;
         try {
-            root = FXMLLoader.load(getClass().getResource("../views/GenerateExam.fxml"));
+            root = FXMLLoader.load(getClass().getResource("/views/GenerateExam.fxml"));
             Stage stage = new Stage();
             stage.initModality(Modality.WINDOW_MODAL);
             stage.initOwner(back_to_home.getScene().getWindow());
