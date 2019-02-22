@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
@@ -19,29 +16,29 @@
     <TableView fx:id="questions_table" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10"
                AnchorPane.bottomAnchor="10" AnchorPane.topAnchor="10" >
         <columns>
-            <TableColumn text="Question" fx:id="question"  >
-                <cellValueFactory><PropertyValueFactory property="question" />
+            <TableColumn text="Question" fx:id="col_question_text"  >
+                <cellValueFactory><PropertyValueFactory property="question_text" />
                 </cellValueFactory>
             </TableColumn>
-            <TableColumn text="Type" fx:id="question_type">
-                <cellValueFactory><PropertyValueFactory property="type" />
+            <TableColumn text="Type" fx:id="col_question_type">
+                <cellValueFactory><PropertyValueFactory property="question_type" />
                 </cellValueFactory>
             </TableColumn>
-            <TableColumn text="Difficulty" fx:id="question_diff">
-                <cellValueFactory><PropertyValueFactory property="diff" />
+            <TableColumn text="Difficulty" fx:id="col_question_diff">
+                <cellValueFactory><PropertyValueFactory property="question_diff" />
                 </cellValueFactory>
             </TableColumn>
         </columns>
         <items>
             <FXCollections fx:factory="observableArrayList">
-                <QuestionModel question ="The IETF standards documents are called" diff="Medium"
-                               type="MCQ"/>
-                <QuestionModel question ="The structure or format of data is called" type="MCQ"
-                               diff="Easy"/>
-                <QuestionModel question =" Which of this is not a network edge device?" type="MCQ"
-                               diff="Hard"/>
-                <QuestionModel question ="washington is the capital of USA" type="True/False"
-                               diff="Easy"/>
+                <QuestionModel question_text="The IETF standards documents are called" question_type="MCQ"
+                               question_diff="Medium"/>
+                <QuestionModel question_text ="The structure or format of data is called" question_type="MCQ"
+                               question_diff="Easy"/>
+                <QuestionModel question_text =" Which of this is not a network edge device?" question_type="MCQ"
+                               question_diff="Hard"/>
+                <QuestionModel question_text ="washington is the capital of USA" question_type="True/False"
+                               question_diff="Easy"/>
             </FXCollections>
         </items>
     </TableView>

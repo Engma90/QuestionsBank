@@ -4,44 +4,44 @@ import javafx.beans.property.SimpleStringProperty;
 
 public class QuestionModel {
 
-    private SimpleStringProperty question = new SimpleStringProperty("");
-    private SimpleStringProperty diff = new SimpleStringProperty("");
-    private SimpleStringProperty type = new SimpleStringProperty("");
+    private SimpleStringProperty question_text = new SimpleStringProperty("");
+    private SimpleStringProperty question_diff = new SimpleStringProperty("");
+    private SimpleStringProperty question_type = new SimpleStringProperty("");
     private char right_answer;
     private String[] answers = new String[4];
 
     public QuestionModel(){
         this("", "", "");
     }
-    public QuestionModel(String q, String d, String type){
-        setQuestion(q);
-        setDiff(d);
-        setType(type);
+    public QuestionModel(String q, String d, String question_type){
+        setQuestion_text(q);
+        setQuestion_diff(d);
+        setQuestion_type(question_type);
 
     }
 
 
-    public String getQuestion() {
-        return question.get();
+    public String getQuestion_text() {
+        return question_text.get();
     }
-    public void setQuestion(String q){
-        this.question.set(q);
-    }
-
-    public String getDiff() {
-        return diff.get();
+    public void setQuestion_text(String q){
+        this.question_text.set(q);
     }
 
-    public void setDiff(String diff) {
-        this.diff.set(diff);
+    public String getQuestion_diff() {
+        return question_diff.get();
     }
 
-    public String getType() {
-        return type.get();
+    public void setQuestion_diff(String question_diff) {
+        this.question_diff.set(question_diff);
     }
 
-    public void setType(String type) {
-        this.type.set(type);
+    public String getQuestion_type() {
+        return question_type.get();
+    }
+
+    public void setQuestion_type(String question_type) {
+        this.question_type.set(question_type);
     }
 
     public char getRight_answer() {

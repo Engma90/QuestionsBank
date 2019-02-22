@@ -13,7 +13,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws IOException {
         Parent root;
         root = FXMLLoader.load(getClass().getResource("/views/Home.fxml"));
-        primaryStage.setTitle("Add question");
+        primaryStage.setTitle("Home");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }

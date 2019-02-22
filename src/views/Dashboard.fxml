@@ -9,7 +9,7 @@
 <?import javafx.collections.FXCollections?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controllers.DashboardController"
+
             prefHeight="600" prefWidth="900.0">
     <HBox spacing="10" AnchorPane.bottomAnchor="10" AnchorPane.leftAnchor="10"
           AnchorPane.rightAnchor="10" AnchorPane.topAnchor="10">
@@ -35,7 +35,7 @@
             <Button text="Add" fx:id="add_course"></Button>
             <Button text="Edit" fx:id="edit_course"></Button>
             <Button text="Delete" fx:id="delete_course"></Button>
-            <Button text="Generate exam" fx:id="generate_exam" onAction="#onGenerateExamClicked"></Button>
+            <Button text="Generate exam" fx:id="generate_exam" onAction="#onGenerateExamClicked"/>
 
         </HBox>
         <Separator orientation="HORIZONTAL" />

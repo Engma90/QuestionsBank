@@ -5,7 +5,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -16,9 +15,6 @@ public class GenerateExamController implements Initializable {
     public RadioButton radio_same, radio_different, radio_shuffle_answers, radio_shuffle_questions, radio_both;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //number_of_models.getSelectionModel().select(0);
-//        Stage current_stage = (Stage) number_of_models.getScene().getWindow();
-//        current_stage.setTitle("Generate Exam");
         final ToggleGroup same_or_different_group = new ToggleGroup();
         final ToggleGroup shuffle_group = new ToggleGroup();
         radio_same.setToggleGroup(same_or_different_group);
@@ -51,14 +47,14 @@ public class GenerateExamController implements Initializable {
             if(radio_same.isSelected()){
                 shuffle.setVisible(true);
                 shuffle.setManaged(true);
-                System.out.println("selected");
+
             }
         });
         radio_different.setOnAction(e ->{
             if(radio_different.isSelected()) {
                 shuffle.setVisible(false);
                 shuffle.setManaged(false);
-                System.out.println("Not selected");
+
             }
         });
 

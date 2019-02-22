@@ -11,7 +11,7 @@
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="controllers.HomeController"
             prefHeight="600.0" prefWidth="700.0" style="
-            -fx-background-image:url('/views/004.jpg');
+            -fx-background-image:url('/views/images/004.jpg');
             -fx-background-repeat: no-repeat;
             -fx-background-size: 100% 100%;">
 
