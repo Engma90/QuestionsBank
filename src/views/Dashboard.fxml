@@ -1,8 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
@@ -14,47 +10,40 @@
     <HBox spacing="10" AnchorPane.bottomAnchor="10" AnchorPane.leftAnchor="10"
           AnchorPane.rightAnchor="10" AnchorPane.topAnchor="10">
     <VBox xmlns:fx="http://javafx.com/fxml" spacing="10" AnchorPane.leftAnchor="10"
-          AnchorPane.bottomAnchor="10" AnchorPane.topAnchor="10">
+          AnchorPane.bottomAnchor="10" AnchorPane.topAnchor="10" minWidth="390">
 
 
         <Label text="Courses"></Label>
 
-        <ListView prefHeight="200" >
+        <ListView prefHeight="200" fx:id="courses_list_view">
             <items>
-                <FXCollections fx:factory="observableArrayList">
-                    <String fx:value="Physics"/>
-                    <String fx:value="Circuits"/>
-                    <String fx:value="Programming"/>
-                    <String fx:value="Logic circuits"/>
-                    <String fx:value="Image processing "/>
+                <FXCollections  fx:factory="observableArrayList">
+
                 </FXCollections>
             </items>
         </ListView>
 
         <HBox spacing="10">
-            <Button text="Add" fx:id="add_course"></Button>
+            <Button text="Add" fx:id="add_course" onAction="#onAddCourseClicked"></Button>
             <Button text="Edit" fx:id="edit_course"></Button>
             <Button text="Delete" fx:id="delete_course"></Button>
             <Button text="Generate exam" fx:id="generate_exam" onAction="#onGenerateExamClicked"/>
+            <Button text="Previous exams" fx:id="previous_exam" onAction="#onGenerateExamClicked"/>
 
         </HBox>
         <Separator orientation="HORIZONTAL" />
         <Label text="Chapters"></Label>
 
-            <ListView prefHeight="200">
+            <ListView prefHeight="200" fx:id="chapters_list_view">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="Chapter one"/>
-                        <String fx:value="Chapter Two"/>
-                        <String fx:value="Chapter Three"/>
-                        <String fx:value="Chapter Four"/>
-                        <String fx:value="Chapter Five"/>
+
                     </FXCollections>
                 </items>
             </ListView>
 
         <HBox spacing="10">
-            <Button text="Add" fx:id="add_chapter"></Button>
+            <Button text="Add" fx:id="add_chapter" onAction="#onAddChapterClicked"></Button>
             <Button text="Edit" fx:id="edit_chapter"></Button>
             <Button text="Delete" fx:id="delete_chapter"></Button>
 
@@ -64,11 +53,9 @@
 
         <Separator orientation="VERTICAL"></Separator>
 
-        <AnchorPane fx:id="right_content" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10"
-                    AnchorPane.bottomAnchor="10" AnchorPane.topAnchor="10">
+        <AnchorPane fx:id="right_content" >
 
         </AnchorPane>
-
 
     </HBox>
 

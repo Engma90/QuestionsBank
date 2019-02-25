@@ -3,7 +3,7 @@ package models;
 import javafx.beans.property.SimpleStringProperty;
 
 public class QuestionModel {
-
+    int id;
     private SimpleStringProperty question_text = new SimpleStringProperty("");
     private SimpleStringProperty question_diff = new SimpleStringProperty("");
     private SimpleStringProperty question_type = new SimpleStringProperty("");
@@ -22,14 +22,14 @@ public class QuestionModel {
 
 
     public String getQuestion_text() {
-        return question_text.get();
+        return question_text.get().toString();
     }
     public void setQuestion_text(String q){
         this.question_text.set(q);
     }
 
     public String getQuestion_diff() {
-        return question_diff.get();
+        return question_diff.get().toString();
     }
 
     public void setQuestion_diff(String question_diff) {
@@ -37,7 +37,7 @@ public class QuestionModel {
     }
 
     public String getQuestion_type() {
-        return question_type.get();
+        return question_type.get().toString();
     }
 
     public void setQuestion_type(String question_type) {
@@ -61,6 +61,13 @@ public class QuestionModel {
     }
 
 
+    public void add_question_to_db(){
 
+    }
+    public void edit_question_in_db(){
 
+    }
+    public void delete_question_from_db(){
+
+    }
 }
