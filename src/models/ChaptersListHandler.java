@@ -1,8 +1,11 @@
 package models;
 
+import controllers.DashboardController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.MessageFormat;
 
 public class ChaptersListHandler {
@@ -18,8 +21,25 @@ public class ChaptersListHandler {
 
     public ObservableList<ChapterModel> getChaptersList(){
         chaptersList = FXCollections.observableArrayList();
-        chaptersList.add(new ChapterModel("1","Ch1"));
-        chaptersList.add(new ChapterModel("2","Ch2"));
-        return chaptersList;
-    }
+        DBHandler db = new DBHandler();
+        String sql = MessageFormat.format(
+                "SELECT * FROM chapter WHERE Course_idCourse ={0};"
+                ,  DashboardController.current_selected_course_id);
+        ResultSet rs =  db.execute_query(sql);
+        try {
+            while (rs.next())
+            {
+                chaptersList.add(new ChapterModel(rs.getInt("idChapter")+"",rs.getString("ChapterName")));
+            }
+            return chaptersList;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        finally {
+            db.closeConnection();
+        }
+
+        }
 }

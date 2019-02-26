@@ -10,19 +10,22 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import models.QuestionModel;
+import models.QuestionTableHandler;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class QuestionsController   implements Initializable {
-    public TableColumn col_question_text, col_question_type, col_question_diff;
-    public TableView questions_table;
+    public TableColumn col_question_text, col_question_type, col_question_diff, col_question_weight;
+    public TableView<QuestionModel> questions_table;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        col_question_text.prefWidthProperty().bind(questions_table.widthProperty().divide(10).multiply(8)); // w * 1/4
-        col_question_type.prefWidthProperty().bind(questions_table.widthProperty().divide(10)); // w * 1/2
-        col_question_diff.prefWidthProperty().bind(questions_table.widthProperty().divide(10)); // w * 1/4
+        col_question_text.prefWidthProperty().bind(questions_table.widthProperty().divide(10).multiply(7)); // w * 1/4
+        col_question_type.prefWidthProperty().bind(questions_table.widthProperty().divide(10));
+        col_question_diff.prefWidthProperty().bind(questions_table.widthProperty().divide(10));
+        col_question_weight.prefWidthProperty().bind(questions_table.widthProperty().divide(10)); // w * 1/4
 
     }
     public void onDeleteClicked(){
@@ -46,5 +49,10 @@ public class QuestionsController   implements Initializable {
         catch (IOException ex) {
             ex.printStackTrace();
         }
+    }
+    public void refreshList(){
+        QuestionTableHandler questionTableHandler = new QuestionTableHandler();
+
+        questions_table.setItems(questionTableHandler.getQuestionList());
     }
 }

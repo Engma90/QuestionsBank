@@ -11,10 +11,10 @@
           AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="20" alignment="CENTER">
 
         <HBox spacing="10">
-            <Label text="Chapter name"></Label>
-            <TextField fx:id="chapter_name"></TextField>
+            <Label text="Chapter name"/>
+            <TextField fx:id="chapter_name"/>
         </HBox>
-        <Button text="Add" fx:id="add_chapter" onAction="#onAddChapterClicked"></Button>
+        <Button text="Add" fx:id="add_chapter" onAction="#onAddChapterClicked"/>
     </VBox>
 
 </AnchorPane>

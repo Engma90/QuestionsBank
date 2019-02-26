@@ -28,17 +28,14 @@
                 <cellValueFactory><PropertyValueFactory property="question_diff" />
                 </cellValueFactory>
             </TableColumn>
+            <TableColumn text="Weight" fx:id="col_question_weight">
+                <cellValueFactory><PropertyValueFactory property="question_weight" />
+                </cellValueFactory>
+            </TableColumn>
         </columns>
         <items>
             <FXCollections fx:factory="observableArrayList">
-                <QuestionModel question_text="The IETF standards documents are called" question_type="MCQ"
-                               question_diff="Medium"/>
-                <QuestionModel question_text ="The structure or format of data is called" question_type="MCQ"
-                               question_diff="Easy"/>
-                <QuestionModel question_text =" Which of this is not a network edge device?" question_type="MCQ"
-                               question_diff="Hard"/>
-                <QuestionModel question_text ="washington is the capital of USA" question_type="True/False"
-                               question_diff="Easy"/>
+
             </FXCollections>
         </items>
     </TableView>

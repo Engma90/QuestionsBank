@@ -22,11 +22,11 @@
     </HBox>
         <HBox spacing="28">
             <Label text="Password"></Label>
-            <TextField fx:id="password"></TextField>
+            <PasswordField fx:id="password"></PasswordField>
         </HBox>
         <HBox spacing="10">
             <Label text="Re password"></Label>
-            <TextField fx:id="re_password"></TextField>
+            <PasswordField fx:id="re_password"></PasswordField>
         </HBox>
         <Button text="Signup" fx:id="signup" onAction="#onSignupClicked"></Button>
     </VBox>

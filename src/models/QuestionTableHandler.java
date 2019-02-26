@@ -1,34 +1,70 @@
 package models;
-import java.sql.*;
+import controllers.DashboardController;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.MessageFormat;
 
 public class QuestionTableHandler {
-    public QuestionTableHandler(){
-//       QuestionModel questionModel = new QuestionModel();
-//       questionModel.setQuestion_text("text");
-//        questionModel.setQuestion_type("type");
-//        questionModel.setQuestion_diff("diff");
-//        questionModel.id = 4;
-//        questionModel.setAnswers(new String[]{"a","b","c","d"});
-//        questionModel.setRight_answer('a');
-//        Gson gson = new Gson();
-//        String json = gson.toJson(questionModel);
-//        System.out.println(json);
-//
-//        QuestionModel q = gson.fromJson(json,QuestionModel.class);
-//        System.out.println(q.getQuestion_text());
+    private ObservableList<QuestionModel> questionList;
+    public boolean Add(String q, String diff, String weight, String type, String[] answers, String right_answer) {
+        DBHandler db = new DBHandler();
 
-//
-//        try{
-//            Class.forName("com.mysql.jdbc.Driver");
-//            Connection con=DriverManager.getConnection(
-//                    "jdbc:mysql://localhost:3306/questionbankdb","root","Root@1234");
-//                //here sonoo is database name, root is username and password
-//            Statement stmt=con.createStatement();
-//            ResultSet rs=stmt.executeQuery("select * from doctor");
-//            while(rs.next())
-//                System.out.println(rs.getInt("idDoctor")+"  "+rs.getString(2)+"  "+rs.getString("DoctorEmail"));
-//            con.close();
-//        }catch(Exception e){ System.out.println(e);}
+
+
+        String sql = "insert into question (QuestionContent, QuestionType, QuestionDifficulty, " +
+                       "QuestionWeight, Chapter_idChapter) values (?,?,?,?,?);";
+//                MessageFormat.format(
+//                "insert into question (QuestionContent, QuestionType, QuestionDifficulty, " +
+//                        "QuestionWeight, Chapter_idChapter) values (\"{0}\",\"{1}\",\"{2}\",\"{3}\",{4});"
+//                , q, type, diff, weight, DashboardController.current_selected_chapter_id);
+
+
+        int last_inserted_question_id = db.execute_PreparedStatement(sql,new String[]
+                {q,type,diff,weight,DashboardController.current_selected_chapter_id});
+        for (int i=0; i<answers.length;i++){
+            sql = MessageFormat.format(
+                    "insert into answer (AnswerLabel, AnswerContent, Question_idQuestion, IsRightAnswer" +
+                            ") values (\"{0}\",\"{1}\",{2},\"{3}\");"
+                    ,((char)(65+i)+""), answers[i], last_inserted_question_id,
+                    ((char)(65+i)+"").equals(right_answer)?1:0);
+            boolean success = db.execute_sql(sql);
+        }
+        return true;
+    }
+
+
+    public ObservableList<QuestionModel> getQuestionList(){
+        questionList = FXCollections.observableArrayList();
+        DBHandler db = new DBHandler();
+        String sql = MessageFormat.format(
+                "SELECT idQuestion,QuestionContent,QuestionDifficulty,QuestionType,QuestionWeight FROM ((( question  " +
+                        "INNER JOIN chapter ON idChapter = {0}) " +
+                        "INNER JOIN course ON idCourse = {1})" +
+                        "INNER JOIN doctor ON  idDoctor ={2}) WHERE Chapter_idChapter = {0};"
+                , DashboardController.current_selected_chapter_id
+        , DashboardController.current_selected_course_id, DashboardController.current_selected_dr_id);
+        ResultSet rs =  db.execute_query(sql);
+        try {
+            while (rs.next())
+            {
+                questionList.add(new QuestionModel(rs.getString("QuestionContent"),rs.getString("QuestionDifficulty"),
+                        rs.getString("QuestionType"), rs.getString("QuestionWeight")));
+            }
+            return questionList;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        finally {
+            db.closeConnection();
+        }
+
     }
 }
 

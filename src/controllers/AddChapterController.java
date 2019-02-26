@@ -1,5 +1,6 @@
 package controllers;
 
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import models.ChaptersListHandler;
 import models.CoursesListHandler;
@@ -11,5 +12,8 @@ public class AddChapterController {
     public void onAddChapterClicked(){
         ChaptersListHandler chaptersListHandler =new ChaptersListHandler();
         boolean success = chaptersListHandler.Add(chapter_name.getText(),DashboardController.current_selected_course_id);
+        if(!success){
+            Alert alert = new Alert(Alert.AlertType.ERROR,"Failed to update");
+        }
     }
 }

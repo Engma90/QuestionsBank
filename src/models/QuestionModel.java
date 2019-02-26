@@ -7,16 +7,31 @@ public class QuestionModel {
     private SimpleStringProperty question_text = new SimpleStringProperty("");
     private SimpleStringProperty question_diff = new SimpleStringProperty("");
     private SimpleStringProperty question_type = new SimpleStringProperty("");
+
+    public String getQuestion_weight() {
+        return question_weight.get();
+    }
+
+    public SimpleStringProperty question_weightProperty() {
+        return question_weight;
+    }
+
+    public void setQuestion_weight(String question_weight) {
+        this.question_weight.set(question_weight);
+    }
+
+    private SimpleStringProperty question_weight = new SimpleStringProperty("");
     private char right_answer;
     private String[] answers = new String[4];
 
     public QuestionModel(){
-        this("", "", "");
+        this("", "", "", "");
     }
-    public QuestionModel(String q, String d, String question_type){
+    public QuestionModel(String q, String d, String question_type, String w){
         setQuestion_text(q);
         setQuestion_diff(d);
         setQuestion_type(question_type);
+        setQuestion_weight(w);
 
     }
 

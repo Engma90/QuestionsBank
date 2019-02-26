@@ -18,6 +18,7 @@
           <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
         </element>
       </element>
+      <element id="library" level="project" name="mysql-connector-java-5.1.47-bin" />
     </root>
   </artifact>
 </component>

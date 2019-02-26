@@ -33,14 +33,14 @@ import java.util.LinkedList;
 import java.util.ResourceBundle;
 
 public class DashboardController implements Initializable {
-    static final String POST_GRAD = "post_grad";
-    static final String UNDER_GRAD = "under_grad";
+    public static final String POST_GRAD = "post_grad";
+    public static final String UNDER_GRAD = "under_grad";
 
     public ListView<CourseModel> courses_list_view;
     public ListView<ChapterModel> chapters_list_view;
     private CoursesListHandler coursesListHandler;
     private ChaptersListHandler chaptersListHandler;
-
+    QuestionsController questionsController;
 
     public AnchorPane right_content;
 
@@ -49,21 +49,21 @@ public class DashboardController implements Initializable {
     public static String current_selected_chapter_id;
     public static String current_selected_dr_id;
 
-    DashboardController(String _degree_category,String dr_id){
-        current_selected_dr_id = dr_id;
-        degree_category = _degree_category;
-        coursesListHandler = new CoursesListHandler();
-        chaptersListHandler = new ChaptersListHandler();
-
+    public DashboardController(){
 
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        coursesListHandler = new CoursesListHandler();
+        chaptersListHandler = new ChaptersListHandler();
         System.out.println(degree_category);
         AnchorPane pnlOne;
         try {
-            pnlOne = FXMLLoader.load(this.getClass().getResource("/views/Questions.fxml"));
-            right_content.getChildren().setAll(pnlOne.getChildren());
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Questions.fxml"));
+            Parent questions_root = loader.load();
+            questionsController = loader.getController();
+            //pnlOne = FXMLLoader.load(this.getClass().getResource("/views/Questions.fxml"));
+            right_content.getChildren().setAll(((AnchorPane)questions_root).getChildren());
 
         } catch (IOException e) {
            Alert  alert = new Alert(Alert.AlertType.ERROR, e.toString());
@@ -80,7 +80,9 @@ public class DashboardController implements Initializable {
             public void changed(ObservableValue<? extends CourseModel> observable, CourseModel oldValue, CourseModel newValue) {
                 System.out.println("Course:");
                 int current_selected_index = courses_list_view.getItems().indexOf(newValue);
-                current_selected_course_id = coursesListHandler.getCoursesList().get(current_selected_index).id;
+                current_selected_course_id = courses_list_view.getItems().get(current_selected_index).id;
+                chapters_list_view.setItems(chaptersListHandler.getChaptersList());
+
                 System.out.println(current_selected_course_id);
             }
         });
@@ -90,7 +92,8 @@ public class DashboardController implements Initializable {
             public void changed(ObservableValue<? extends ChapterModel> observable, ChapterModel oldValue, ChapterModel newValue) {
                 System.out.println("Chapter:");
                 int current_selected_index = chapters_list_view.getItems().indexOf(newValue);
-                current_selected_chapter_id = chaptersListHandler.getChaptersList().get(current_selected_index).id;
+                current_selected_chapter_id = chapters_list_view.getItems().get(current_selected_index).id;
+                questionsController.refreshList();
                 System.out.println(current_selected_chapter_id);
             }
         });

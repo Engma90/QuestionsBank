@@ -1,34 +1,22 @@
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.layout.GridPane?>
-
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import controllers.AddQuestionController ?>
-<?import javafx.scene.web.HTMLEditor?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.ToggleGroup?>
-
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ComboBox?>
-<?import java.lang.String?>
 <?import javafx.collections.FXCollections?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.web.HTMLEditor?>
+<?import java.lang.*?>
 <AnchorPane fx:controller="controllers.AddQuestionController"
             xmlns:fx="http://javafx.com/fxml" prefHeight="700" prefWidth="700">
 
     <VBox fx:id="container" spacing="10" AnchorPane.topAnchor="10" AnchorPane.leftAnchor="10" AnchorPane.bottomAnchor="10"
           AnchorPane.rightAnchor="10">
         <HTMLEditor fx:id="html_editor"  AnchorPane.topAnchor="10" AnchorPane.leftAnchor="10"
-                    AnchorPane.bottomAnchor="10" AnchorPane.rightAnchor="10"/>
+                    AnchorPane.bottomAnchor="10" AnchorPane.rightAnchor="10" maxHeight="400"/>
         <HBox spacing="10">
             <Label text="Type"/>
             <RadioButton text="MCQ" fx:id="radio_mcq"/>
             <RadioButton text="True/False" fx:id="radio_true_false"/>
         </HBox>
         <HBox spacing="10">
-        <ComboBox value="Difficulty">
+        <ComboBox value="Difficulty" fx:id="combo_q_diff">
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:id="easy" fx:value="Easy"/>
@@ -37,7 +25,7 @@
                 </FXCollections>
             </items>
         </ComboBox>
-        <ComboBox value="Weight">
+        <ComboBox value="Weight" fx:id="combo_q_weight">
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:id="wlow" fx:value="Low"/>
@@ -49,24 +37,24 @@
         </HBox>
         <VBox fx:id="mcq_ui_group" spacing="10">
             <HBox spacing="10">
-                <Label text="A"></Label>
-                <TextField prefWidth="500" fx:id="txt_answer_a"></TextField>
-                <RadioButton fx:id="radio_answer_a"></RadioButton>
+                <Label text="A"/>
+                <TextField prefWidth="500" fx:id="txt_answer_a"/>
+                <RadioButton fx:id="radio_answer_a"/>
             </HBox>
             <HBox spacing="10">
-                <Label text="B"></Label>
-                <TextField prefWidth="500" fx:id="txt_answer_b"></TextField>
-                <RadioButton fx:id="radio_answer_b"></RadioButton>
+                <Label text="B"/>
+                <TextField prefWidth="500" fx:id="txt_answer_b"/>
+                <RadioButton fx:id="radio_answer_b"/>
             </HBox>
             <HBox spacing="10">
-                <Label text="C"></Label>
-                <TextField prefWidth="500" fx:id="txt_answer_c"></TextField>
-                <RadioButton fx:id="radio_answer_c"></RadioButton>
+                <Label text="C"/>
+                <TextField prefWidth="500" fx:id="txt_answer_c"/>
+                <RadioButton fx:id="radio_answer_c"/>
             </HBox>
             <HBox spacing="10">
-                <Label text="D"></Label>
-                <TextField prefWidth="500" fx:id="txt_answer_d"></TextField>
-                <RadioButton fx:id="radio_answer_d"></RadioButton>
+                <Label text="D"/>
+                <TextField prefWidth="500" fx:id="txt_answer_d"/>
+                <RadioButton fx:id="radio_answer_d"/>
             </HBox>
         </VBox>
 
@@ -84,8 +72,8 @@
         </VBox>
 
         <HBox AnchorPane.leftAnchor="10" AnchorPane.bottomAnchor="10"
-              AnchorPane.rightAnchor="10" alignment="CENTER">
-            <Button fx:id="saveBtn" text="Save" onAction="#onSave" prefHeight="50" prefWidth="100"/>
+              AnchorPane.rightAnchor="10" alignment="BOTTOM_CENTER">
+            <Button fx:id="add_question" text="Add" onAction="#onAddClicked" maxHeight="50" prefWidth="100"/>
         </HBox>
     </VBox>
 
