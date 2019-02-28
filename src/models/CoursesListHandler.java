@@ -1,6 +1,7 @@
 package models;
 
 import controllers.DashboardController;
+import controllers.QuestionsController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -20,7 +21,21 @@ public class CoursesListHandler {
                 , cat, name, code, dr_id);
         return db.execute_sql(sql);
     }
-
+    public boolean Edit(String code, String name, String id) {
+        DBHandler db = new DBHandler();
+        String sql = MessageFormat.format(
+                "UPDATE course SET CourseName =\"{0}\" , CourseCode = \"{1}\"  WHERE idCourse = {2}  ;"
+                ,name, code, id);
+        return db.execute_sql(sql);
+    }
+    public boolean Delete(String id) {
+        DBHandler db = new DBHandler();
+        DashboardController.chaptersListHandler.DeleteAllSelectedCourseChapters();
+        String sql = MessageFormat.format(
+                "DELETE FROM course WHERE idCourse = {0}  ;",
+                 id);
+        return db.execute_sql(sql);
+    }
 
     public ObservableList<CourseModel> getCoursesList(){
         DBHandler db = new DBHandler();

@@ -32,19 +32,19 @@
         </VBox>
 
     <VBox fx:id="shuffle" spacing="5">
-        <RadioButton fx:id="radio_shuffle_answers" text="Shuffle answers"/>
+
         <RadioButton fx:id="radio_shuffle_questions" text="Shuffle question"/>
-        <RadioButton fx:id="radio_both" text="Both"/>
+
     </VBox>
         <Separator/>
         <Label text="Exam content"/>
-        <CheckBox text="Chapter 1"/>
-        <CheckBox text="Chapter 2"/>
-        <CheckBox text="Chapter 3"/>
+        <VBox fx:id="content" spacing="10">
+
+        </VBox>
     </VBox>
     <HBox spacing="20" AnchorPane.bottomAnchor="10"  AnchorPane.rightAnchor="10"
           AnchorPane.leftAnchor="10" alignment="CENTER">
-        <Button text="Generate" fx:id="generate"/>
+        <Button text="Generate" fx:id="generate" onAction="#onGenerateClicked"/>
         <Button text="Cancel" fx:id="cancel"/>
     </HBox>
 </AnchorPane>

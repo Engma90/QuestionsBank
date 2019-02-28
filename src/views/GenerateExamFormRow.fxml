@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.GenerateExamFormRowController"
+             spacing="10">
+        <CheckBox fx:id="isSelected"></CheckBox>
+        <Label fx:id="lbl_chapter_name"></Label>
+        <TextField fx:id="number_of_questions"></TextField>
+        <CheckBox fx:id="easy"></CheckBox>
+        <CheckBox fx:id="medium"></CheckBox>
+        <CheckBox fx:id="hard"></CheckBox>
+
+
+</HBox>

@@ -39,7 +39,7 @@ public class DashboardController implements Initializable {
     public ListView<CourseModel> courses_list_view;
     public ListView<ChapterModel> chapters_list_view;
     private CoursesListHandler coursesListHandler;
-    private ChaptersListHandler chaptersListHandler;
+    public static  ChaptersListHandler chaptersListHandler;
     QuestionsController questionsController;
 
     public AnchorPane right_content;
@@ -48,6 +48,9 @@ public class DashboardController implements Initializable {
     public static String current_selected_course_id;
     public static String current_selected_chapter_id;
     public static String current_selected_dr_id;
+    private static int current_selected_course_index;
+    private static int current_selected_chapter_index;
+
 
     public DashboardController(){
 
@@ -71,32 +74,46 @@ public class DashboardController implements Initializable {
         }
 
         courses_list_view.setItems(coursesListHandler.getCoursesList());
+        courses_list_view.getSelectionModel().selectFirst();
         chapters_list_view.setItems(chaptersListHandler.getChaptersList());
+        chapters_list_view.getSelectionModel().selectFirst();
 
 
 
         courses_list_view.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<CourseModel>() {
             @Override
             public void changed(ObservableValue<? extends CourseModel> observable, CourseModel oldValue, CourseModel newValue) {
-                System.out.println("Course:");
+
+                chapters_list_view.getItems().clear();
+                current_selected_chapter_index = -1;
+                current_selected_chapter_id = "-1";
                 int current_selected_index = courses_list_view.getItems().indexOf(newValue);
                 current_selected_course_id = courses_list_view.getItems().get(current_selected_index).id;
+                System.out.println("get(current_selected_index).id "+current_selected_course_id);
+                current_selected_course_index = current_selected_index;
+                questionsController.refreshList();
                 chapters_list_view.setItems(chaptersListHandler.getChaptersList());
+                chapters_list_view.getSelectionModel().selectFirst();
+                System.out.println("Course="+current_selected_course_index);
 
-                System.out.println(current_selected_course_id);
+
             }
         });
 
         chapters_list_view.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<ChapterModel>() {
             @Override
             public void changed(ObservableValue<? extends ChapterModel> observable, ChapterModel oldValue, ChapterModel newValue) {
-                System.out.println("Chapter:");
+
                 int current_selected_index = chapters_list_view.getItems().indexOf(newValue);
+                if(current_selected_index != -1)
                 current_selected_chapter_id = chapters_list_view.getItems().get(current_selected_index).id;
+                current_selected_chapter_index = current_selected_index;
                 questionsController.refreshList();
-                System.out.println(current_selected_chapter_id);
+                System.out.println("Chapter="+current_selected_chapter_index);
             }
         });
+        courses_list_view.getSelectionModel().selectFirst();
+        chapters_list_view.getSelectionModel().selectFirst();
     }
     @FXML
     public void onHomeClicked(ActionEvent e) throws IOException {
@@ -129,7 +146,11 @@ public class DashboardController implements Initializable {
     public void onAddCourseClicked(ActionEvent e){
         Parent root;
         try {
-            root = FXMLLoader.load(getClass().getResource("/views/AddCourse.fxml"));
+            FXMLLoader loader = new
+                    FXMLLoader(getClass().getResource("/views/AddCourse.fxml"));
+            AddCourseController addCourseController =new AddCourseController("Add", null);
+            loader.setController(addCourseController);
+            root = loader.load();
             Stage stage = new Stage();
             stage.initModality(Modality.WINDOW_MODAL);
             stage.initOwner(((Node)e.getTarget()).getScene().getWindow());
@@ -138,6 +159,9 @@ public class DashboardController implements Initializable {
             stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                 public void handle(WindowEvent we) {
                     System.out.println("Closed");
+                    courses_list_view.getItems().clear();
+                    courses_list_view.setItems(coursesListHandler.getCoursesList());
+                    courses_list_view.getSelectionModel().selectLast();
                 }
             });
             stage.show();
@@ -146,12 +170,52 @@ public class DashboardController implements Initializable {
             ex.printStackTrace();
         }
     }
+    public void onEditCourseClicked(ActionEvent e){
+        Parent root;
+        try {
+            FXMLLoader loader = new
+                    FXMLLoader(getClass().getResource("/views/AddCourse.fxml"));
+            AddCourseController addCourseController =new AddCourseController("Edit", courses_list_view.getItems().get(current_selected_course_index));
+            loader.setController(addCourseController);
+            root = loader.load();
+            Stage stage = new Stage();
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.initOwner(((Node)e.getTarget()).getScene().getWindow());
+            stage.setTitle("Edit Course");
+            stage.setScene(new Scene(root));
+            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                public void handle(WindowEvent we) {
+                    System.out.println("Closed");
+                    courses_list_view.getItems().clear();
+                    courses_list_view.setItems(coursesListHandler.getCoursesList());
+                    courses_list_view.getSelectionModel().select(current_selected_course_index);
+                }
+            });
+            stage.show();
+        }
+        catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+    public void onDeleteCourseClicked(ActionEvent e){
+        coursesListHandler.Delete(current_selected_course_id);
+        courses_list_view.getItems().clear();
+        courses_list_view.setItems(coursesListHandler.getCoursesList());
+        int selection = current_selected_course_index - 1;
+        if(selection<0)
+            selection = 0;
+        courses_list_view.getSelectionModel().select(selection);
+    }
 
 
     public void onAddChapterClicked(ActionEvent e){
         Parent root;
         try {
-            root = FXMLLoader.load(getClass().getResource("/views/AddChapter.fxml"));
+            FXMLLoader loader = new
+                    FXMLLoader(getClass().getResource("/views/AddChapter.fxml"));
+            AddChapterController addChapterController =new AddChapterController("Add", null);
+            loader.setController(addChapterController);
+            root = loader.load();
             Stage stage = new Stage();
             stage.initModality(Modality.WINDOW_MODAL);
             stage.initOwner(((Node)e.getTarget()).getScene().getWindow());
@@ -160,6 +224,9 @@ public class DashboardController implements Initializable {
             stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                 public void handle(WindowEvent we) {
                     System.out.println("Closed");
+                    chapters_list_view.getItems().clear();
+                    chapters_list_view.setItems(chaptersListHandler.getChaptersList());
+                    chapters_list_view.getSelectionModel().selectLast();
                 }
             });
             stage.show();
@@ -168,5 +235,44 @@ public class DashboardController implements Initializable {
             ex.printStackTrace();
         }
     }
+
+
+    public void onEditChapterClicked(ActionEvent e){
+        Parent root;
+        try {
+            FXMLLoader loader = new
+                    FXMLLoader(getClass().getResource("/views/AddChapter.fxml"));
+            AddChapterController addChapterController =new AddChapterController("Edit",  chapters_list_view.getItems().get(current_selected_chapter_index));
+            loader.setController(addChapterController);
+            root = loader.load();
+            Stage stage = new Stage();
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.initOwner(((Node)e.getTarget()).getScene().getWindow());
+            stage.setTitle("Edit Chapter");
+            stage.setScene(new Scene(root));
+            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                public void handle(WindowEvent we) {
+                    System.out.println("Closed");
+                    chapters_list_view.getItems().clear();
+                    chapters_list_view.setItems(chaptersListHandler.getChaptersList());
+                    chapters_list_view.getSelectionModel().select(current_selected_chapter_index);
+                }
+            });
+            stage.show();
+        }
+        catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+    public void onDeleteChapterClicked(ActionEvent e){
+        chaptersListHandler.Delete(current_selected_chapter_id);
+        chapters_list_view.getItems().clear();
+        chapters_list_view.setItems(chaptersListHandler.getChaptersList());
+        int selection = current_selected_chapter_index - 1;
+        if(selection<0)
+            selection = 0;
+        chapters_list_view.getSelectionModel().select(selection);
+    }
+
 
 }

@@ -15,12 +15,12 @@ public class Main extends Application {
         Parent root;
         root = FXMLLoader.load(getClass().getResource("/views/Home.fxml"));
         primaryStage.setTitle("Home");
+        primaryStage.setMaximized(true);
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
 
     public static void main(String[] args) {
-        QuestionTableHandler questionTableHandler = new QuestionTableHandler();
         launch(args);
     }
 }

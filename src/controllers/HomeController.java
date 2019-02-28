@@ -66,6 +66,8 @@ public class HomeController implements Initializable {
         Scene scene = new Scene(loader.load());
         current_stage.setScene(scene);
 
+        current_stage.setMaximized(false);
+        current_stage.setMaximized(true);
         current_stage.show();
     }
     public void onPostGradClicked(ActionEvent e) throws IOException {
@@ -75,6 +77,9 @@ public class HomeController implements Initializable {
         current_stage.setTitle("Dashboard - Post graduates");
         Scene scene = new Scene(loader.load());
         current_stage.setScene(scene);
+
+        current_stage.setMaximized(false);
+        current_stage.setMaximized(true);
         current_stage.show();
     }
     public void onSignupClicked(ActionEvent e){

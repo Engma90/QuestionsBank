@@ -3,7 +3,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.web.HTMLEditor?>
 <?import java.lang.*?>
-<AnchorPane fx:controller="controllers.AddQuestionController"
+<AnchorPane
             xmlns:fx="http://javafx.com/fxml" prefHeight="700" prefWidth="700">
 
     <VBox fx:id="container" spacing="10" AnchorPane.topAnchor="10" AnchorPane.leftAnchor="10" AnchorPane.bottomAnchor="10"
@@ -74,6 +74,7 @@
         <HBox AnchorPane.leftAnchor="10" AnchorPane.bottomAnchor="10"
               AnchorPane.rightAnchor="10" alignment="BOTTOM_CENTER">
             <Button fx:id="add_question" text="Add" onAction="#onAddClicked" maxHeight="50" prefWidth="100"/>
+            <Button fx:id="edit_question" text="Edit" onAction="#onEditClicked" maxHeight="50" prefWidth="100"/>
         </HBox>
     </VBox>
 

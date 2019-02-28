@@ -5,7 +5,7 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controllers.AddChapterController"
+
             prefHeight="250.0" prefWidth="300.0">
     <VBox spacing="20" AnchorPane.topAnchor="20" AnchorPane.rightAnchor="20"
           AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="20" alignment="CENTER">
@@ -15,6 +15,7 @@
             <TextField fx:id="chapter_name"/>
         </HBox>
         <Button text="Add" fx:id="add_chapter" onAction="#onAddChapterClicked"/>
+        <Button text="Edit" fx:id="edit_chapter" onAction="#onEditChapterClicked"/>
     </VBox>
 
 </AnchorPane>

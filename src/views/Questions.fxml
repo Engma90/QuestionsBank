@@ -9,12 +9,13 @@
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="controllers.QuestionsController"
-
             >
+
     <VBox spacing="10" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10"
           AnchorPane.bottomAnchor="10" AnchorPane.topAnchor="10">
     <TableView fx:id="questions_table" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10"
                AnchorPane.bottomAnchor="10" AnchorPane.topAnchor="10" >
+
         <columns>
             <TableColumn text="Question" fx:id="col_question_text"  >
                 <cellValueFactory><PropertyValueFactory property="question_text" />
@@ -41,8 +42,8 @@
     </TableView>
     <HBox spacing="20">
         <Button fx:id="add" text="Add" onAction="#onAddClicked"></Button>
-        <Button fx:id="edit" text="Edit"></Button>
-        <Button fx:id="delete" onAction="#onDeleteClicked" text="Delete"></Button>
+        <Button fx:id="edit" text="Edit" onAction="#onEditClicked"></Button>
+        <Button fx:id="delete" onAction="#onDeleteQuestionClicked" text="Delete"></Button>
         <Button fx:id="import_csv" text="Import CSV"></Button>
         <Button fx:id="export_csv" text="Export CSV"></Button>
 

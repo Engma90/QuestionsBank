@@ -1,6 +1,7 @@
 package models;
 
 import controllers.DashboardController;
+import controllers.QuestionsController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -17,6 +18,27 @@ public class ChaptersListHandler {
                 "insert into chapter (ChapterName, Course_idCourse) values (\"{0}\",{1}) ;"
                 , name,course_id);
         return db.execute_sql(sql);
+    }
+    public boolean Edit(String name, String chapter_id) {
+        DBHandler db = new DBHandler();
+        String sql = MessageFormat.format(
+                "UPDATE chapter SET ChapterName = \"{0}\" WHERE idChapter = {1} ;"
+                , name,chapter_id);
+        return db.execute_sql(sql);
+    }
+    public boolean Delete(String chapter_id) {
+        QuestionsController.questionTableHandler.DeleteAllSelectedChapterQuestions();
+        DBHandler db = new DBHandler();
+        String sql = MessageFormat.format(
+                "DELETE  FROM chapter WHERE idChapter = {0} ;"
+                , chapter_id);
+        return db.execute_sql(sql);
+    }
+    public boolean DeleteAllSelectedCourseChapters(){
+        for (ChapterModel ch: chaptersList){
+            Delete(ch.id);
+        }
+        return true;
     }
 
     public ObservableList<ChapterModel> getChaptersList(){

@@ -3,7 +3,9 @@ package models;
 import javafx.beans.property.SimpleStringProperty;
 
 public class QuestionModel {
-    int id;
+
+
+    private String id;
     private SimpleStringProperty question_text = new SimpleStringProperty("");
     private SimpleStringProperty question_diff = new SimpleStringProperty("");
     private SimpleStringProperty question_type = new SimpleStringProperty("");
@@ -21,13 +23,14 @@ public class QuestionModel {
     }
 
     private SimpleStringProperty question_weight = new SimpleStringProperty("");
-    private char right_answer;
+    private String right_answer;
     private String[] answers = new String[4];
 
     public QuestionModel(){
-        this("", "", "", "");
+        this("", "", "", "", "");
     }
-    public QuestionModel(String q, String d, String question_type, String w){
+    public QuestionModel(String id, String q, String d, String question_type, String w){
+        this.id = id;
         setQuestion_text(q);
         setQuestion_diff(d);
         setQuestion_type(question_type);
@@ -35,7 +38,13 @@ public class QuestionModel {
 
     }
 
+    public String getId() {
+        return id;
+    }
 
+    public void setId(String id) {
+        this.id = id;
+    }
     public String getQuestion_text() {
         return question_text.get().toString();
     }
@@ -59,11 +68,11 @@ public class QuestionModel {
         this.question_type.set(question_type);
     }
 
-    public char getRight_answer() {
+    public String getRight_answer() {
         return right_answer;
     }
 
-    public void setRight_answer(char right_answer) {
+    public void setRight_answer(String right_answer) {
         this.right_answer = right_answer;
     }
 
@@ -73,16 +82,5 @@ public class QuestionModel {
 
     public void setAnswers(String[] answers) {
         this.answers = answers;
-    }
-
-
-    public void add_question_to_db(){
-
-    }
-    public void edit_question_in_db(){
-
-    }
-    public void delete_question_from_db(){
-
     }
 }
