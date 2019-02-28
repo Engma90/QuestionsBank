@@ -7,12 +7,41 @@
 <?import javafx.scene.layout.*?>
 
 <?import javafx.collections.FXCollections?>
+<?import controllers.NumberField?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="controllers.GenerateExamController"
-            prefHeight="400.0" prefWidth="300.0">
+            prefHeight="400.0" prefWidth="600.0">
     <VBox spacing="10" AnchorPane.leftAnchor="20" AnchorPane.topAnchor="20"
           AnchorPane.rightAnchor="20" AnchorPane.bottomAnchor="20">
+        <HBox spacing="50">
+            <VBox spacing="10">
+                <Label text="College" fx:id="college_label"></Label>
+                <TextField fx:id="college_text"></TextField>
+                <Label text="Department"></Label>
+                <TextField fx:id="department_text"></TextField>
+                <Label text="Note"></Label>
+                <TextArea text="Attempt 5 of the following questions (including questions 1 and 2)"
+                          fx:id="note_text"></TextArea>
+            </VBox>
+            <VBox spacing="10">
+                <ComboBox value="Exam type" fx:id="exam_type">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:id="exam_type_option1" fx:value="Quiz"/>
+                            <String fx:id="exam_type_option2" fx:value="Midterm Exam"/>
+                            <String fx:id="exam_type_option3" fx:value="Final Exam"/>
+                        </FXCollections>
+                    </items>
+                </ComboBox>
+                <Label text="Date"></Label>
+                <TextField text="Mon 05/01/2015" fx:id="exam_date"></TextField>
+                <Label text="Duration"></Label>
+                <NumberField fx:id="exam_duration"></NumberField>
+                <Label text="Total marks"></Label>
+                <NumberField fx:id="exam_total_marks"></NumberField>
+            </VBox>
+        </HBox>
     <ComboBox value="Number of models" fx:id="number_of_models">
         <items>
             <FXCollections fx:factory="observableArrayList">
@@ -37,7 +66,13 @@
 
     </VBox>
         <Separator/>
-        <Label text="Exam content"/>
+        <HBox spacing="10">
+            <Label text="Exam chapters" prefWidth="230"/>
+            <Label text="Number of easy questions" prefWidth="200"/>
+            <Label text="Number of medium questions" prefWidth="200"/>
+            <Label text="Number of hard questions" prefWidth="200"/>
+        </HBox>
+
         <VBox fx:id="content" spacing="10">
 
         </VBox>

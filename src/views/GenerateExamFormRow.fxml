@@ -6,16 +6,19 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import controllers.NumberField?>
 <HBox xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controllers.GenerateExamFormRowController"
-             spacing="10">
-        <CheckBox fx:id="isSelected"></CheckBox>
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controllers.GenerateExamFormRowController"
+      spacing="10">
+        <CheckBox fx:id="isSelected" prefWidth="20"></CheckBox>
         <Label fx:id="lbl_chapter_name"></Label>
-        <TextField fx:id="number_of_questions"></TextField>
-        <CheckBox fx:id="easy"></CheckBox>
-        <CheckBox fx:id="medium"></CheckBox>
-        <CheckBox fx:id="hard"></CheckBox>
+
+        <NumberField fx:id="Easy" prefWidth="200"></NumberField>
+        <NumberField fx:id="Medium" prefWidth="200"></NumberField>
+        <NumberField fx:id="Hard" prefWidth="200"></NumberField>
+
+        <Label fx:id="number_of_questions" prefWidth="50"></Label>
 
 
 </HBox>

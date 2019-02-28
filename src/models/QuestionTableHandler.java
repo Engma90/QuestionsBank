@@ -139,6 +139,39 @@ public class QuestionTableHandler {
 
     }
 
+    public ObservableList<QuestionModel> getQuestionList(String ch_id, String diff) {
+        questionList = FXCollections.observableArrayList();
+        DBHandler db = new DBHandler();
+        System.out.println("------------------------------------------0");
+        String sql = MessageFormat.format(
+                "SELECT idQuestion,QuestionContent,QuestionDifficulty,QuestionType,QuestionWeight FROM ((( question  " +
+                        "INNER JOIN chapter ON idChapter = {0}) " +
+                        "INNER JOIN course ON idCourse = {1})" +
+                        "INNER JOIN doctor ON  idDoctor ={2}) WHERE Chapter_idChapter = {0} AND QuestionDifficulty =\"{3}\" ;"
+                , ch_id
+                , DashboardController.current_selected_course_id, DashboardController.current_selected_dr_id, diff);
+        ResultSet rs = db.execute_query(sql);
+        System.out.println("------------------------------------------1");
+        try {
+            while (rs.next()) {
+                QuestionModel model = new QuestionModel(rs.getInt("idQuestion") + "", rs.getString("QuestionContent"), rs.getString("QuestionDifficulty"),
+                        rs.getString("QuestionType"), rs.getString("QuestionWeight"));
+                questionList.add(model);
+                System.out.println("------------------------------------------2");
+
+                getQuestionAnswersList(model, db);
+            }
+            return questionList;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            db.closeConnection();
+        }
+
+    }
+
     private void getQuestionAnswersList(QuestionModel model, DBHandler db) {
         try {
             String sql = MessageFormat.format(
