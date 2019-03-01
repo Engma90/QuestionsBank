@@ -6,36 +6,25 @@ public class QuestionModel {
 
 
     private String id;
-    private SimpleStringProperty question_text = new SimpleStringProperty("");
+    private SimpleStringProperty raw_text = new SimpleStringProperty("");
     private SimpleStringProperty question_diff = new SimpleStringProperty("");
     private SimpleStringProperty question_type = new SimpleStringProperty("");
-    public int isEdited, isDeleted, isInExam;
-
-    public String getQuestion_weight() {
-        return question_weight.get();
-    }
-
-    public SimpleStringProperty question_weightProperty() {
-        return question_weight;
-    }
-
-    public void setQuestion_weight(String question_weight) {
-        this.question_weight.set(question_weight);
-    }
-
+    private SimpleStringProperty question_text = new SimpleStringProperty("");
     private SimpleStringProperty question_weight = new SimpleStringProperty("");
     private String right_answer;
     private String[] answers = new String[4];
+    public int isEdited, isDeleted, isInExam;
 
     public QuestionModel(){
-        this("", "", "", "", "");
+        this("", "", "", "", "", "");
     }
-    public QuestionModel(String id, String q, String d, String question_type, String w){
+    public QuestionModel(String id, String q, String d, String question_type, String w, String raw){
         this.id = id;
         setQuestion_text(q);
         setQuestion_diff(d);
         setQuestion_type(question_type);
         setQuestion_weight(w);
+        setRaw_text(raw);
 
     }
 
@@ -83,5 +72,19 @@ public class QuestionModel {
 
     public void setAnswers(String[] answers) {
         this.answers = answers;
+    }
+    public String getRaw_text() {
+        return raw_text.get();
+    }
+
+    public void setRaw_text(String raw_text) {
+        this.raw_text.set(raw_text);
+    }
+
+    public String getQuestion_weight() {
+        return question_weight.get();
+    }
+    public void setQuestion_weight(String question_weight) {
+        this.question_weight.set(question_weight);
     }
 }

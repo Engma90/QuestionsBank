@@ -74,12 +74,6 @@ public class DashboardController implements Initializable {
             alert.show();
         }
 
-        courses_list_view.setItems(coursesListHandler.getCoursesList());
-        courses_list_view.getSelectionModel().selectFirst();
-        chapters_list_view.setItems(chaptersListHandler.getChaptersList());
-        chapters_list_view.getSelectionModel().selectFirst();
-
-
 
         courses_list_view.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<CourseModel>() {
             @Override
@@ -113,7 +107,13 @@ public class DashboardController implements Initializable {
                 System.out.println("Chapter="+current_selected_chapter_index);
             }
         });
+//        courses_list_view.getSelectionModel().selectFirst();
+//        chapters_list_view.getSelectionModel().selectFirst();
+
+
+        courses_list_view.setItems(coursesListHandler.getCoursesList());
         courses_list_view.getSelectionModel().selectFirst();
+        chapters_list_view.setItems(chaptersListHandler.getChaptersList());
         chapters_list_view.getSelectionModel().selectFirst();
     }
     @FXML
@@ -214,7 +214,7 @@ public class DashboardController implements Initializable {
         try {
             FXMLLoader loader = new
                     FXMLLoader(getClass().getResource("/views/AddChapter.fxml"));
-            AddChapterController addChapterController =new AddChapterController("Add", null);
+            AddChapterController addChapterController =new AddChapterController("Add", new ChapterModel());
             loader.setController(addChapterController);
             root = loader.load();
             Stage stage = new Stage();
@@ -266,7 +266,8 @@ public class DashboardController implements Initializable {
         }
     }
     public void onDeleteChapterClicked(ActionEvent e){
-        chaptersListHandler.Delete(current_selected_chapter_id);
+        ChapterModel model = new ChapterModel(current_selected_chapter_id, "");
+        chaptersListHandler.Delete(model);
         chapters_list_view.getItems().clear();
         chapters_list_view.setItems(chaptersListHandler.getChaptersList());
         int selection = current_selected_chapter_index - 1;

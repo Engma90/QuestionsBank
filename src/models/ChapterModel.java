@@ -8,6 +8,9 @@ public class ChapterModel {
         this.id = id;
         this.name = name;
     }
+    public ChapterModel(){
+
+    }
 
     @Override
     public String toString(){

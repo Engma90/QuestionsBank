@@ -6,6 +6,7 @@
 <?import javafx.collections.FXCollections?>
 <?import models.QuestionModel?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.web.HTMLEditor?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="controllers.QuestionsController"
@@ -18,7 +19,7 @@
 
         <columns>
             <TableColumn text="Question" fx:id="col_question_text"  >
-                <cellValueFactory><PropertyValueFactory property="question_text" />
+                <cellValueFactory><PropertyValueFactory property="raw_text" />
                 </cellValueFactory>
             </TableColumn>
             <TableColumn text="Type" fx:id="col_question_type">

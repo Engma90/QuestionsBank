@@ -10,5 +10,6 @@
     <orderEntry type="library" name="docx4j-6.1.1" level="project" />
     <orderEntry type="library" name="gson-2.8.2" level="project" />
     <orderEntry type="library" name="mysql-connector-java-5.1.47-bin" level="project" />
+    <orderEntry type="library" name="jsoup-1.11.3" level="project" />
   </component>
 </module>

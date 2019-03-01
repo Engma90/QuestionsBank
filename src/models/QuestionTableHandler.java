@@ -106,13 +106,15 @@ public class QuestionTableHandler {
         ResultSet rs = db.execute_query(sql);
         try {
             while (rs.next()) {
-                QuestionModel model = new QuestionModel(rs.getInt("idQuestion") + "", rs.getString("QuestionContent"), rs.getString("QuestionDifficulty"),
-                        rs.getString("QuestionType"), rs.getString("QuestionWeight"));
-                model.isInExam = rs.getInt("IsInExam");
-                model.isEdited = rs.getInt("IsEdited");
-                model.isDeleted = rs.getInt("IsDeleted");
-                questionList.add(model);
-                getQuestionAnswersList(model, db);
+                if(rs.getInt("IsEdited") == 0 && rs.getInt("IsDeleted") == 0) {
+                    QuestionModel model = new QuestionModel(rs.getInt("idQuestion") + "", rs.getString("QuestionContent"), rs.getString("QuestionDifficulty"),
+                            rs.getString("QuestionType"), rs.getString("QuestionWeight"),"");
+                    model.isInExam = rs.getInt("IsInExam");
+                    model.isEdited = rs.getInt("IsEdited");
+                    model.isDeleted = rs.getInt("IsDeleted");
+                    questionList.add(model);
+                    getQuestionAnswersList(model, db);
+                }
             }
             return questionList;
 
@@ -141,15 +143,18 @@ public class QuestionTableHandler {
         System.out.println("------------------------------------------1");
         try {
             while (rs.next()) {
+                if(rs.getInt("IsEdited") == 0 && rs.getInt("IsDeleted") == 0){
                 QuestionModel model = new QuestionModel(rs.getInt("idQuestion") + "", rs.getString("QuestionContent"), rs.getString("QuestionDifficulty"),
-                        rs.getString("QuestionType"), rs.getString("QuestionWeight"));
+                        rs.getString("QuestionType"), rs.getString("QuestionWeight"),"");
                 model.isInExam = rs.getInt("IsInExam");
                 model.isEdited = rs.getInt("IsEdited");
                 model.isDeleted = rs.getInt("IsDeleted");
+
                 questionList.add(model);
                 System.out.println("------------------------------------------2");
 
                 getQuestionAnswersList(model, db);
+                }
             }
             return questionList;
 
@@ -177,15 +182,16 @@ public class QuestionTableHandler {
         System.out.println("------------------------------------------1");
         try {
             while (rs.next()) {
+                if(rs.getInt("IsEdited") == 0 && rs.getInt("IsDeleted") == 0){
                 QuestionModel model = new QuestionModel(rs.getInt("idQuestion") + "", rs.getString("QuestionContent"), rs.getString("QuestionDifficulty"),
-                        rs.getString("QuestionType"), rs.getString("QuestionWeight"));
+                        rs.getString("QuestionType"), rs.getString("QuestionWeight"),"");
                 model.isInExam = rs.getInt("IsInExam");
                 model.isEdited = rs.getInt("IsEdited");
                 model.isDeleted = rs.getInt("IsDeleted");
                 questionList.add(model);
                 System.out.println("------------------------------------------2");
-
                 getQuestionAnswersList(model, db);
+                }
             }
             return questionList;
 

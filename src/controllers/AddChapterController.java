@@ -41,7 +41,8 @@ public class AddChapterController implements Initializable {
         //ChaptersListHandler chaptersListHandler =DashboardController.chaptersListHandler;
         System.out.println("current_selected_course_id=" + DashboardController.current_selected_course_id);
         System.out.println("chapter_name.getText()=" + chapter_name.getText());
-        boolean success = DashboardController.chaptersListHandler.Add(chapter_name.getText(),DashboardController.current_selected_course_id);
+        model.name = chapter_name.getText();
+        boolean success = DashboardController.chaptersListHandler.Add(model);
         if(!success){
             Alert alert = new Alert(Alert.AlertType.ERROR,"Failed to add");
         }
@@ -50,7 +51,9 @@ public class AddChapterController implements Initializable {
 
     public void onEditChapterClicked(ActionEvent e){
         //ChaptersListHandler chaptersListHandler =new ChaptersListHandler();
-        boolean success = DashboardController.chaptersListHandler.Edit(chapter_name.getText(),DashboardController.current_selected_chapter_id);
+        model.name = chapter_name.getText();
+        model.id = DashboardController.current_selected_chapter_id;
+        boolean success = DashboardController.chaptersListHandler.Edit(model);
         if(!success){
             Alert alert = new Alert(Alert.AlertType.ERROR,"Failed to edit");
         }

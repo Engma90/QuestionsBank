@@ -16,7 +16,7 @@ public class ExamModel {
     public String Duration;
     public String TotalMarks;
     public String Course_idCourse;
-    public List<ExamQuestionModel> examQuestionModelList;
+    public List<QuestionModel> questionModelList;
 
 
 
