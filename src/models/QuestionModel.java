@@ -9,6 +9,7 @@ public class QuestionModel {
     private SimpleStringProperty question_text = new SimpleStringProperty("");
     private SimpleStringProperty question_diff = new SimpleStringProperty("");
     private SimpleStringProperty question_type = new SimpleStringProperty("");
+    public int isEdited, isDeleted, isInExam;
 
     public String getQuestion_weight() {
         return question_weight.get();

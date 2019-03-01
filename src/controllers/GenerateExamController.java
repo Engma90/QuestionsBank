@@ -5,16 +5,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.VBox;
-import models.ChapterModel;
-import models.QuestionModel;
-import models.QuestionTableHandler;
+import models.*;
 
 import java.io.IOException;
 import java.net.URL;
@@ -28,6 +23,11 @@ public class GenerateExamController implements Initializable {
     List<GenerateExamFormRowController> generateExamFormRowControllerList;
     List<ChapterModel> chapterModelList;
     public List<QuestionModel> exam_questions;
+    public TextField college_text, exam_duration,department_text, exam_date,
+            exam_total_marks, exam_name_text ;
+    public TextArea note_text;
+    public ComboBox exam_type;
+
 
 
     @Override
@@ -99,6 +99,7 @@ public class GenerateExamController implements Initializable {
 
     public void onGenerateClicked(ActionEvent e) {
         exam_questions = new ArrayList<QuestionModel>();
+        ExamModel examModel = new ExamModel();
         for (GenerateExamFormRowController row : generateExamFormRowControllerList) {
             if (row.isSelected.isSelected()) {
                 row.easy_list = QuestionsController.questionTableHandler.getQuestionList(row.chapter_id, "Easy");
@@ -135,7 +136,31 @@ public class GenerateExamController implements Initializable {
                 }
             }
         }
-        Collections.shuffle(exam_questions);
+        if(exam_questions.size()>0) {
+            Collections.shuffle(exam_questions);
+            examModel.College = college_text.getText();
+            examModel.Date = exam_date.getText();
+            examModel.Department = department_text.getText();
+            examModel.Duration = exam_duration.getText();
+            examModel.ExamCategory = DashboardController.degree_category;
+            examModel.Course_idCourse = DashboardController.current_selected_course_id;
+            examModel.ExamName = exam_name_text.getText();
+            examModel.Note = note_text.getText();
+            examModel.CourseName = DashboardController.coursesListHandler.coursesList.get
+                    (DashboardController.current_selected_course_index).
+                    name.toString();
+            examModel.ExamModel = "A";
+            examModel.ExamType = exam_type.getValue().toString();
+            examModel.TotalMarks = exam_total_marks.getText();
+            GeneratorHandler generatorHandler = new GeneratorHandler();
+            generatorHandler.Add(examModel);
+//            if(Integer.parseInt(number_of_models.getValue().toString())>1){
+//                for (int i = 0; i<Integer.parseInt(number_of_models.getValue().toString()); i++){
+//                    examModel.ExamModel = ((char) 65 + i) + "";
+//                }
+
+ //           }
+        }
     }
     public boolean validate_row_input(int input_val, int db_return){
         return input_val <= db_return;

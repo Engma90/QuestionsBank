@@ -12,7 +12,7 @@ import java.sql.Statement;
 import java.text.MessageFormat;
 
 public class CoursesListHandler {
-    ObservableList<CourseModel> coursesList = FXCollections.observableArrayList();
+    public ObservableList<CourseModel> coursesList = FXCollections.observableArrayList();
 
     public boolean Add(String code, String name, String dr_id, String cat) {
         DBHandler db = new DBHandler();

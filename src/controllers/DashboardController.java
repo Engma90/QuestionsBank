@@ -38,7 +38,7 @@ public class DashboardController implements Initializable {
 
     public ListView<CourseModel> courses_list_view;
     public ListView<ChapterModel> chapters_list_view;
-    private CoursesListHandler coursesListHandler;
+    public static CoursesListHandler coursesListHandler;
     public static  ChaptersListHandler chaptersListHandler;
     QuestionsController questionsController;
 
@@ -48,8 +48,9 @@ public class DashboardController implements Initializable {
     public static String current_selected_course_id;
     public static String current_selected_chapter_id;
     public static String current_selected_dr_id;
-    private static int current_selected_course_index;
-    private static int current_selected_chapter_index;
+    static int current_selected_course_index;
+    static int current_selected_chapter_index;
+
 
 
     public DashboardController(){

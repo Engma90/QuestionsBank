@@ -11,66 +11,83 @@ import java.text.MessageFormat;
 public class QuestionTableHandler {
     private ObservableList<QuestionModel> questionList;
 
-    public boolean Add(String q, String diff, String weight, String type, String[] answers, String right_answer) {
+    public boolean Add(QuestionModel model) {
         DBHandler db = new DBHandler();
         String sql = "insert into question (QuestionContent, QuestionType, QuestionDifficulty, " +
                 "QuestionWeight, Chapter_idChapter) values (?,?,?,?,?);";
         int last_inserted_question_id = db.execute_PreparedStatement(sql, new String[]
-                {q, type, diff, weight, DashboardController.current_selected_chapter_id});
-        for (int i = 0; i < answers.length; i++) {
+                {model.getQuestion_text(), model.getQuestion_type(), model.getQuestion_diff(), model.getQuestion_weight(), DashboardController.current_selected_chapter_id});
+        for (int i = 0; i < model.getAnswers().length; i++) {
             sql = MessageFormat.format(
-                    "insert into answer (AnswerLabel, AnswerContent, Question_idQuestion, IsRightAnswer" +
+                    "insert into questionanswer (AnswerLabel, AnswerContent, Question_idQuestion, IsRightAnswer" +
                             ") values (\"{0}\",\"{1}\",{2},\"{3}\");"
-                    , ((char) (65 + i) + ""), answers[i], last_inserted_question_id,
-                    ((char) (65 + i) + "").equals(right_answer) ? 1 : 0);
+                    , ((char) (65 + i) + ""), model.getAnswers()[i], last_inserted_question_id,
+                    ((char) (65 + i) + "").equals(model.getRight_answer()) ? 1 : 0);
             boolean success = db.execute_sql(sql);
         }
         return true;
     }
 
 
-    public boolean Edit(String id,String q, String diff, String weight, String type, String[] answers, String right_answer) {
+    public boolean Edit(QuestionModel model) {
         DBHandler db = new DBHandler();
-        String sql = "UPDATE question SET QuestionContent = ?, QuestionType = ?, QuestionDifficulty = ?, " +
-                "QuestionWeight =? WHERE idQuestion =?;";
+        if (model.isInExam == 0) {
+            String sql = "UPDATE question SET QuestionContent = ?, QuestionType = ?, QuestionDifficulty = ?, " +
+                    "QuestionWeight =? WHERE idQuestion =?;";
 
-        int last_inserted_question_id = db.execute_PreparedStatement(sql, new String[]
-                {q, type, diff, weight, id});
+            int last_inserted_question_id = db.execute_PreparedStatement(sql, new String[]
+                    {model.getQuestion_text(), model.getQuestion_type(), model.getQuestion_diff(), model.getQuestion_weight(), model.getId()});
 
-        sql = MessageFormat.format("DELETE FROM answer WHERE Question_idQuestion = {0};", id);
-        boolean success = db.execute_sql(sql);
+            sql = MessageFormat.format("DELETE FROM questionanswer WHERE Question_idQuestion = {0};", model.getId());
+            boolean success = db.execute_sql(sql);
 
 
-        for (int i = 0; i < answers.length; i++) {
-            sql = MessageFormat.format(
-                    "insert into answer (AnswerLabel, AnswerContent, Question_idQuestion, IsRightAnswer" +
-                            ") values (\"{0}\",\"{1}\",{2},\"{3}\");"
-                    , ((char) (65 + i) + ""), answers[i], id,
-                    ((char) (65 + i) + "").equals(right_answer) ? 1 : 0);
+            for (int i = 0; i < model.getAnswers().length; i++) {
+                sql = MessageFormat.format(
+                        "insert into questionanswer (AnswerLabel, AnswerContent, Question_idQuestion, IsRightAnswer" +
+                                ") values (\"{0}\",\"{1}\",{2},\"{3}\");"
+                        , ((char) (65 + i) + ""), model.getAnswers()[i], model.getId(),
+                        ((char) (65 + i) + "").equals(model.getRight_answer()) ? 1 : 0);
+                success = db.execute_sql(sql);
+            }
+            return true;
+        }else {
+            boolean success = Add(model);
+            String sql = MessageFormat.format("UPDATE question SET IsEdited = 1 WHERE idQuestion ={0};", model.getId());
             success = db.execute_sql(sql);
+            return success;
+
         }
-        return true;
     }
     public boolean DeleteQuestionAnswers(String Q_id){
+
         DBHandler db = new DBHandler();
-        String sql = MessageFormat.format("DELETE FROM answer WHERE Question_idQuestion = {0};", Q_id);
+
+        String sql = MessageFormat.format("DELETE FROM questionanswer WHERE Question_idQuestion = {0};", Q_id);
         boolean success = db.execute_sql(sql);
         return success;
 
     }
 
-    public boolean DeleteQuestion(String Q_id){
+    public boolean DeleteQuestion( QuestionModel model){
         DBHandler db = new DBHandler();
-        boolean success1 = DeleteQuestionAnswers(Q_id);
-        String sql = MessageFormat.format("DELETE FROM question  WHERE idQuestion = {0};", Q_id);
-         boolean success2 = db.execute_sql(sql);
+        if(model.isInExam == 0) {
+            boolean success1 = DeleteQuestionAnswers(model.getId());
+            String sql = MessageFormat.format("DELETE FROM question  WHERE idQuestion = {0};", model.getId());
+            boolean success2 = db.execute_sql(sql);
 
-        return  success1 && success2;
+            return success1 && success2;
+        }else{
+            boolean success = Add(model);
+            String sql = MessageFormat.format("UPDATE question SET IsDeleted = 1 WHERE idQuestion ={0};", model.getId());
+            success = db.execute_sql(sql);
+            return success;
+        }
     }
     public boolean DeleteAllSelectedChapterQuestions(){
         for (QuestionModel q:questionList){
             System.out.println("Q_ID = "+q.getId());
-            DeleteQuestion(q.getId());
+            DeleteQuestion(q);
         }
         return true;
     }
@@ -80,7 +97,7 @@ public class QuestionTableHandler {
         questionList = FXCollections.observableArrayList();
         DBHandler db = new DBHandler();
         String sql = MessageFormat.format(
-                "SELECT idQuestion,QuestionContent,QuestionDifficulty,QuestionType,QuestionWeight FROM ((( question  " +
+                "SELECT IsEdited,IsInExam,IsDeleted,idQuestion,QuestionContent,QuestionDifficulty,QuestionType,QuestionWeight FROM ((( question  " +
                         "INNER JOIN chapter ON idChapter = {0}) " +
                         "INNER JOIN course ON idCourse = {1})" +
                         "INNER JOIN doctor ON  idDoctor ={2}) WHERE Chapter_idChapter = {0};"
@@ -91,6 +108,9 @@ public class QuestionTableHandler {
             while (rs.next()) {
                 QuestionModel model = new QuestionModel(rs.getInt("idQuestion") + "", rs.getString("QuestionContent"), rs.getString("QuestionDifficulty"),
                         rs.getString("QuestionType"), rs.getString("QuestionWeight"));
+                model.isInExam = rs.getInt("IsInExam");
+                model.isEdited = rs.getInt("IsEdited");
+                model.isDeleted = rs.getInt("IsDeleted");
                 questionList.add(model);
                 getQuestionAnswersList(model, db);
             }
@@ -111,7 +131,7 @@ public class QuestionTableHandler {
         DBHandler db = new DBHandler();
         System.out.println("------------------------------------------0");
         String sql = MessageFormat.format(
-                "SELECT idQuestion,QuestionContent,QuestionDifficulty,QuestionType,QuestionWeight FROM ((( question  " +
+                "SELECT IsEdited,IsInExam,IsDeleted,idQuestion,QuestionContent,QuestionDifficulty,QuestionType,QuestionWeight FROM ((( question  " +
                         "INNER JOIN chapter ON idChapter = {0}) " +
                         "INNER JOIN course ON idCourse = {1})" +
                         "INNER JOIN doctor ON  idDoctor ={2}) WHERE Chapter_idChapter = {0};"
@@ -123,6 +143,9 @@ public class QuestionTableHandler {
             while (rs.next()) {
                 QuestionModel model = new QuestionModel(rs.getInt("idQuestion") + "", rs.getString("QuestionContent"), rs.getString("QuestionDifficulty"),
                         rs.getString("QuestionType"), rs.getString("QuestionWeight"));
+                model.isInExam = rs.getInt("IsInExam");
+                model.isEdited = rs.getInt("IsEdited");
+                model.isDeleted = rs.getInt("IsDeleted");
                 questionList.add(model);
                 System.out.println("------------------------------------------2");
 
@@ -144,7 +167,7 @@ public class QuestionTableHandler {
         DBHandler db = new DBHandler();
         System.out.println("------------------------------------------0");
         String sql = MessageFormat.format(
-                "SELECT idQuestion,QuestionContent,QuestionDifficulty,QuestionType,QuestionWeight FROM ((( question  " +
+                "SELECT IsEdited,IsInExam,IsDeleted,idQuestion,QuestionContent,QuestionDifficulty,QuestionType,QuestionWeight FROM ((( question  " +
                         "INNER JOIN chapter ON idChapter = {0}) " +
                         "INNER JOIN course ON idCourse = {1})" +
                         "INNER JOIN doctor ON  idDoctor ={2}) WHERE Chapter_idChapter = {0} AND QuestionDifficulty =\"{3}\" ;"
@@ -156,6 +179,9 @@ public class QuestionTableHandler {
             while (rs.next()) {
                 QuestionModel model = new QuestionModel(rs.getInt("idQuestion") + "", rs.getString("QuestionContent"), rs.getString("QuestionDifficulty"),
                         rs.getString("QuestionType"), rs.getString("QuestionWeight"));
+                model.isInExam = rs.getInt("IsInExam");
+                model.isEdited = rs.getInt("IsEdited");
+                model.isDeleted = rs.getInt("IsDeleted");
                 questionList.add(model);
                 System.out.println("------------------------------------------2");
 
@@ -175,7 +201,7 @@ public class QuestionTableHandler {
     private void getQuestionAnswersList(QuestionModel model, DBHandler db) {
         try {
             String sql = MessageFormat.format(
-                    "SELECT * FROM answer where Question_idQuestion = {0};"
+                    "SELECT * FROM questionanswer where Question_idQuestion = {0};"
                     , model.getId());
             ResultSet rs_ans = db.execute_query(sql);
             int counter = 0;

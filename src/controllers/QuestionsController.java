@@ -68,7 +68,7 @@ public class QuestionsController   implements Initializable {
         try {
             FXMLLoader loader = new
                     FXMLLoader(getClass().getResource("/views/AddQuestion.fxml"));
-            AddQuestionController addQuestionController =new AddQuestionController("Add", null);
+            AddQuestionController addQuestionController =new AddQuestionController("Add", new QuestionModel());
             loader.setController(addQuestionController);
             root = loader.load();
             Stage stage = new Stage();
@@ -119,7 +119,9 @@ public class QuestionsController   implements Initializable {
         }
     }
     public void onDeleteQuestionClicked(ActionEvent e){
-        questionTableHandler.DeleteQuestion(current_selected_question_id);
+        QuestionModel model = new QuestionModel();
+        model.setId(current_selected_question_id);
+        questionTableHandler.DeleteQuestion(model);
         questions_table.getItems().clear();
         questions_table.setItems(questionTableHandler.getQuestionList());
         int selection = current_selected_question_index - 1;

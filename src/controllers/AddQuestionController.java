@@ -145,7 +145,13 @@ public class AddQuestionController  implements Initializable {
                 else if(radio_answer_d.isSelected())
                     right_answer = "D";
                 System.out.println("valid");
-                questionTableHandler.Add(Q, diff, weight, "MCQ",answers,right_answer);
+                model.setQuestion_text(Q);
+                model.setQuestion_diff(diff);
+                model.setQuestion_weight(weight);
+                model.setQuestion_type("MCQ");
+                model.setAnswers(answers);
+                model.setRight_answer(right_answer);
+                questionTableHandler.Add(model);
             }
 
         }else {
@@ -159,8 +165,13 @@ public class AddQuestionController  implements Initializable {
                     right_answer = "A";
                 else if(radio_answer_b.isSelected())
                     right_answer = "B";
-
-                questionTableHandler.Add(Q, diff, weight, "True/False",answers,right_answer);
+                model.setQuestion_text(Q);
+                model.setQuestion_diff(diff);
+                model.setQuestion_weight(weight);
+                model.setQuestion_type("True/False");
+                model.setAnswers(answers);
+                model.setRight_answer(right_answer);
+                questionTableHandler.Add(model);
             }
         }
 
@@ -196,7 +207,13 @@ public class AddQuestionController  implements Initializable {
                 else if(radio_answer_d.isSelected())
                     right_answer = "D";
                 System.out.println("valid");
-                questionTableHandler.Edit(model.getId(),Q, diff, weight, "MCQ",answers,right_answer);
+                model.setQuestion_text(Q);
+                model.setQuestion_diff(diff);
+                model.setQuestion_weight(weight);
+                model.setQuestion_type("MCQ");
+                model.setAnswers(answers);
+                model.setRight_answer(right_answer);
+                questionTableHandler.Edit(model);
             }
 
         }else {
@@ -210,8 +227,13 @@ public class AddQuestionController  implements Initializable {
                     right_answer = "A";
                 else if(radio_answer_false.isSelected())
                     right_answer = "B";
-
-                questionTableHandler.Edit(model.getId(),Q, diff, weight, "True/False",answers,right_answer);
+                model.setQuestion_text(Q);
+                model.setQuestion_diff(diff);
+                model.setQuestion_weight(weight);
+                model.setQuestion_type("True/False");
+                model.setAnswers(answers);
+                model.setRight_answer(right_answer);
+                questionTableHandler.Edit(model);
             }
         }
 

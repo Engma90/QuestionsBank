@@ -10,7 +10,7 @@ public class DBHandler {
         try{
             Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/questionbankdb","root","Root@1234");
+                    "jdbc:mysql://localhost:3306/qbdb","root","Root@1234");
             return connection;
         }catch(Exception e){ System.out.println(e.getMessage());
             return null;}
