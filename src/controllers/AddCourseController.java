@@ -3,6 +3,7 @@ package controllers;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -32,6 +33,7 @@ public class AddCourseController implements Initializable {
             edit_course.setManaged(false);
             add_course.setVisible(true);
             add_course.setManaged(true);
+            add_course.setDefaultButton(true);
         }else {
             add_course.setVisible(false);
             add_course.setManaged(false);
@@ -39,6 +41,7 @@ public class AddCourseController implements Initializable {
             edit_course.setManaged(true);
             course_name.setText(model.name);
             course_code.setText(model.code);
+            edit_course.setDefaultButton(true);
         }
 
     }
@@ -46,14 +49,24 @@ public class AddCourseController implements Initializable {
         CoursesListHandler coursesListHandler =new CoursesListHandler();
         boolean success = coursesListHandler.Add(course_code.getText(),course_name.getText(),
                 DashboardController.current_selected_dr_id,DashboardController.degree_category);
-        close(e);
+        if(!success){
+            new Alert(Alert.AlertType.ERROR,"Operation Failed").show();
+        }
+        else {
+            close(e);
+        }
     }
 
     public void onEditCourseClicked(ActionEvent e){
         CoursesListHandler coursesListHandler =new CoursesListHandler();
         boolean success = coursesListHandler.Edit(course_code.getText(),course_name.getText(),
                 DashboardController.current_selected_course_id);
-        close(e);
+        if(!success){
+            new Alert(Alert.AlertType.ERROR,"Operation Failed").show();
+        }
+        else {
+            close(e);
+        }
     }
 
     private void close(ActionEvent e){

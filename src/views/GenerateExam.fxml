@@ -8,10 +8,11 @@
 
 <?import javafx.collections.FXCollections?>
 <?import controllers.NumberField?>
+<?import javafx.geometry.Insets?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="controllers.GenerateExamController"
-            prefHeight="400.0" prefWidth="600.0">
+            prefHeight="500.0" prefWidth="1000.0" minWidth="1000">
     <VBox spacing="10" AnchorPane.leftAnchor="20" AnchorPane.topAnchor="20"
           AnchorPane.rightAnchor="20" AnchorPane.bottomAnchor="20">
         <HBox spacing="50">
@@ -28,6 +29,13 @@
                           fx:id="note_text"></TextArea>
             </VBox>
             <VBox spacing="10">
+
+                <Label text="Date"></Label>
+                <TextField promptText="Mon 05/01/2015" fx:id="exam_date"></TextField>
+                <Label text="Duration"></Label>
+                <TextField fx:id="exam_duration"></TextField>
+                <Label text="Total marks"></Label>
+                <TextField fx:id="exam_total_marks"></TextField>
                 <ComboBox value="Exam type" fx:id="exam_type">
                     <items>
                         <FXCollections fx:factory="observableArrayList">
@@ -37,12 +45,6 @@
                         </FXCollections>
                     </items>
                 </ComboBox>
-                <Label text="Date"></Label>
-                <TextField promptText="Mon 05/01/2015" fx:id="exam_date"></TextField>
-                <Label text="Duration"></Label>
-                <TextField fx:id="exam_duration"></TextField>
-                <Label text="Total marks"></Label>
-                <TextField fx:id="exam_total_marks"></TextField>
             </VBox>
         </HBox>
     <ComboBox value="Number of models" fx:id="number_of_models">
@@ -63,26 +65,29 @@
         <RadioButton fx:id="radio_different" text="Different questions"/>
         </VBox>
 
-    <VBox fx:id="shuffle" spacing="5">
+    <!--<VBox fx:id="shuffle" spacing="5">-->
 
-        <RadioButton fx:id="radio_shuffle_questions" text="Shuffle question"/>
+        <!--<RadioButton fx:id="radio_shuffle_questions" text="Shuffle question"/>-->
 
-    </VBox>
+    <!--</VBox>-->
         <Separator/>
         <HBox spacing="10">
-            <Label text="Exam chapters" prefWidth="230"/>
+            <Label text="Exam chapters" prefWidth="240"/>
             <Label text="Number of easy questions" prefWidth="200"/>
             <Label text="Number of medium questions" prefWidth="200"/>
             <Label text="Number of hard questions" prefWidth="200"/>
         </HBox>
-
+<ScrollPane minHeight="220" minWidth="500">
+    <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
         <VBox fx:id="content" spacing="10">
 
         </VBox>
+</ScrollPane>
+        <HBox spacing="20" AnchorPane.bottomAnchor="10"  AnchorPane.rightAnchor="10"
+              AnchorPane.leftAnchor="10" alignment="CENTER">
+            <Button text="Generate" fx:id="generate" onAction="#onGenerateClicked"/>
+            <Button text="Cancel" fx:id="cancel"/>
+        </HBox>
     </VBox>
-    <HBox spacing="20" AnchorPane.bottomAnchor="10"  AnchorPane.rightAnchor="10"
-          AnchorPane.leftAnchor="10" alignment="CENTER">
-        <Button text="Generate" fx:id="generate" onAction="#onGenerateClicked"/>
-        <Button text="Cancel" fx:id="cancel"/>
-    </HBox>
+
 </AnchorPane>

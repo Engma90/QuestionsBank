@@ -30,7 +30,7 @@ public class CoursesListHandler {
     }
     public boolean Delete(String id) {
         DBHandler db = new DBHandler();
-        DashboardController.chaptersListHandler.DeleteAllSelectedCourseChapters();
+        boolean success = DashboardController.chaptersListHandler.DeleteAllSelectedCourseChapters();
         String sql = MessageFormat.format(
                 "DELETE FROM course WHERE idCourse = {0}  ;",
                  id);

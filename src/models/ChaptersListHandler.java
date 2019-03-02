@@ -4,13 +4,11 @@ import controllers.DashboardController;
 import controllers.QuestionsController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.MessageFormat;
 
 public class ChaptersListHandler {
-
     private ObservableList<ChapterModel> chaptersList;
     public boolean Add(ChapterModel model) {
         DBHandler db = new DBHandler();
@@ -34,11 +32,12 @@ public class ChaptersListHandler {
                 , model.id);
         return db.execute_sql(sql);
     }
-    public boolean DeleteAllSelectedCourseChapters(){
+    boolean DeleteAllSelectedCourseChapters(){
+        boolean success = false;
         for (ChapterModel ch: chaptersList){
-            Delete(ch);
+            success = Delete(ch);
         }
-        return true;
+        return success;
     }
 
     public ObservableList<ChapterModel> getChaptersList(){

@@ -38,9 +38,12 @@ public class AddQuestionController  implements Initializable {
     public AddQuestionController(String operation_type, QuestionModel model){
         this.operation_type = operation_type;
         this.model = model;
+
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        combo_q_weight.setVisible(false);
+        combo_q_weight.setManaged(false);
         System.out.println(combo_q_diff.getValue());
         final ToggleGroup type_group = new ToggleGroup();
         radio_mcq.setToggleGroup(type_group);
@@ -76,11 +79,13 @@ public class AddQuestionController  implements Initializable {
             edit_question.setManaged(false);
             add_question.setVisible(true);
             add_question.setManaged(true);
+            //add_question.setDefaultButton(true);
         }else {
             add_question.setVisible(false);
             add_question.setManaged(false);
             edit_question.setVisible(true);
             edit_question.setManaged(true);
+            //edit_question.setDefaultButton(true);
             setPrevConfig();
         }
 
@@ -152,6 +157,9 @@ public class AddQuestionController  implements Initializable {
                 model.setAnswers(answers);
                 model.setRight_answer(right_answer);
                 questionTableHandler.Add(model);
+                close(e);
+            }else {
+                new Alert(Alert.AlertType.ERROR,"Please fill all fields").show();
             }
 
         }else {
@@ -172,6 +180,9 @@ public class AddQuestionController  implements Initializable {
                 model.setAnswers(answers);
                 model.setRight_answer(right_answer);
                 questionTableHandler.Add(model);
+                close(e);
+            }else {
+                new Alert(Alert.AlertType.ERROR,"Please fill all fields").show();
             }
         }
 
@@ -180,7 +191,7 @@ public class AddQuestionController  implements Initializable {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        close(e);
+
     }
 
 
@@ -214,6 +225,9 @@ public class AddQuestionController  implements Initializable {
                 model.setAnswers(answers);
                 model.setRight_answer(right_answer);
                 questionTableHandler.Edit(model);
+                close(e);
+            }else {
+                new Alert(Alert.AlertType.ERROR,"Please fill all fields").show();
             }
 
         }else {
@@ -234,15 +248,19 @@ public class AddQuestionController  implements Initializable {
                 model.setAnswers(answers);
                 model.setRight_answer(right_answer);
                 questionTableHandler.Edit(model);
+                close(e);
+            }
+            else {
+                new Alert(Alert.AlertType.ERROR,"Please fill all fields").show();
             }
         }
+//
+//        try {
+//            //Save_to_file(Q);
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//        }
 
-        try {
-            Save_to_file(Q);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        close(e);
     }
 
     private void Save_to_file(String s) throws IOException {
@@ -257,7 +275,7 @@ public class AddQuestionController  implements Initializable {
         if(Q.isEmpty() || A.isEmpty() || B.isEmpty() || C.isEmpty() || D.isEmpty()){
             return false;
         }
-        else if(diff.equals("Difficulty") || weight.equals("Weight")){
+        else if(diff.equals("Difficulty") ){//|| weight.equals("Weight")
             return false;
         }
         else if(!radio_answer_a.isSelected() && !radio_answer_b.isSelected()
@@ -271,7 +289,7 @@ public class AddQuestionController  implements Initializable {
         if(Q.isEmpty()){
             return false;
         }
-        else if(diff.equals("Difficulty") || weight.equals("Weight")){
+        else if(diff.equals("Difficulty")){
             return false;
         }
         else if(!radio_answer_true.isSelected() && !radio_answer_false.isSelected()){

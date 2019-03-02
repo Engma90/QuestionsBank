@@ -7,6 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -27,6 +28,7 @@ public class HomeController implements Initializable {
     public PasswordField login_password;
     public static boolean isLogged_in = false;
     static LoginHandler loginHandler;
+    public Button login,under_graduates;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         if(isLogged_in){
@@ -35,7 +37,10 @@ public class HomeController implements Initializable {
             login_form.setVisible(false);
             login_form.setManaged(false);
             dr_name.setText(loginHandler.dr.name);
+
+
         }else {
+            login.setDefaultButton(true);
             navigate_form.setVisible(false);
             navigate_form.setManaged(false);
             login_form.setVisible(true);
@@ -47,12 +52,13 @@ public class HomeController implements Initializable {
 
         loginHandler = new LoginHandler();
         if(loginHandler.login(login_email.getText(), login_password.getText())){
+            isLogged_in = true;
             navigate_form.setVisible(true);
             navigate_form.setManaged(true);
             login_form.setVisible(false);
             login_form.setManaged(false);
             dr_name.setText(loginHandler.dr.name);
-            isLogged_in = true;
+            under_graduates.setDefaultButton(true);
         }
 
 

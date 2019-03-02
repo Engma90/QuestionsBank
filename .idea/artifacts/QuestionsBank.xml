@@ -19,6 +19,8 @@
         </element>
       </element>
       <element id="library" level="project" name="mysql-connector-java-5.1.47-bin" />
+      <element id="library" level="project" name="jsoup-1.11.3" />
+      <element id="library" level="project" name="aopalliance-repackaged-2.2.0" />
     </root>
   </artifact>
 </component>

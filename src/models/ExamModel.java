@@ -17,7 +17,4 @@ public class ExamModel {
     public String TotalMarks;
     public String Course_idCourse;
     public List<QuestionModel> questionModelList;
-
-
-
 }

@@ -135,6 +135,8 @@ public class DashboardController implements Initializable {
             stage.initModality(Modality.WINDOW_MODAL);
             stage.initOwner(((Node)e.getTarget()).getScene().getWindow());
             stage.setTitle("Generate Exam");
+            stage.setMinHeight(700);
+            stage.setMinWidth(1000);
             stage.setScene(new Scene(root));
             stage.show();
         }

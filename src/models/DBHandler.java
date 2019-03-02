@@ -11,6 +11,10 @@ public class DBHandler {
             Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/qbdb","root","Root@1234");
+
+//            connection = DriverManager.getConnection(
+//                    "jdbc:mysql://db4free.net:3306/gcp_b6f5e2b44df2","b4ff235c5f33bb","34022b76");
+
             return connection;
         }catch(Exception e){ System.out.println(e.getMessage());
             return null;}

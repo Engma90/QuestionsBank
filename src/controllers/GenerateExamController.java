@@ -9,20 +9,23 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.VBox;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.Window;
 import models.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
 public class GenerateExamController implements Initializable {
     public ComboBox number_of_models;
-    public VBox same_or_different, shuffle;
+    public VBox same_or_different;//, shuffle;
     public VBox content;
-    public RadioButton radio_same, radio_different, radio_shuffle_questions;
+    public RadioButton radio_same, radio_different;//, radio_shuffle_questions;
     List<GenerateExamFormRowController> generateExamFormRowControllerList;
     List<ChapterModel> chapterModelList;
-    public List<QuestionModel> exam_questions;
+
     public TextField college_text, exam_duration, department_text, exam_date,
             exam_total_marks, exam_name_text;
     public TextArea note_text;
@@ -33,15 +36,15 @@ public class GenerateExamController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         generateExamFormRowControllerList = new ArrayList<>();
         final ToggleGroup same_or_different_group = new ToggleGroup();
-        final ToggleGroup shuffle_group = new ToggleGroup();
+        //final ToggleGroup shuffle_group = new ToggleGroup();
         radio_same.setToggleGroup(same_or_different_group);
         radio_different.setToggleGroup(same_or_different_group);
 
-        radio_shuffle_questions.setToggleGroup(shuffle_group);
+        //radio_shuffle_questions.setToggleGroup(shuffle_group);
 
 
-        shuffle.setVisible(false);
-        shuffle.setManaged(false);
+//        shuffle.setVisible(false);
+//        shuffle.setManaged(false);
         same_or_different.setVisible(false);
         same_or_different.setManaged(false);
 
@@ -49,13 +52,13 @@ public class GenerateExamController implements Initializable {
             if (Integer.parseInt(number_of_models.getSelectionModel().getSelectedItem().toString()) > 1) {
                 same_or_different.setVisible(true);
                 same_or_different.setManaged(true);
-                shuffle.setVisible(true);
-                shuffle.setManaged(true);
+//                shuffle.setVisible(true);
+//                shuffle.setManaged(true);
                 radio_same.setSelected(true);
             } else {
                 radio_same.setSelected(true);
-                shuffle.setVisible(false);
-                shuffle.setManaged(false);
+       //         shuffle.setVisible(false);
+      //          shuffle.setManaged(false);
                 same_or_different.setVisible(false);
                 same_or_different.setManaged(false);
             }
@@ -64,15 +67,15 @@ public class GenerateExamController implements Initializable {
 
         radio_same.setOnAction(e -> {
             if (radio_same.isSelected()) {
-                shuffle.setVisible(true);
-                shuffle.setManaged(true);
+        //        shuffle.setVisible(true);
+        //        shuffle.setManaged(true);
 
             }
         });
         radio_different.setOnAction(e -> {
             if (radio_different.isSelected()) {
-                shuffle.setVisible(false);
-                shuffle.setManaged(false);
+      //          shuffle.setVisible(false);
+      //          shuffle.setManaged(false);
 
             }
         });
@@ -98,62 +101,103 @@ public class GenerateExamController implements Initializable {
     }
 
     public void onGenerateClicked(ActionEvent e) {
-        exam_questions = new ArrayList<QuestionModel>();
-        ExamModel examModel = new ExamModel();
+        if(validate()) {
+            DirectoryChooser directoryChooser = new DirectoryChooser();
+            Node source = (Node) e.getSource();
+            Window stage = source.getScene().getWindow();
+            File selectedDirectory = directoryChooser.showDialog(stage);
+
+            if (selectedDirectory != null) {
+                System.out.println(selectedDirectory.getAbsolutePath());
+
+
+                List<QuestionModel> exam_questions = getExamQuestionsList();
+                ExamModel examModel = new ExamModel();
+                if (exam_questions.size() > 0) {
+                    if (radio_same.isSelected() || Integer.parseInt(number_of_models.getValue().toString()) == 1) {
+                        for (int i = 0; i < Integer.parseInt(number_of_models.getValue().toString()); i++) {
+                            examModel.ExamModel = ((char) (65 + i)) + "";
+                            examModel.questionModelList = exam_questions;
+                            addExamToDatabase(examModel);
+                            new FileExporter().Export(examModel, selectedDirectory.getAbsolutePath());
+                        }
+                        new Alert(Alert.AlertType.INFORMATION, "Operation Compleated").show();
+                    } else if (radio_different.isSelected() && Integer.parseInt(number_of_models.getValue().toString()) > 1) {
+                        for (int i = 0; i < Integer.parseInt(number_of_models.getValue().toString()); i++) {
+                            exam_questions = getExamQuestionsList();
+                            examModel.ExamModel = ((char) (65 + i)) + "";
+                            examModel.questionModelList = exam_questions;
+                            addExamToDatabase(examModel);
+                            new FileExporter().Export(examModel, selectedDirectory.getAbsolutePath());
+                        }
+                        new Alert(Alert.AlertType.INFORMATION, "Operation Compleated").show();
+                    }
+                }
+            }
+        }
+    }
+    private  List<QuestionModel> getExamQuestionsList(){
+        List<QuestionModel> exam_questions = new ArrayList<QuestionModel>();
+        for (GenerateExamFormRowController row : generateExamFormRowControllerList) {
+            if (row.isSelected.isSelected()) {
+                Collections.shuffle(row.easy_list);
+                for (int i = 0; i < Integer.parseInt(row.Easy.getText()); i++) {
+                    exam_questions.add(row.easy_list.get(i));
+                }
+                Collections.shuffle(row.medium_list);
+                for (int i = 0; i < Integer.parseInt(row.Medium.getText()); i++) {
+                    exam_questions.add(row.medium_list.get(i));
+                }
+                Collections.shuffle(row.hard_list);
+                for (int i = 0; i < Integer.parseInt(row.Hard.getText()); i++) {
+                    exam_questions.add(row.hard_list.get(i));
+                }
+            }
+        }
+        return exam_questions;
+    }
+
+
+    private boolean validate(){
+        if(college_text.getText().isEmpty() || exam_name_text.getText().isEmpty()
+        || department_text.getText().isEmpty() || note_text.getText().isEmpty()
+         || exam_date.getText().isEmpty() || exam_duration.getText().isEmpty()
+        || exam_total_marks.getText().isEmpty() || exam_type.getValue().toString().equals("Exam type")
+        || number_of_models.getValue().toString().equals("Number of models")){
+            new Alert(Alert.AlertType.ERROR, "Please fill all fields").show();
+            return false;
+        }
         for (GenerateExamFormRowController row : generateExamFormRowControllerList) {
             if (row.isSelected.isSelected()) {
                 row.easy_list = QuestionsController.questionTableHandler.getQuestionList(row.chapter_id, "Easy");
                 Collections.shuffle(row.easy_list);
                 if (!validate_row_input(Integer.parseInt(row.Easy.getText()), row.easy_list.size())) {
-                    System.out.println("");
-                    //row.Easy.setBorder();
-                    new Alert(Alert.AlertType.ERROR, "Wrong number of questions in chapter:" + row.chapter_name).show();
-
-                } else {
-                    for (int i = 0; i < Integer.parseInt(row.Easy.getText()); i++) {
-                        exam_questions.add(row.easy_list.get(i));
-                    }
+                    new Alert(Alert.AlertType.ERROR, "Wrong number of easy questions in chapter:" + row.chapter_name).show();
+                    return false;
                 }
                 row.medium_list = QuestionsController.questionTableHandler.getQuestionList(row.chapter_id, "Medium");
                 Collections.shuffle(row.medium_list);
                 if (!validate_row_input(Integer.parseInt(row.Medium.getText()), row.medium_list.size())) {
-                    new Alert(Alert.AlertType.ERROR, "Wrong number of questions in chapter:" + row.chapter_name).show();
-
-                } else {
-                    for (int i = 0; i < Integer.parseInt(row.Medium.getText()); i++) {
-                        exam_questions.add(row.medium_list.get(i));
-                    }
+                    new Alert(Alert.AlertType.ERROR, "Wrong number of medium questions in chapter:" + row.chapter_name).show();
+                    return false;
                 }
                 row.hard_list = QuestionsController.questionTableHandler.getQuestionList(row.chapter_id, "Hard");
                 Collections.shuffle(row.hard_list);
                 if (!validate_row_input(Integer.parseInt(row.Hard.getText()), row.hard_list.size())) {
-                    new Alert(Alert.AlertType.ERROR, "Wrong number of questions in chapter:" + row.chapter_name).show();
-
-                } else {
-                    for (int i = 0; i < Integer.parseInt(row.Hard.getText()); i++) {
-                        exam_questions.add(row.hard_list.get(i));
-                    }
+                    new Alert(Alert.AlertType.ERROR, "Wrong number of hard questions in chapter:" + row.chapter_name).show();
+                    return false;
                 }
             }
         }
-        if (exam_questions.size() > 0) {
-            if (radio_same.isSelected() || Integer.parseInt(number_of_models.getValue().toString()) == 1) {
-                for (int i = 0; i < Integer.parseInt(number_of_models.getValue().toString()); i++) {
-                    examModel.ExamModel = ((char) (65 + i)) + "";
-                    addExamToDatabase(examModel);
-                }
-            } else if (radio_different.isSelected() && Integer.parseInt(number_of_models.getValue().toString()) > 1) {
-
-            }
-        }
+        return true;
     }
 
-    public boolean validate_row_input(int input_val, int db_return) {
+    private boolean validate_row_input(int input_val, int db_return) {
         return input_val <= db_return;
     }
 
     private void addExamToDatabase(ExamModel examModel) {
-        Collections.shuffle(exam_questions);
+        Collections.shuffle(examModel.questionModelList);
         examModel.College = college_text.getText();
         examModel.Date = exam_date.getText();
         examModel.Department = department_text.getText();
@@ -168,7 +212,7 @@ public class GenerateExamController implements Initializable {
 
         examModel.ExamType = exam_type.getValue().toString();
         examModel.TotalMarks = exam_total_marks.getText();
-        examModel.questionModelList = exam_questions;
+        //examModel.questionModelList = examModel.questionModelList;
         GeneratorHandler generatorHandler = new GeneratorHandler();
         generatorHandler.Add(examModel);
     }

@@ -31,10 +31,12 @@ public class AddChapterController implements Initializable {
         if(this.operation_type.contains("Add")){
             edit_chapter.setVisible(false);
             edit_chapter.setManaged(false);
+            add_chapter.setDefaultButton(true);
         }else {
             add_chapter.setVisible(false);
             add_chapter.setManaged(false);
             chapter_name.setText(model.name);
+            edit_chapter.setDefaultButton(true);
         }
     }
     public void onAddChapterClicked(ActionEvent e){
@@ -44,9 +46,11 @@ public class AddChapterController implements Initializable {
         model.name = chapter_name.getText();
         boolean success = DashboardController.chaptersListHandler.Add(model);
         if(!success){
-            Alert alert = new Alert(Alert.AlertType.ERROR,"Failed to add");
+            new Alert(Alert.AlertType.ERROR,"Operation Failed").show();
         }
-        close(e);
+        else {
+            close(e);
+        }
     }
 
     public void onEditChapterClicked(ActionEvent e){
@@ -55,9 +59,11 @@ public class AddChapterController implements Initializable {
         model.id = DashboardController.current_selected_chapter_id;
         boolean success = DashboardController.chaptersListHandler.Edit(model);
         if(!success){
-            Alert alert = new Alert(Alert.AlertType.ERROR,"Failed to edit");
+            new Alert(Alert.AlertType.ERROR,"Operation Failed").show();
         }
-        close(e);
+        else {
+            close(e);
+        }
     }
 
     private void close(ActionEvent e){
