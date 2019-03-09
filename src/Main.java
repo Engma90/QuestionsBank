@@ -1,11 +1,9 @@
-import controllers.FileExporter;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import models.QuestionTableHandler;
 
 import java.io.IOException;
 
@@ -18,10 +16,10 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws IOException {
 
         Parent root;
-        root = FXMLLoader.load(getClass().getResource("/views/PreviousExams.fxml"));
-//        Image icon = new Image(getClass().getResourceAsStream("icon.png"));
-//
-//        primaryStage.getIcons().add(icon);
+        root = FXMLLoader.load(getClass().getResource("/views/Home.fxml"));
+        Image icon = new Image(getClass().getResourceAsStream("logo.png"));
+
+        primaryStage.getIcons().add(icon);
         primaryStage.setTitle("Home");
         primaryStage.setMaximized(true);
         primaryStage.setScene(new Scene(root));

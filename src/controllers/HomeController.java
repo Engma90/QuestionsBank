@@ -32,8 +32,8 @@ public class HomeController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         if(isLogged_in){
-            navigate_form.setVisible(true);
-            navigate_form.setManaged(true);
+//            navigate_form.setVisible(true);
+//            navigate_form.setManaged(true);
             login_form.setVisible(false);
             login_form.setManaged(false);
             dr_name.setText(loginHandler.dr.name);
@@ -41,53 +41,69 @@ public class HomeController implements Initializable {
 
         }else {
             login.setDefaultButton(true);
-            navigate_form.setVisible(false);
-            navigate_form.setManaged(false);
+//            navigate_form.setVisible(false);
+//            navigate_form.setManaged(false);
             login_form.setVisible(true);
             login_form.setManaged(true);
         }
     }
 
-    public void onLoginClicked(ActionEvent e){
+    public void onLoginClicked(ActionEvent e) throws IOException{
 
         loginHandler = new LoginHandler();
         if(loginHandler.login(login_email.getText(), login_password.getText())){
             isLogged_in = true;
-            navigate_form.setVisible(true);
-            navigate_form.setManaged(true);
-            login_form.setVisible(false);
-            login_form.setManaged(false);
-            dr_name.setText(loginHandler.dr.name);
-            under_graduates.setDefaultButton(true);
+//            navigate_form.setVisible(true);
+//            navigate_form.setManaged(true);
+//            login_form.setVisible(false);
+//            login_form.setManaged(false);
+//            dr_name.setText(loginHandler.dr.name);
+            //under_graduates.setDefaultButton(true);
+
+
+
+
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Dashboard.fxml"));
+            DashboardController.degree_category = DashboardController.UNDER_GRAD;
+            Stage current_stage = new Stage(); //(Stage) ((Node)e.getTarget()).getScene().getWindow();
+            current_stage.setTitle("Dashboard - Under graduates");
+            Scene scene = new Scene(loader.load());
+            current_stage.setScene(scene);
+
+            //current_stage.setMaximized(false);
+            current_stage.setMaximized(true);
+            current_stage.show();
+            ((Stage) ((Node)e.getTarget()).getScene().getWindow()).close();
         }
 
 
     }
-    public void onUnderGradClicked(ActionEvent e) throws IOException {
-
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Dashboard.fxml"));
-        DashboardController.degree_category = DashboardController.UNDER_GRAD;
-        Stage current_stage = (Stage) ((Node)e.getTarget()).getScene().getWindow();
-        current_stage.setTitle("Dashboard - Under graduates");
-        Scene scene = new Scene(loader.load());
-        current_stage.setScene(scene);
-
-        current_stage.setMaximized(false);
-        current_stage.setMaximized(true);
-        current_stage.show();
-    }
-    public void onPostGradClicked(ActionEvent e) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Dashboard.fxml"));
-        DashboardController.degree_category = DashboardController.POST_GRAD;
-        Stage current_stage = (Stage) ((Node)e.getTarget()).getScene().getWindow();
-        current_stage.setTitle("Dashboard - Post graduates");
-        Scene scene = new Scene(loader.load());
-        current_stage.setScene(scene);
-
-        current_stage.setMaximized(false);
-        current_stage.setMaximized(true);
-        current_stage.show();
-    }
+//    public void onUnderGradClicked(ActionEvent e) throws IOException {
+//
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Dashboard.fxml"));
+//        DashboardController.degree_category = DashboardController.UNDER_GRAD;
+//        Stage current_stage = (Stage) ((Node)e.getTarget()).getScene().getWindow();
+//        current_stage.setTitle("Dashboard - Under graduates");
+//        Scene scene = new Scene(loader.load());
+//        current_stage.setScene(scene);
+//
+//        current_stage.setMaximized(false);
+//        current_stage.setMaximized(true);
+//        current_stage.show();
+//    }
+//    public void onPostGradClicked(ActionEvent e) throws IOException {
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Dashboard.fxml"));
+//        DashboardController.degree_category = DashboardController.POST_GRAD;
+//        Stage current_stage = (Stage) ((Node)e.getTarget()).getScene().getWindow();
+//        current_stage.setTitle("Dashboard - Post graduates");
+//        Scene scene = new Scene(loader.load());
+//        current_stage.setScene(scene);
+//
+//        current_stage.setMaximized(false);
+//        current_stage.setMaximized(true);
+//        current_stage.show();
+//    }
     public void onSignupClicked(ActionEvent e){
         Parent root;
         try {

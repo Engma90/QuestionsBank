@@ -1,7 +1,5 @@
 package controllers;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
@@ -22,14 +20,10 @@ import javafx.stage.Stage;
 
 import javafx.event.ActionEvent;
 import javafx.stage.WindowEvent;
-import models.ChapterModel;
-import models.ChaptersListHandler;
-import models.CourseModel;
-import models.CoursesListHandler;
+import models.*;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.LinkedList;
 import java.util.ResourceBundle;
 
 public class DashboardController implements Initializable {
@@ -38,18 +32,21 @@ public class DashboardController implements Initializable {
 
     public ListView<CourseModel> courses_list_view;
     public ListView<ChapterModel> chapters_list_view;
+    public ListView<TopicModel> topics_list_view;
     public static CoursesListHandler coursesListHandler;
     public static  ChaptersListHandler chaptersListHandler;
-    QuestionsController questionsController;
+    QuestionsTableController questionsTableController;
 
     public AnchorPane right_content;
 
     public static String degree_category;
     public static String current_selected_course_id;
     public static String current_selected_chapter_id;
+    public static String current_selected_topic_id;
     public static String current_selected_dr_id;
     static int current_selected_course_index;
     static int current_selected_chapter_index;
+    static int current_selected_topic_index;
 
 
 
@@ -63,10 +60,10 @@ public class DashboardController implements Initializable {
         System.out.println(degree_category);
         AnchorPane pnlOne;
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Questions.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/QuestionsTable.fxml"));
             Parent questions_root = loader.load();
-            questionsController = loader.getController();
-            //pnlOne = FXMLLoader.load(this.getClass().getResource("/views/Questions.fxml"));
+            questionsTableController = loader.getController();
+            //pnlOne = FXMLLoader.load(this.getClass().getResource("/views/QuestionsTable.fxml"));
             right_content.getChildren().setAll(((AnchorPane)questions_root).getChildren());
 
         } catch (IOException e) {
@@ -82,11 +79,11 @@ public class DashboardController implements Initializable {
                 chapters_list_view.getItems().clear();
                 current_selected_chapter_index = -1;
                 current_selected_chapter_id = "-1";
-                int current_selected_index = courses_list_view.getItems().indexOf(newValue);
+                int current_selected_index = courses_list_view.getSelectionModel().getSelectedIndex();//.getItems().indexOf(newValue);
                 current_selected_course_id = courses_list_view.getItems().get(current_selected_index).id;
                 System.out.println("get(current_selected_index).id "+current_selected_course_id);
                 current_selected_course_index = current_selected_index;
-                questionsController.refreshList();
+                questionsTableController.refreshList();
                 chapters_list_view.setItems(chaptersListHandler.getChaptersList());
                 chapters_list_view.getSelectionModel().selectFirst();
                 System.out.println("Course="+current_selected_course_index);
@@ -103,10 +100,26 @@ public class DashboardController implements Initializable {
                 if(current_selected_index != -1)
                 current_selected_chapter_id = chapters_list_view.getItems().get(current_selected_index).id;
                 current_selected_chapter_index = current_selected_index;
-                questionsController.refreshList();
+                //questionsTableController.refreshList();
                 System.out.println("Chapter="+current_selected_chapter_index);
             }
         });
+
+
+        topics_list_view.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TopicModel>() {
+            @Override
+            public void changed(ObservableValue<? extends TopicModel> observable, TopicModel oldValue, TopicModel newValue) {
+
+                int current_selected_index = topics_list_view.getItems().indexOf(newValue);
+                if(current_selected_index != -1)
+                    current_selected_topic_id = topics_list_view.getItems().get(current_selected_index).id;
+                current_selected_topic_index = current_selected_index;
+                questionsTableController.refreshList();
+                System.out.println("topic="+current_selected_topic_index);
+            }
+        });
+
+
 //        courses_list_view.getSelectionModel().selectFirst();
 //        chapters_list_view.getSelectionModel().selectFirst();
 
@@ -116,15 +129,15 @@ public class DashboardController implements Initializable {
         chapters_list_view.setItems(chaptersListHandler.getChaptersList());
         chapters_list_view.getSelectionModel().selectFirst();
     }
-    @FXML
-    public void onHomeClicked(ActionEvent e) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Home.fxml"));
-        Stage current_stage = (Stage) ((Node)e.getTarget()).getScene().getWindow();
-        current_stage.setTitle("Home");
-        Scene scene = new Scene(loader.load());
-        current_stage.setScene(scene);
-        current_stage.show();
-    }
+//    @FXML
+//    public void onHomeClicked(ActionEvent e) throws IOException {
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Home.fxml"));
+//        Stage current_stage = (Stage) ((Node)e.getTarget()).getScene().getWindow();
+//        current_stage.setTitle("Home");
+//        Scene scene = new Scene(loader.load());
+//        current_stage.setScene(scene);
+//        current_stage.show();
+//    }
 
     @FXML
     public void onGenerateExamClicked(ActionEvent e){
@@ -268,7 +281,7 @@ public class DashboardController implements Initializable {
         }
     }
     public void onDeleteChapterClicked(ActionEvent e){
-        ChapterModel model = new ChapterModel(current_selected_chapter_id, "");
+        ChapterModel model = new ChapterModel(current_selected_chapter_id, "","");
         chaptersListHandler.Delete(model);
         chapters_list_view.getItems().clear();
         chapters_list_view.setItems(chaptersListHandler.getChaptersList());
@@ -278,5 +291,76 @@ public class DashboardController implements Initializable {
         chapters_list_view.getSelectionModel().select(selection);
     }
 
+
+
+
+    public void onAddTopicClicked(ActionEvent e){
+        Parent root;
+        try {
+            FXMLLoader loader = new
+                    FXMLLoader(getClass().getResource("/views/AddTopic.fxml"));
+            AddTopicController addTopicController =new AddTopicController("Add", new TopicModel());
+            loader.setController(addTopicController);
+            root = loader.load();
+            Stage stage = new Stage();
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.initOwner(((Node)e.getTarget()).getScene().getWindow());
+            stage.setTitle("Add Topic");
+            stage.setScene(new Scene(root));
+            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                public void handle(WindowEvent we) {
+                    System.out.println("Closed");
+                    try {
+                        topics_list_view.getItems().clear();
+                    }catch (Exception ex){
+
+                    }
+
+                    topics_list_view.setItems(TopicListHandler.getInstance().getTopicsList());
+                    topics_list_view.getSelectionModel().selectLast();
+                }
+            });
+            stage.show();
+        }
+        catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+    public void onEditTopicClicked(ActionEvent e){
+        Parent root;
+        try {
+            FXMLLoader loader = new
+                    FXMLLoader(getClass().getResource("/views/AddTopic.fxml"));
+            AddTopicController addTopicController =new AddTopicController("Edit", topics_list_view.getSelectionModel().getSelectedItem());
+            loader.setController(addTopicController);
+            root = loader.load();
+            Stage stage = new Stage();
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.initOwner(((Node)e.getTarget()).getScene().getWindow());
+            stage.setTitle("Edit Topic");
+            stage.setScene(new Scene(root));
+            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                public void handle(WindowEvent we) {
+                    System.out.println("Closed");
+                    topics_list_view.getItems().clear();
+                    topics_list_view.setItems(TopicListHandler.getInstance().getTopicsList());
+                    topics_list_view.getSelectionModel().selectLast();
+                }
+            });
+            stage.show();
+        }
+        catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+    public void onDeleteTopicClicked(ActionEvent e){
+        TopicListHandler.getInstance().Delete(topics_list_view.getSelectionModel().getSelectedItem());
+        topics_list_view.getItems().clear();
+        topics_list_view.setItems(TopicListHandler.getInstance().getTopicsList());
+        int selection = topics_list_view.getSelectionModel().getSelectedIndex() - 1;
+        if(selection<0)
+            selection = 0;
+        topics_list_view.getSelectionModel().select(selection);
+    }
 
 }

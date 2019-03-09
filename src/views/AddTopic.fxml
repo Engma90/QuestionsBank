@@ -11,15 +11,11 @@
           AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="20" alignment="CENTER">
 
         <HBox spacing="10">
-            <Label text="Chapter number"/>
-            <TextField fx:id="chapter_number"/>
+            <Label text="Topic name"/>
+            <TextField fx:id="topic_name"/>
         </HBox>
-        <HBox spacing="10">
-            <Label text="Chapter name"/>
-            <TextField fx:id="chapter_name"/>
-        </HBox>
-        <Button text="Add" fx:id="add_chapter" onAction="#onAddChapterClicked"/>
-        <Button text="Edit" fx:id="edit_chapter" onAction="#onEditChapterClicked"/>
+        <Button text="Add" fx:id="add_topic" onAction="#onAddTopicClicked"/>
+        <Button text="Edit" fx:id="edit_topic" onAction="#onEditTopicClicked"/>
     </VBox>
 
 </AnchorPane>

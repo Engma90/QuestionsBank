@@ -18,7 +18,7 @@
 
         <Label text="Courses" />
 
-        <ListView fx:id="courses_list_view" prefHeight="200">
+        <ListView fx:id="courses_list_view" prefHeight="150">
             <items>
                 <FXCollections fx:factory="observableArrayList">
 
@@ -32,13 +32,13 @@
             <Button fx:id="delete_course" text="Delete" onAction="#onDeleteCourseClicked" />
 
             <Button fx:id="generate_exam" onAction="#onGenerateExamClicked" text="Generate exam" />
-            <Button fx:id="previous_exam" onAction="#onGenerateExamClicked" text="Previous exams" />
+            <!--<Button fx:id="previous_exam" onAction="#onGenerateExamClicked" text="Previous exams" />-->
 
         </HBox>
         <Separator orientation="HORIZONTAL" />
         <Label text="Chapters" />
 
-            <ListView fx:id="chapters_list_view" prefHeight="200">
+            <ListView fx:id="chapters_list_view" prefHeight="150">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
 
@@ -53,6 +53,27 @@
 
         </HBox>
 
+
+
+
+        <Separator orientation="HORIZONTAL" />
+        <Label text="Topics" />
+
+        <ListView fx:id="topics_list_view" prefHeight="150">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+
+                </FXCollections>
+            </items>
+        </ListView>
+
+        <HBox spacing="10">
+            <Button fx:id="add_topic" onAction="#onAddTopicClicked" text="Add" />
+            <Button fx:id="edit_topic" text="Edit" onAction="#onEditTopicClicked" />
+            <Button fx:id="delete_topic" text="Delete" onAction="#onDeleteTopicClicked" />
+
+        </HBox>
+
 </VBox>
 
         <Separator orientation="VERTICAL" />
@@ -63,7 +84,7 @@
 
     </HBox>
 
-    <HBox AnchorPane.bottomAnchor="10" AnchorPane.leftAnchor="10">
-        <Button fx:id="back_to_home" onAction="#onHomeClicked" text="Home" />
-    </HBox>
+    <!--<HBox AnchorPane.bottomAnchor="10" AnchorPane.leftAnchor="10">-->
+        <!--<Button fx:id="back_to_home" onAction="#onHomeClicked" text="Home" />-->
+    <!--</HBox>-->
 </AnchorPane>

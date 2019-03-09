@@ -12,8 +12,9 @@ public class QuestionModel {
     private SimpleStringProperty question_text = new SimpleStringProperty("");
     private SimpleStringProperty question_weight = new SimpleStringProperty("");
     private String right_answer;
+    public String expected_time = "2";
     private String[] answers = new String[4];
-    public int isEdited, isDeleted, isInExam;
+    //public int isEdited, isDeleted, isInExam;
 
     public QuestionModel(){
         this("", "", "", "", "", "");

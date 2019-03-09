@@ -18,7 +18,7 @@ import java.util.ResourceBundle;
 
 public class AddChapterController implements Initializable {
 
-    public TextField chapter_name;
+    public TextField chapter_name,chapter_number;
     public Button add_chapter, edit_chapter;
     private String operation_type;
     private ChapterModel model;
@@ -36,14 +36,16 @@ public class AddChapterController implements Initializable {
             add_chapter.setVisible(false);
             add_chapter.setManaged(false);
             chapter_name.setText(model.name);
+            chapter_number.setText(model.number);
             edit_chapter.setDefaultButton(true);
         }
     }
     public void onAddChapterClicked(ActionEvent e){
         //ChaptersListHandler chaptersListHandler =DashboardController.chaptersListHandler;
-        System.out.println("current_selected_course_id=" + DashboardController.current_selected_course_id);
-        System.out.println("chapter_name.getText()=" + chapter_name.getText());
+//        System.out.println("current_selected_course_id=" + DashboardController.current_selected_course_id);
+//        System.out.println("chapter_name.getText()=" + chapter_name.getText());
         model.name = chapter_name.getText();
+        model.number = chapter_number.getText();
         boolean success = DashboardController.chaptersListHandler.Add(model);
         if(!success){
             new Alert(Alert.AlertType.ERROR,"Operation Failed").show();
@@ -56,6 +58,7 @@ public class AddChapterController implements Initializable {
     public void onEditChapterClicked(ActionEvent e){
         //ChaptersListHandler chaptersListHandler =new ChaptersListHandler();
         model.name = chapter_name.getText();
+        model.number = chapter_number.getText();
         model.id = DashboardController.current_selected_chapter_id;
         boolean success = DashboardController.chaptersListHandler.Edit(model);
         if(!success){

@@ -25,6 +25,7 @@
                 </FXCollections>
             </items>
         </ComboBox>
+            <Spinner min="1" max="100" editable="true" fx:id="spinner_q_diff"></Spinner>
         <ComboBox value="Weight" fx:id="combo_q_weight">
             <items>
                 <FXCollections fx:factory="observableArrayList">

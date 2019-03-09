@@ -8,9 +8,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.web.HTMLEditor;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import models.CourseModel;
 import models.QuestionModel;
-import models.QuestionTableHandler;
+import models.QuestionsTableHandler;
 
 
 import java.io.FileOutputStream;
@@ -32,6 +31,7 @@ public class AddQuestionController  implements Initializable {
     public VBox mcq_ui_group,true_false_ui_group,container;
     public TextField txt_answer_a, txt_answer_b, txt_answer_c, txt_answer_d;
     public ComboBox<String> combo_q_weight,combo_q_diff;
+    public Spinner<Integer> spinner_q_diff;
 
     private String operation_type;
     private QuestionModel model;
@@ -44,7 +44,7 @@ public class AddQuestionController  implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         combo_q_weight.setVisible(false);
         combo_q_weight.setManaged(false);
-        System.out.println(combo_q_diff.getValue());
+        System.out.println(spinner_q_diff.getValue());
         final ToggleGroup type_group = new ToggleGroup();
         radio_mcq.setToggleGroup(type_group);
         radio_true_false.setToggleGroup(type_group);
@@ -129,9 +129,9 @@ public class AddQuestionController  implements Initializable {
     }
     public void onAddClicked(ActionEvent e) {
         String Q = html_editor.getHtmlText();
-        String diff = combo_q_diff.getValue().toString();
-        String weight = combo_q_weight.getValue().toString();
-        QuestionTableHandler questionTableHandler = new QuestionTableHandler();
+        String diff = spinner_q_diff.getValue().toString();
+        String weight = "1001";//combo_q_weight.getValue().toString();
+        QuestionsTableHandler questionsTableHandler = new QuestionsTableHandler();
 
         if(radio_mcq.isSelected()){
             String A = txt_answer_a.getText();
@@ -156,7 +156,7 @@ public class AddQuestionController  implements Initializable {
                 model.setQuestion_type("MCQ");
                 model.setAnswers(answers);
                 model.setRight_answer(right_answer);
-                questionTableHandler.Add(model);
+                questionsTableHandler.Add(model);
                 close(e);
             }else {
                 new Alert(Alert.AlertType.ERROR,"Please fill all fields").show();
@@ -179,7 +179,7 @@ public class AddQuestionController  implements Initializable {
                 model.setQuestion_type("True/False");
                 model.setAnswers(answers);
                 model.setRight_answer(right_answer);
-                questionTableHandler.Add(model);
+                questionsTableHandler.Add(model);
                 close(e);
             }else {
                 new Alert(Alert.AlertType.ERROR,"Please fill all fields").show();
@@ -197,9 +197,9 @@ public class AddQuestionController  implements Initializable {
 
     public void onEditClicked(ActionEvent e) {
         String Q = html_editor.getHtmlText();
-        String diff = combo_q_diff.getValue();
-        String weight = combo_q_weight.getValue();
-        QuestionTableHandler questionTableHandler = new QuestionTableHandler();
+        String diff = spinner_q_diff.getValue().toString();
+        String weight = "1001";//combo_q_weight.getValue();
+        QuestionsTableHandler questionsTableHandler = new QuestionsTableHandler();
 
         if(radio_mcq.isSelected()){
             String A = txt_answer_a.getText();
@@ -224,7 +224,7 @@ public class AddQuestionController  implements Initializable {
                 model.setQuestion_type("MCQ");
                 model.setAnswers(answers);
                 model.setRight_answer(right_answer);
-                questionTableHandler.Edit(model);
+                questionsTableHandler.Edit(model);
                 close(e);
             }else {
                 new Alert(Alert.AlertType.ERROR,"Please fill all fields").show();
@@ -247,7 +247,7 @@ public class AddQuestionController  implements Initializable {
                 model.setQuestion_type("True/False");
                 model.setAnswers(answers);
                 model.setRight_answer(right_answer);
-                questionTableHandler.Edit(model);
+                questionsTableHandler.Edit(model);
                 close(e);
             }
             else {

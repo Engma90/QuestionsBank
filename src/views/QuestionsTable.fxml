@@ -9,7 +9,7 @@
 <?import javafx.scene.web.HTMLEditor?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controllers.QuestionsController"
+            fx:controller="controllers.QuestionsTableController"
             >
 
     <VBox spacing="10" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10"
@@ -30,10 +30,10 @@
                 <cellValueFactory><PropertyValueFactory property="question_diff" />
                 </cellValueFactory>
             </TableColumn>
-            <TableColumn text="Weight" fx:id="col_question_weight">
-                <cellValueFactory><PropertyValueFactory property="question_weight" />
-                </cellValueFactory>
-            </TableColumn>
+            <!--<TableColumn text="Weight" fx:id="col_question_weight">-->
+                <!--<cellValueFactory><PropertyValueFactory property="question_weight" />-->
+                <!--</cellValueFactory>-->
+            <!--</TableColumn>-->
         </columns>
         <items>
             <FXCollections fx:factory="observableArrayList">

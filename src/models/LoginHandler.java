@@ -9,11 +9,11 @@ import java.text.MessageFormat;
 public class LoginHandler {
     public Doctor dr = new Doctor();
     public boolean login(String email, String password) {
-        DBHandler db = new DBHandler();
+        //DBHandler db = new DBHandler();
         String sql = MessageFormat.format(
                 "SELECT * FROM doctor WHERE DoctorEmail =\"{0}\"  AND DoctorPassword = \"{1}\" ;"
                 ,  email, password);
-        ResultSet rs =  db.execute_query(sql);
+        ResultSet rs =  DBSingletonHandler.getInstance().execute_query(sql);
         int dr_id = -1;
         try {
             if(rs.next())
@@ -30,7 +30,7 @@ public class LoginHandler {
             e.printStackTrace();
         }
         finally {
-            db.closeConnection();
+            //db.closeConnection();
         }
         return false;
     }

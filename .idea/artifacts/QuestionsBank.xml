@@ -6,6 +6,11 @@
         <option name="appClass" value="Main" />
         <option name="description" value="" />
         <option name="htmlPlaceholderId" value="" />
+        <option name="icons">
+          <JavaFxApplicationIcons>
+            <option name="windowsIcon" value="$PROJECT_DIR$/Resource/icon.ico" />
+          </JavaFxApplicationIcons>
+        </option>
         <option name="title" value="Question Bank" />
         <option name="vendor" value="BU" />
         <option name="version" value="1" />

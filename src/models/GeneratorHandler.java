@@ -6,7 +6,7 @@ import java.text.MessageFormat;
 
 public class GeneratorHandler {
     public boolean Add(ExamModel model) {
-        DBHandler db = new DBHandler();
+        //DBHandler db = new DBHandler();
 
         String sql =
                 "INSERT INTO exam (Date, ExamName, ExamModel, ExamCategory, CourseName, College, " +
@@ -18,16 +18,16 @@ public class GeneratorHandler {
                 model.ExamType, model.Duration, model.TotalMarks,
                 DashboardController.current_selected_course_id, DashboardController.current_selected_dr_id
         };
-        int exam_id = db.execute_PreparedStatement(sql,params);
+        int exam_id = DBSingletonHandler.getInstance().execute_PreparedStatement(sql,params);
         for (QuestionModel q : model.questionModelList) {
-            q.isInExam = 1;
-            sql = MessageFormat.format("UPDATE question SET IsInExam = 1 WHERE idQuestion ={0};", q.getId());
-            db.execute_sql(sql);
+
+//            sql = MessageFormat.format("UPDATE question SET IsInExam = 1 WHERE idQuestion ={0};", q.getId());
+//            DBSingletonHandler.getInstance().execute_sql(sql);
             sql = MessageFormat.format(
                     "INSERT INTO examquestion (Exam_idExam,Question_idQuestion) " +
                             "VALUES ({0},{1});"
                     , exam_id, q.getId());
-            db.execute_sql(sql);
+            DBSingletonHandler.getInstance().execute_sql(sql);
         }
 
         return true;

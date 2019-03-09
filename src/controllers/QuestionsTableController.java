@@ -10,38 +10,34 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.web.HTMLEditor;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import models.QuestionModel;
-import models.QuestionTableHandler;
+import models.QuestionsTableHandler;
 import org.jsoup.Jsoup;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 
-public class QuestionsController   implements Initializable {
+public class QuestionsTableController implements Initializable {
     public TableColumn col_question_text, col_question_type, col_question_diff, col_question_weight;
     public TableView<QuestionModel> questions_table;
 
     public static String current_selected_question_id;
     public static int current_selected_question_index;
-    public static QuestionTableHandler questionTableHandler;
+    public static QuestionsTableHandler questionsTableHandler;
 //    ContextMenu contextMenu;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        col_question_text.prefWidthProperty().bind(questions_table.widthProperty().divide(10).multiply(7)); // w * 1/4
+        col_question_text.prefWidthProperty().bind(questions_table.widthProperty().divide(10).multiply(8)); // w * 1/4
         col_question_type.prefWidthProperty().bind(questions_table.widthProperty().divide(10));
         col_question_diff.prefWidthProperty().bind(questions_table.widthProperty().divide(10));
-        col_question_weight.prefWidthProperty().bind(questions_table.widthProperty().divide(10)); // w * 1/4
-        questionTableHandler = new QuestionTableHandler();
+        //col_question_weight.prefWidthProperty().bind(questions_table.widthProperty().divide(10)); // w * 1/4
+        questionsTableHandler = new QuestionsTableHandler();
         refreshList();
 //        MenuItem add = new MenuItem("Add");
 //        add.setOnAction(new EventHandler<ActionEvent>() {
@@ -86,7 +82,7 @@ public class QuestionsController   implements Initializable {
                 public void handle(WindowEvent we) {
                     System.out.println("Closed");
 //                    questions_table.getItems().clear();
-//                    ObservableList<QuestionModel> temp_list = questionTableHandler.getQuestionList();
+//                    ObservableList<QuestionModel> temp_list = questionsTableHandler.getQuestionList();
 ////                    for (QuestionModel questionModel: temp_list){
 ////                        questionModel.raw_text.set(Jsoup.parse(questionModel.getQuestion_text()).text());
 ////                    }
@@ -117,9 +113,8 @@ public class QuestionsController   implements Initializable {
             stage.setScene(new Scene(root));
             stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                 public void handle(WindowEvent we) {
-                    System.out.println("Closed");
 //                    questions_table.getItems().clear();
-//                    questions_table.setItems(questionTableHandler.getQuestionList());
+//                    questions_table.setItems(questionsTableHandler.getQuestionList());
                     refreshList();
                     questions_table.getSelectionModel().select(current_selected_question_index);
                 }
@@ -133,9 +128,9 @@ public class QuestionsController   implements Initializable {
     public void onDeleteQuestionClicked(ActionEvent e){
         QuestionModel model = new QuestionModel();
         model.setId(current_selected_question_id);
-        questionTableHandler.DeleteQuestion(model);
+        questionsTableHandler.DeleteQuestion(model);
 //        questions_table.getItems().clear();
-//        questions_table.setItems(questionTableHandler.getQuestionList());
+//        questions_table.setItems(questionsTableHandler.getQuestionList());
         refreshList();
         int selection = current_selected_question_index - 1;
         if(selection<0)
@@ -144,15 +139,12 @@ public class QuestionsController   implements Initializable {
     }
 
     public void refreshList(){
-         //questionTableHandler = new QuestionTableHandler();
+         //questionsTableHandler = new QuestionsTableHandler();
         questions_table.getItems().clear();
-        ObservableList<QuestionModel> temp_list = questionTableHandler.getQuestionList();
+        ObservableList<QuestionModel> temp_list = questionsTableHandler.getQuestionList();
         for (QuestionModel questionModel: temp_list){
-            System.out.println("1111111");
             System.out.println((Jsoup.parse(questionModel.getQuestion_text()).text()));
-            System.out.println("2222222");
             questionModel.setRaw_text(((Jsoup.parse(questionModel.getQuestion_text()).text())));
-            System.out.println("333333");
             System.out.println(questionModel.getRaw_text());
         }
         questions_table.setItems(temp_list);

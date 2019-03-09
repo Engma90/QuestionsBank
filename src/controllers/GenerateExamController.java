@@ -6,8 +6,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
@@ -85,7 +83,7 @@ public class GenerateExamController implements Initializable {
         chapterModelList = DashboardController.chaptersListHandler.getChaptersList();
         for (ChapterModel c : chapterModelList) {
             System.out.println("----------------------1");
-            List<QuestionModel> questionModelList = QuestionsController.questionTableHandler.getQuestionList(c.id);
+            List<QuestionModel> questionModelList = QuestionsTableController.questionsTableHandler.getQuestionList(c.id);
             System.out.println("----------------------2");
             List<String> l = new ArrayList<String>();
             for (QuestionModel q : questionModelList) {
@@ -169,19 +167,19 @@ public class GenerateExamController implements Initializable {
         }
         for (GenerateExamFormRowController row : generateExamFormRowControllerList) {
             if (row.isSelected.isSelected()) {
-                row.easy_list = QuestionsController.questionTableHandler.getQuestionList(row.chapter_id, "Easy");
+                row.easy_list = QuestionsTableController.questionsTableHandler.getQuestionList(row.chapter_id, "Easy");
                 Collections.shuffle(row.easy_list);
                 if (!validate_row_input(Integer.parseInt(row.Easy.getText()), row.easy_list.size())) {
                     new Alert(Alert.AlertType.ERROR, "Wrong number of easy questions in chapter:" + row.chapter_name).show();
                     return false;
                 }
-                row.medium_list = QuestionsController.questionTableHandler.getQuestionList(row.chapter_id, "Medium");
+                row.medium_list = QuestionsTableController.questionsTableHandler.getQuestionList(row.chapter_id, "Medium");
                 Collections.shuffle(row.medium_list);
                 if (!validate_row_input(Integer.parseInt(row.Medium.getText()), row.medium_list.size())) {
                     new Alert(Alert.AlertType.ERROR, "Wrong number of medium questions in chapter:" + row.chapter_name).show();
                     return false;
                 }
-                row.hard_list = QuestionsController.questionTableHandler.getQuestionList(row.chapter_id, "Hard");
+                row.hard_list = QuestionsTableController.questionsTableHandler.getQuestionList(row.chapter_id, "Hard");
                 Collections.shuffle(row.hard_list);
                 if (!validate_row_input(Integer.parseInt(row.Hard.getText()), row.hard_list.size())) {
                     new Alert(Alert.AlertType.ERROR, "Wrong number of hard questions in chapter:" + row.chapter_name).show();

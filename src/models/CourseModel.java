@@ -1,10 +1,5 @@
 package models;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
-
 public class CourseModel {
     public String id;
     public String name;

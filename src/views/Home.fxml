@@ -29,17 +29,17 @@
         </HBox>
     </VBox>
 
-<VBox fx:id="navigate_form" AnchorPane.leftAnchor="10"  alignment="CENTER" AnchorPane.rightAnchor="10"
-      AnchorPane.topAnchor="200" spacing="10">
-    <HBox alignment="CENTER" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10">
-    <Label text="Hello Dr."></Label>
-        <Label fx:id="dr_name"></Label>
-    </HBox>
-    <HBox alignment="CENTER" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10"
-          spacing="30">
-        <Button fx:id="under_graduates" text="Under Graduates" onAction="#onUnderGradClicked"/>
-        <Button fx:id="post_graduates" text="Post Graduates" onAction="#onPostGradClicked"/>
-    </HBox>
-</VBox>
-    <Button fx:id="exit" text="Exit" AnchorPane.leftAnchor="10" AnchorPane.bottomAnchor="10"/>
+<!--<VBox fx:id="navigate_form" AnchorPane.leftAnchor="10"  alignment="CENTER" AnchorPane.rightAnchor="10"-->
+      <!--AnchorPane.topAnchor="200" spacing="10">-->
+    <!--<HBox alignment="CENTER" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10">-->
+    <!--<Label text="Hello Dr."></Label>-->
+        <!--<Label fx:id="dr_name"></Label>-->
+    <!--</HBox>-->
+    <!--<HBox alignment="CENTER" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10"-->
+          <!--spacing="30">-->
+        <!--<Button fx:id="under_graduates" text="Under Graduates" onAction="#onUnderGradClicked"/>-->
+        <!--<Button fx:id="post_graduates" text="Post Graduates" onAction="#onPostGradClicked"/>-->
+    <!--</HBox>-->
+<!--</VBox>-->
+    <!--<Button fx:id="exit" text="Exit" AnchorPane.leftAnchor="10" AnchorPane.bottomAnchor="10"/>-->
 </AnchorPane>
