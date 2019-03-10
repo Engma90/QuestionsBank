@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.collections.FXCollections?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.ChaptersTableController">
+    <VBox spacing="10" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
+          AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="0">
+
+    <Label text="Chapters" />
+
+    <ListView fx:id="chapters_list_view" prefHeight="150">
+        <items>
+            <FXCollections fx:factory="observableArrayList">
+
+            </FXCollections>
+        </items>
+    </ListView>
+
+    <HBox spacing="10">
+        <Button fx:id="add_chapter" onAction="#onAddChapterClicked" text="Add" />
+        <Button fx:id="edit_chapter" text="Edit" onAction="#onEditChapterClicked" />
+        <Button fx:id="delete_chapter" text="Delete" onAction="#onDeleteChapterClicked" />
+
+    </HBox>
+    </VBox>
+</AnchorPane>

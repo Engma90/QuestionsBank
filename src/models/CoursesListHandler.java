@@ -9,7 +9,26 @@ import java.sql.SQLException;
 import java.text.MessageFormat;
 
 public class CoursesListHandler {
-    public ObservableList<CourseModel> coursesList = FXCollections.observableArrayList();
+    private ObservableList<CourseModel> coursesList = FXCollections.observableArrayList();
+
+
+    private static volatile CoursesListHandler instance = null;
+
+    private CoursesListHandler() {
+
+    }
+
+    public static CoursesListHandler getInstance() {
+        if (instance == null) {
+            // To provide thread-safe implementation.
+            synchronized (CoursesListHandler.class) {
+                if (instance == null) {
+                    instance = new CoursesListHandler();
+                }
+            }
+        }
+        return instance;
+    }
 
     public boolean Add(String code, String name, String dr_id, String cat) {
         //DBHandler db = new DBHandler();

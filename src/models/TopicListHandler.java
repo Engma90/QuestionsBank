@@ -1,5 +1,6 @@
 package models;
 
+import controllers.ChaptersTableController;
 import controllers.DashboardController;
 import controllers.QuestionsTableController;
 import javafx.collections.FXCollections;
@@ -29,11 +30,11 @@ public class TopicListHandler {
     }
     
     private ObservableList<TopicModel> topicList;
-    public boolean Add(TopicModel model) {
+    public boolean Add(ChapterModel chapterModel, TopicModel model) {
         //DBHandler db = new DBHandler();
         String sql = MessageFormat.format(
                 "insert into topic (Name, Chapter_idChapter) values (\"{0}\",{1}) ;"
-                , model.name, DashboardController.current_selected_chapter_id);
+                , model.name, chapterModel.id);
         return DBSingletonHandler.getInstance().execute_sql(sql);
     }
     public boolean Edit(TopicModel model) {
@@ -59,12 +60,12 @@ public class TopicListHandler {
 //        return success;
 //    }
 
-    public ObservableList<TopicModel> getTopicsList(){
+    public ObservableList<TopicModel> getTopicsList(ChapterModel chapterModel){
         topicList = FXCollections.observableArrayList();
         //DBHandler db = new DBHandler();
         String sql = MessageFormat.format(
                 "SELECT * FROM topic WHERE Chapter_idChapter ={0};"
-                ,  DashboardController.current_selected_chapter_id);
+                ,  chapterModel.id);
         ResultSet rs =  DBSingletonHandler.getInstance().execute_query(sql);
         try {
             while (rs.next())

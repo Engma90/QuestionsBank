@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import models.QuestionModel;
 import models.QuestionsTableHandler;
+import models.TopicModel;
 
 
 import java.io.FileOutputStream;
@@ -35,9 +36,11 @@ public class AddQuestionController  implements Initializable {
 
     private String operation_type;
     private QuestionModel model;
-    public AddQuestionController(String operation_type, QuestionModel model){
+    private TopicModel topicModel;
+    public AddQuestionController(String operation_type,TopicModel topicModel, QuestionModel model){
         this.operation_type = operation_type;
         this.model = model;
+        this.topicModel = topicModel;
 
     }
     @Override
@@ -156,7 +159,7 @@ public class AddQuestionController  implements Initializable {
                 model.setQuestion_type("MCQ");
                 model.setAnswers(answers);
                 model.setRight_answer(right_answer);
-                questionsTableHandler.Add(model);
+                questionsTableHandler.Add(topicModel, model);
                 close(e);
             }else {
                 new Alert(Alert.AlertType.ERROR,"Please fill all fields").show();
@@ -179,7 +182,7 @@ public class AddQuestionController  implements Initializable {
                 model.setQuestion_type("True/False");
                 model.setAnswers(answers);
                 model.setRight_answer(right_answer);
-                questionsTableHandler.Add(model);
+                questionsTableHandler.Add(topicModel, model);
                 close(e);
             }else {
                 new Alert(Alert.AlertType.ERROR,"Please fill all fields").show();

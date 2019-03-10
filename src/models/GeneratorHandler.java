@@ -1,5 +1,6 @@
 package models;
 
+import controllers.CoursesTableController;
 import controllers.DashboardController;
 
 import java.text.MessageFormat;
@@ -10,13 +11,12 @@ public class GeneratorHandler {
 
         String sql =
                 "INSERT INTO exam (Date, ExamName, ExamModel, ExamCategory, CourseName, College, " +
-                        "Department, Note, ExamType, Duration, TotalMarks, Course_idCourse, Doctor_idDoctor) " +
-                        "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?) ;";
+                        "Department, Note, ExamType, Duration, TotalMarks, Doctor_idDoctor) " +
+                        "VALUES (?,?,?,?,?,?,?,?,?,?,?,?) ;";
         String[] params = new String[]{
                  model.Date, model.ExamName, model.ExamModel, model.ExamCategory,
                 model.CourseName, model.College, model.Department, model.Note,
-                model.ExamType, model.Duration, model.TotalMarks,
-                DashboardController.current_selected_course_id, DashboardController.current_selected_dr_id
+                model.ExamType, model.Duration, model.TotalMarks, DashboardController.current_selected_dr_id
         };
         int exam_id = DBSingletonHandler.getInstance().execute_PreparedStatement(sql,params);
         for (QuestionModel q : model.questionModelList) {

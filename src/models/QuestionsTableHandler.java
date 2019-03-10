@@ -1,6 +1,8 @@
 package models;
 
+import controllers.CoursesTableController;
 import controllers.DashboardController;
+import controllers.TopicsTableController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -11,13 +13,13 @@ import java.text.MessageFormat;
 public class QuestionsTableHandler {
     private ObservableList<QuestionModel> questionList;
 
-    public boolean Add(QuestionModel model) {
+    public boolean Add(TopicModel topicModel, QuestionModel model) {
         //DBHandler db = new DBHandler();
         String sql = "insert into question (QuestionContent, QuestionType, QuestionDifficulty, " +
                 "QuestionWeight, QuestionExpectedTime, Topic_idTopic) values (?,?,?,?,?,?);";
         int last_inserted_question_id = DBSingletonHandler.getInstance().execute_PreparedStatement(sql, new String[]
                 {model.getQuestion_text(), model.getQuestion_type(), model.getQuestion_diff(), model.getQuestion_weight(), model.expected_time,
-                        DashboardController.current_selected_topic_id});
+                        topicModel.id});
         for (int i = 0; i < model.getAnswers().length; i++) {
             sql = MessageFormat.format(
                     "insert into questionanswer (AnswerLabel, AnswerContent, Question_idQuestion, IsRightAnswer" +
@@ -80,20 +82,11 @@ public class QuestionsTableHandler {
     }
 
 
-    public ObservableList<QuestionModel> getQuestionList() {
+    public ObservableList<QuestionModel> getQuestionList(TopicModel topicModel) {
         questionList = FXCollections.observableArrayList();
-        //DBHandler db = new DBHandler();
-//        String sql = MessageFormat.format(
-//                "SELECT idQuestion,QuestionContent,QuestionDifficulty,QuestionType,QuestionWeight FROM ((( question  " +
-//                        "INNER JOIN chapter ON idChapter = {0}) " +
-//                        "INNER JOIN course ON idCourse = {1})" +
-//                        "INNER JOIN doctor ON  idDoctor ={2}) WHERE Chapter_idChapter = {0};"
-//        , DashboardController.current_selected_chapter_id
-//                , DashboardController.current_selected_course_id, DashboardController.current_selected_dr_id);
-
                 String sql = MessageFormat.format(
                         "SELECT idQuestion,QuestionContent,QuestionDifficulty,QuestionType,QuestionWeight FROM  question WHERE Topic_idTopic = {0};"
-                , DashboardController.current_selected_topic_id);
+                , topicModel.id);
         ResultSet rs = DBSingletonHandler.getInstance().execute_query(sql);
         try {
             while (rs.next()) {
@@ -116,7 +109,7 @@ public class QuestionsTableHandler {
     }
 
 
-    public ObservableList<QuestionModel> getQuestionList(String ch_id) {
+    public ObservableList<QuestionModel> getQuestionList(CourseModel courseModel, String ch_id) {
         questionList = FXCollections.observableArrayList();
         //DBHandler db = new DBHandler();
         System.out.println("------------------------------------------0");
@@ -126,7 +119,7 @@ public class QuestionsTableHandler {
                         "INNER JOIN course ON idCourse = {1})" +
                         "INNER JOIN doctor ON  idDoctor ={2}) WHERE Chapter_idChapter = {0};"
                 , ch_id
-                , DashboardController.current_selected_course_id, DashboardController.current_selected_dr_id);
+                , courseModel.id, DashboardController.current_selected_dr_id);
         ResultSet rs = DBSingletonHandler.getInstance().execute_query(sql);
         System.out.println("------------------------------------------1");
         try {
@@ -152,7 +145,7 @@ public class QuestionsTableHandler {
 
     }
 
-    public ObservableList<QuestionModel> getQuestionList(String ch_id, String diff) {
+    public ObservableList<QuestionModel> getQuestionList(CourseModel courseModel, String ch_id, String diff) {
         questionList = FXCollections.observableArrayList();
         //DBHandler db = new DBHandler();
         System.out.println("------------------------------------------0");
@@ -162,7 +155,7 @@ public class QuestionsTableHandler {
                         "INNER JOIN course ON idCourse = {1})" +
                         "INNER JOIN doctor ON  idDoctor ={2}) WHERE Chapter_idChapter = {0} AND QuestionDifficulty =\"{3}\" ;"
                 , ch_id
-                , DashboardController.current_selected_course_id, DashboardController.current_selected_dr_id, diff);
+                , courseModel.id, DashboardController.current_selected_dr_id, diff);
         ResultSet rs = DBSingletonHandler.getInstance().execute_query(sql);
         System.out.println("------------------------------------------1");
         try {

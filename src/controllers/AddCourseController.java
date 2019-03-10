@@ -46,8 +46,8 @@ public class AddCourseController implements Initializable {
 
     }
     public void onAddCourseClicked(ActionEvent e){
-        CoursesListHandler coursesListHandler =new CoursesListHandler();
-        boolean success = coursesListHandler.Add(course_code.getText(),course_name.getText(),
+        //CoursesListHandler coursesListHandler =new CoursesListHandler();
+        boolean success = CoursesListHandler.getInstance().Add(course_code.getText(),course_name.getText(),
                 DashboardController.current_selected_dr_id,DashboardController.degree_category);
         if(!success){
             new Alert(Alert.AlertType.ERROR,"Operation Failed").show();
@@ -58,9 +58,9 @@ public class AddCourseController implements Initializable {
     }
 
     public void onEditCourseClicked(ActionEvent e){
-        CoursesListHandler coursesListHandler =new CoursesListHandler();
-        boolean success = coursesListHandler.Edit(course_code.getText(),course_name.getText(),
-                DashboardController.current_selected_course_id);
+        //CoursesListHandler coursesListHandler =new CoursesListHandler();
+        boolean success = CoursesListHandler.getInstance().Edit(course_code.getText(),course_name.getText(),
+                model.id);
         if(!success){
             new Alert(Alert.AlertType.ERROR,"Operation Failed").show();
         }

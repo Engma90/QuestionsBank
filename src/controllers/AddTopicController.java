@@ -20,6 +20,7 @@ public class AddTopicController implements Initializable {
     String operation_type;
     public TextField topic_name;
     public Button add_topic, edit_topic;
+    public ChapterModel chapterModel;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -35,15 +36,16 @@ public class AddTopicController implements Initializable {
         }
     }
 
-    public AddTopicController(String operation_type, TopicModel model){
+    public AddTopicController(String operation_type,ChapterModel chapterModel, TopicModel model){
         this.operation_type = operation_type;
         this.model = model;
+        this.chapterModel = chapterModel;
     }
 
     public void onAddTopicClicked(ActionEvent e){
         //new TopicModel();
         model.name = topic_name.getText();
-        boolean success = TopicListHandler.getInstance().Add(model);
+        boolean success = TopicListHandler.getInstance().Add(chapterModel, model);
 
         if(!success){
             new Alert(Alert.AlertType.ERROR,"Operation Failed").show();

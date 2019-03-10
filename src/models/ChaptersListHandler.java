@@ -1,5 +1,6 @@
 package models;
 
+import controllers.CoursesTableController;
 import controllers.DashboardController;
 import controllers.QuestionsTableController;
 import javafx.collections.FXCollections;
@@ -10,11 +11,30 @@ import java.text.MessageFormat;
 
 public class ChaptersListHandler {
     private ObservableList<ChapterModel> chaptersList;
-    public boolean Add(ChapterModel model) {
+
+
+    private static volatile ChaptersListHandler instance = null;
+
+    private ChaptersListHandler() {
+
+    }
+
+    public static ChaptersListHandler getInstance() {
+        if (instance == null) {
+            // To provide thread-safe implementation.
+            synchronized (ChaptersListHandler.class) {
+                if (instance == null) {
+                    instance = new ChaptersListHandler();
+                }
+            }
+        }
+        return instance;
+    }
+    public boolean Add(CourseModel courseModel, ChapterModel model) {
         //DBHandler db = new DBHandler();
         String sql = MessageFormat.format(
                 "insert into chapter (ChapterName, Course_idCourse, ChapterNumber) values (\"{0}\",{1},{2}) ;"
-                , model.name,DashboardController.current_selected_course_id,model.number);
+                , model.name, courseModel.id,model.number);
         return DBSingletonHandler.getInstance().execute_sql(sql);
     }
     public boolean Edit(ChapterModel model) {
@@ -40,12 +60,12 @@ public class ChaptersListHandler {
 //        return success;
 //    }
 
-    public ObservableList<ChapterModel> getChaptersList(){
+    public ObservableList<ChapterModel> getChaptersList(CourseModel courseModel){
         chaptersList = FXCollections.observableArrayList();
         //DBHandler db = new DBHandler();
         String sql = MessageFormat.format(
                 "SELECT * FROM chapter WHERE Course_idCourse ={0};"
-                ,  DashboardController.current_selected_course_id);
+                ,  courseModel.id);
         ResultSet rs =  DBSingletonHandler.getInstance().execute_query(sql);
         try {
             while (rs.next())

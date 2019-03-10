@@ -11,7 +11,7 @@ public class ChapterModel {
         this.number = number;
     }
     public ChapterModel(){
-
+        this("-1","","");
     }
 
     @Override

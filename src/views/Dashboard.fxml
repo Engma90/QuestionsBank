@@ -1,90 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import javafx.collections.FXCollections?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-        <!--prefHeight="600" prefWidth="900.0"  maxWidth="900"-->
-<AnchorPane  xmlns="http://javafx.com/javafx/8.0.171"
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.171"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="controllers.DashboardController">
-    <HBox spacing="10" AnchorPane.bottomAnchor="10" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10" AnchorPane.topAnchor="10">
-    <VBox minWidth="390" spacing="10" AnchorPane.bottomAnchor="10" AnchorPane.leftAnchor="10" AnchorPane.topAnchor="10" xmlns:fx="http://javafx.com/fxml">
+    <HBox spacing="10" AnchorPane.bottomAnchor="10" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10"
+          AnchorPane.topAnchor="10">
+        <VBox minWidth="390" spacing="10" AnchorPane.bottomAnchor="10" AnchorPane.leftAnchor="10"
+              AnchorPane.topAnchor="10" xmlns:fx="http://javafx.com/fxml">
 
 
-        <Label text="Courses" />
+            <AnchorPane fx:id="courses" AnchorPane.bottomAnchor="10" AnchorPane.leftAnchor="10"
+                        AnchorPane.rightAnchor="10" AnchorPane.topAnchor="10">
 
-        <ListView fx:id="courses_list_view" prefHeight="150">
-            <items>
-                <FXCollections fx:factory="observableArrayList">
+            </AnchorPane>
 
-                </FXCollections>
-            </items>
-        </ListView>
+            <Separator/>
 
-        <HBox spacing="10">
-            <Button fx:id="add_course" onAction="#onAddCourseClicked" text="Add" />
-            <Button fx:id="edit_course" text="Edit" onAction="#onEditCourseClicked" />
-            <Button fx:id="delete_course" text="Delete" onAction="#onDeleteCourseClicked" />
+            <AnchorPane fx:id="chapters" AnchorPane.bottomAnchor="10" AnchorPane.leftAnchor="10"
+                        AnchorPane.rightAnchor="10" AnchorPane.topAnchor="10">
 
-            <Button fx:id="generate_exam" onAction="#onGenerateExamClicked" text="Generate exam" />
-            <!--<Button fx:id="previous_exam" onAction="#onGenerateExamClicked" text="Previous exams" />-->
+            </AnchorPane>
 
-        </HBox>
-        <Separator orientation="HORIZONTAL" />
-        <Label text="Chapters" />
+            <Separator/>
+            <AnchorPane fx:id="topics" AnchorPane.bottomAnchor="10" AnchorPane.leftAnchor="10"
+                        AnchorPane.rightAnchor="10" AnchorPane.topAnchor="10">
 
-            <ListView fx:id="chapters_list_view" prefHeight="150">
-                <items>
-                    <FXCollections fx:factory="observableArrayList">
+            </AnchorPane>
 
-                    </FXCollections>
-                </items>
-            </ListView>
+        </VBox>
 
-        <HBox spacing="10">
-            <Button fx:id="add_chapter" onAction="#onAddChapterClicked" text="Add" />
-            <Button fx:id="edit_chapter" text="Edit" onAction="#onEditChapterClicked" />
-            <Button fx:id="delete_chapter" text="Delete" onAction="#onDeleteChapterClicked" />
+        <Separator orientation="VERTICAL"/>
 
-        </HBox>
-
-
-
-
-        <Separator orientation="HORIZONTAL" />
-        <Label text="Topics" />
-
-        <ListView fx:id="topics_list_view" prefHeight="150">
-            <items>
-                <FXCollections fx:factory="observableArrayList">
-
-                </FXCollections>
-            </items>
-        </ListView>
-
-        <HBox spacing="10">
-            <Button fx:id="add_topic" onAction="#onAddTopicClicked" text="Add" />
-            <Button fx:id="edit_topic" text="Edit" onAction="#onEditTopicClicked" />
-            <Button fx:id="delete_topic" text="Delete" onAction="#onDeleteTopicClicked" />
-
-        </HBox>
-
-</VBox>
-
-        <Separator orientation="VERTICAL" />
-
-        <AnchorPane prefWidth="1000" fx:id="right_content"  AnchorPane.bottomAnchor="10" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10" AnchorPane.topAnchor="10">
+        <AnchorPane prefWidth="1000" fx:id="right_content" AnchorPane.bottomAnchor="10" AnchorPane.leftAnchor="10"
+                    AnchorPane.rightAnchor="10" AnchorPane.topAnchor="10">
 
         </AnchorPane>
 
     </HBox>
-
-    <!--<HBox AnchorPane.bottomAnchor="10" AnchorPane.leftAnchor="10">-->
-        <!--<Button fx:id="back_to_home" onAction="#onHomeClicked" text="Home" />-->
-    <!--</HBox>-->
 </AnchorPane>

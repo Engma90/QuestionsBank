@@ -24,14 +24,18 @@ public class GenerateExamController implements Initializable {
     List<GenerateExamFormRowController> generateExamFormRowControllerList;
     List<ChapterModel> chapterModelList;
 
+
     public TextField college_text, exam_duration, department_text, exam_date,
             exam_total_marks, exam_name_text;
     public TextArea note_text;
     public ComboBox exam_type;
 
+    public CourseModel courseModel = new CourseModel();
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
         generateExamFormRowControllerList = new ArrayList<>();
         final ToggleGroup same_or_different_group = new ToggleGroup();
         //final ToggleGroup shuffle_group = new ToggleGroup();
@@ -79,11 +83,13 @@ public class GenerateExamController implements Initializable {
         });
         radio_same.setSelected(true);
 
+    }
 
-        chapterModelList = DashboardController.chaptersListHandler.getChaptersList();
+    public void initUI(){
+        chapterModelList = ChaptersListHandler.getInstance().getChaptersList(courseModel);
         for (ChapterModel c : chapterModelList) {
             System.out.println("----------------------1");
-            List<QuestionModel> questionModelList = QuestionsTableController.questionsTableHandler.getQuestionList(c.id);
+            List<QuestionModel> questionModelList = QuestionsTableController.questionsTableHandler.getQuestionList(courseModel,c.id);
             System.out.println("----------------------2");
             List<String> l = new ArrayList<String>();
             for (QuestionModel q : questionModelList) {
@@ -94,8 +100,6 @@ public class GenerateExamController implements Initializable {
 
             addRow(c.id, c.name, l);
         }
-
-
     }
 
     public void onGenerateClicked(ActionEvent e) {
@@ -167,19 +171,19 @@ public class GenerateExamController implements Initializable {
         }
         for (GenerateExamFormRowController row : generateExamFormRowControllerList) {
             if (row.isSelected.isSelected()) {
-                row.easy_list = QuestionsTableController.questionsTableHandler.getQuestionList(row.chapter_id, "Easy");
+                row.easy_list = QuestionsTableController.questionsTableHandler.getQuestionList(courseModel, row.chapter_id, "Easy");
                 Collections.shuffle(row.easy_list);
                 if (!validate_row_input(Integer.parseInt(row.Easy.getText()), row.easy_list.size())) {
                     new Alert(Alert.AlertType.ERROR, "Wrong number of easy questions in chapter:" + row.chapter_name).show();
                     return false;
                 }
-                row.medium_list = QuestionsTableController.questionsTableHandler.getQuestionList(row.chapter_id, "Medium");
+                row.medium_list = QuestionsTableController.questionsTableHandler.getQuestionList(courseModel, row.chapter_id, "Medium");
                 Collections.shuffle(row.medium_list);
                 if (!validate_row_input(Integer.parseInt(row.Medium.getText()), row.medium_list.size())) {
                     new Alert(Alert.AlertType.ERROR, "Wrong number of medium questions in chapter:" + row.chapter_name).show();
                     return false;
                 }
-                row.hard_list = QuestionsTableController.questionsTableHandler.getQuestionList(row.chapter_id, "Hard");
+                row.hard_list = QuestionsTableController.questionsTableHandler.getQuestionList(courseModel, row.chapter_id, "Hard");
                 Collections.shuffle(row.hard_list);
                 if (!validate_row_input(Integer.parseInt(row.Hard.getText()), row.hard_list.size())) {
                     new Alert(Alert.AlertType.ERROR, "Wrong number of hard questions in chapter:" + row.chapter_name).show();
@@ -201,12 +205,10 @@ public class GenerateExamController implements Initializable {
         examModel.Department = department_text.getText();
         examModel.Duration = exam_duration.getText();
         examModel.ExamCategory = DashboardController.degree_category;
-        examModel.Course_idCourse = DashboardController.current_selected_course_id;
+        examModel.Course_idCourse = courseModel.id;
         examModel.ExamName = exam_name_text.getText();
         examModel.Note = note_text.getText();
-        examModel.CourseName = DashboardController.coursesListHandler.coursesList.get
-                (DashboardController.current_selected_course_index).
-                name.toString();
+        examModel.CourseName =courseModel.name;
 
         examModel.ExamType = exam_type.getValue().toString();
         examModel.TotalMarks = exam_total_marks.getText();

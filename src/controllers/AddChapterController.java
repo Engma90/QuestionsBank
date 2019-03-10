@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import models.ChapterModel;
 import models.ChaptersListHandler;
+import models.CourseModel;
 import models.CoursesListHandler;
 
 import java.net.URL;
@@ -22,9 +23,11 @@ public class AddChapterController implements Initializable {
     public Button add_chapter, edit_chapter;
     private String operation_type;
     private ChapterModel model;
-    public AddChapterController(String operation_type, ChapterModel model){
+    private CourseModel courseModel;
+    public AddChapterController(String operation_type, CourseModel courseModel, ChapterModel model){
         this.operation_type = operation_type;
         this.model = model;
+        this.courseModel = courseModel;
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -46,7 +49,7 @@ public class AddChapterController implements Initializable {
 //        System.out.println("chapter_name.getText()=" + chapter_name.getText());
         model.name = chapter_name.getText();
         model.number = chapter_number.getText();
-        boolean success = DashboardController.chaptersListHandler.Add(model);
+        boolean success = ChaptersListHandler.getInstance().Add(courseModel, model);
         if(!success){
             new Alert(Alert.AlertType.ERROR,"Operation Failed").show();
         }
@@ -59,8 +62,7 @@ public class AddChapterController implements Initializable {
         //ChaptersListHandler chaptersListHandler =new ChaptersListHandler();
         model.name = chapter_name.getText();
         model.number = chapter_number.getText();
-        model.id = DashboardController.current_selected_chapter_id;
-        boolean success = DashboardController.chaptersListHandler.Edit(model);
+        boolean success = ChaptersListHandler.getInstance().Edit(model);
         if(!success){
             new Alert(Alert.AlertType.ERROR,"Operation Failed").show();
         }
