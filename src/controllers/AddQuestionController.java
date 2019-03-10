@@ -1,7 +1,9 @@
 package controllers;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 
 import javafx.scene.layout.VBox;
@@ -12,25 +14,26 @@ import models.QuestionModel;
 import models.QuestionsTableHandler;
 import models.TopicModel;
 
-
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class AddQuestionController  implements Initializable {
-    public Button add_question,edit_question;
+    private List<AddQuestionAnswerRowController> answerRowControllers;
+    public Button add_question,edit_question, add_answer;
     public HTMLEditor html_editor;
     public RadioButton radio_mcq;
     public RadioButton radio_true_false;
-    public RadioButton radio_answer_a;
-    public RadioButton radio_answer_b;
-    public RadioButton radio_answer_c;
-    public RadioButton radio_answer_d;
+    //public RadioButton radio_answer_a;
+    //public RadioButton radio_answer_b;
+    //public RadioButton radio_answer_c;
+    //public RadioButton radio_answer_d;
     public RadioButton radio_answer_true;
     public RadioButton radio_answer_false;
-    public VBox mcq_ui_group,true_false_ui_group,container;
-    public TextField txt_answer_a, txt_answer_b, txt_answer_c, txt_answer_d;
+    public VBox mcq_ui_group,true_false_ui_group, mcq_ui_answers_list,container;
+    //public TextField txt_answer_a, txt_answer_b, txt_answer_c, txt_answer_d;
     public ComboBox<String> combo_q_weight,combo_q_diff;
     public Spinner<Integer> spinner_q_diff;
 
@@ -43,8 +46,38 @@ public class AddQuestionController  implements Initializable {
         this.topicModel = topicModel;
 
     }
+
+    private void add_row(){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/AddQuestionAnswerRow.fxml"));
+            Parent root = loader.load();
+            mcq_ui_answers_list.getChildren().add((root));
+            answerRowControllers.add((loader.getController()));
+            ((AddQuestionAnswerRowController)loader.getController()).label.setText((char)(65 + (answerRowControllers.size()-1))+"");
+            ((AddQuestionAnswerRowController)loader.getController()).addQuestionController = this;
+            ((AddQuestionAnswerRowController)loader.getController()).loader = loader;
+        } catch (IOException e) {
+            Alert  alert = new Alert(Alert.AlertType.ERROR, e.toString());
+            alert.show();
+        }
+    }
+
+    public void remove_row(AddQuestionAnswerRowController ans){
+        answerRowControllers.remove(ans);
+        mcq_ui_answers_list.getChildren().remove((Node)ans.loader.getRoot());
+        int count=0;
+        for(AddQuestionAnswerRowController a:answerRowControllers){
+            a.label.setText(((char) (65 + count) + ""));
+            count++;
+            }
+    }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        answerRowControllers = new ArrayList<>();
+        for (int i=0; i<5;i++){
+            add_row();
+        }
+
         combo_q_weight.setVisible(false);
         combo_q_weight.setManaged(false);
         System.out.println(spinner_q_diff.getValue());
@@ -52,10 +85,10 @@ public class AddQuestionController  implements Initializable {
         radio_mcq.setToggleGroup(type_group);
         radio_true_false.setToggleGroup(type_group);
         final ToggleGroup answer_group = new ToggleGroup();
-        radio_answer_a.setToggleGroup(answer_group);
-        radio_answer_b.setToggleGroup(answer_group);
-        radio_answer_c.setToggleGroup(answer_group);
-        radio_answer_d.setToggleGroup(answer_group);
+        //radio_answer_a.setToggleGroup(answer_group);
+        //radio_answer_b.setToggleGroup(answer_group);
+        //radio_answer_c.setToggleGroup(answer_group);
+        //radio_answer_d.setToggleGroup(answer_group);
 
         final ToggleGroup true_false_answer_group = new ToggleGroup();
         radio_answer_true.setToggleGroup(true_false_answer_group);
@@ -110,24 +143,24 @@ public class AddQuestionController  implements Initializable {
             }
         }else if(model.getQuestion_type().equals("MCQ")){
             radio_mcq.setSelected(true);
-            txt_answer_a.setText(model.getAnswers()[0]);
-            txt_answer_b.setText(model.getAnswers()[1]);
-            txt_answer_c.setText(model.getAnswers()[2]);
-            txt_answer_d.setText(model.getAnswers()[3]);
-            switch (model.getRight_answer()) {
-                case "A":
-                    radio_answer_a.setSelected(true);
-                    break;
-                case "B":
-                    radio_answer_b.setSelected(true);
-                    break;
-                case "C":
-                    radio_answer_c.setSelected(true);
-                    break;
-                case "D":
-                    radio_answer_d.setSelected(true);
-                    break;
-            }
+            //txt_answer_a.setText(model.getAnswers()[0]);
+            //txt_answer_b.setText(model.getAnswers()[1]);
+            //txt_answer_c.setText(model.getAnswers()[2]);
+            //txt_answer_d.setText(model.getAnswers()[3]);
+//            switch (model.getRight_answer()) {
+//                case "A":
+//                    radio_answer_a.setSelected(true);
+//                    break;
+//                case "B":
+//                    radio_answer_b.setSelected(true);
+//                    break;
+//                case "C":
+//                    radio_answer_c.setSelected(true);
+//                    break;
+//                case "D":
+//                    radio_answer_d.setSelected(true);
+//                    break;
+//            }
         }
     }
     public void onAddClicked(ActionEvent e) {
@@ -137,33 +170,33 @@ public class AddQuestionController  implements Initializable {
         QuestionsTableHandler questionsTableHandler = new QuestionsTableHandler();
 
         if(radio_mcq.isSelected()){
-            String A = txt_answer_a.getText();
-            String B = txt_answer_b.getText();
-            String C = txt_answer_c.getText();
-            String D = txt_answer_d.getText();
-            if (validate(Q, diff, weight,A, B, C, D)){
-                String[] answers = new String[]{A,B,C,D};
-                String right_answer = "A";
-                if(radio_answer_a.isSelected())
-                    right_answer = "A";
-                else if(radio_answer_b.isSelected())
-                    right_answer = "B";
-                else if(radio_answer_c.isSelected())
-                    right_answer = "C";
-                else if(radio_answer_d.isSelected())
-                    right_answer = "D";
-                System.out.println("valid");
-                model.setQuestion_text(Q);
-                model.setQuestion_diff(diff);
-                model.setQuestion_weight(weight);
-                model.setQuestion_type("MCQ");
-                model.setAnswers(answers);
-                model.setRight_answer(right_answer);
-                questionsTableHandler.Add(topicModel, model);
-                close(e);
-            }else {
-                new Alert(Alert.AlertType.ERROR,"Please fill all fields").show();
-            }
+           // String A = txt_answer_a.getText();
+            //String B = txt_answer_b.getText();
+            //String C = txt_answer_c.getText();
+            //String D = txt_answer_d.getText();
+//            if (validate(Q, diff, weight,A, B, C, D)){
+//                String[] answers = new String[]{A,B,C,D};
+//                String right_answer = "A";
+//                if(radio_answer_a.isSelected())
+//                    right_answer = "A";
+//                else if(radio_answer_b.isSelected())
+//                    right_answer = "B";
+//                else if(radio_answer_c.isSelected())
+//                    right_answer = "C";
+//                else if(radio_answer_d.isSelected())
+//                    right_answer = "D";
+//                System.out.println("valid");
+//                model.setQuestion_text(Q);
+//                model.setQuestion_diff(diff);
+//                model.setQuestion_weight(weight);
+//                model.setQuestion_type("MCQ");
+//                model.setAnswers(answers);
+//                model.setRight_answer(right_answer);
+//                questionsTableHandler.Add(topicModel, model);
+//                close(e);
+//            }else {
+//                new Alert(Alert.AlertType.ERROR,"Please fill all fields").show();
+//            }
 
         }else {
             String A = "True";
@@ -172,9 +205,9 @@ public class AddQuestionController  implements Initializable {
             if (validate(Q, diff, weight)){
                 String[] answers = new String[]{A,B};
                 String right_answer = "A";
-                if(radio_answer_a.isSelected())
+                if(radio_answer_true.isSelected())
                     right_answer = "A";
-                else if(radio_answer_b.isSelected())
+                else if(radio_answer_false.isSelected())
                     right_answer = "B";
                 model.setQuestion_text(Q);
                 model.setQuestion_diff(diff);
@@ -189,11 +222,11 @@ public class AddQuestionController  implements Initializable {
             }
         }
 
-        try {
-            Save_to_file(Q);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+//        try {
+//            Save_to_file(Q);
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//        }
 
     }
 
@@ -205,33 +238,33 @@ public class AddQuestionController  implements Initializable {
         QuestionsTableHandler questionsTableHandler = new QuestionsTableHandler();
 
         if(radio_mcq.isSelected()){
-            String A = txt_answer_a.getText();
-            String B = txt_answer_b.getText();
-            String C = txt_answer_c.getText();
-            String D = txt_answer_d.getText();
-            if (validate(Q, diff, weight,A, B, C, D)){
-                String[] answers = new String[]{A,B,C,D};
-                String right_answer = "A";
-                if(radio_answer_a.isSelected())
-                    right_answer = "A";
-                else if(radio_answer_b.isSelected())
-                    right_answer = "B";
-                else if(radio_answer_c.isSelected())
-                    right_answer = "C";
-                else if(radio_answer_d.isSelected())
-                    right_answer = "D";
-                System.out.println("valid");
-                model.setQuestion_text(Q);
-                model.setQuestion_diff(diff);
-                model.setQuestion_weight(weight);
-                model.setQuestion_type("MCQ");
-                model.setAnswers(answers);
-                model.setRight_answer(right_answer);
-                questionsTableHandler.Edit(model);
-                close(e);
-            }else {
-                new Alert(Alert.AlertType.ERROR,"Please fill all fields").show();
-            }
+//            String A = txt_answer_a.getText();
+//            String B = txt_answer_b.getText();
+//            String C = txt_answer_c.getText();
+//            String D = txt_answer_d.getText();
+//            if (validate(Q, diff, weight,A, B, C, D)){
+//                String[] answers = new String[]{A,B,C,D};
+//                String right_answer = "A";
+//                if(radio_answer_a.isSelected())
+//                    right_answer = "A";
+//                else if(radio_answer_b.isSelected())
+//                    right_answer = "B";
+//                else if(radio_answer_c.isSelected())
+//                    right_answer = "C";
+//                else if(radio_answer_d.isSelected())
+//                    right_answer = "D";
+//                System.out.println("valid");
+//                model.setQuestion_text(Q);
+//                model.setQuestion_diff(diff);
+//                model.setQuestion_weight(weight);
+//                model.setQuestion_type("MCQ");
+//                model.setAnswers(answers);
+//                model.setRight_answer(right_answer);
+//                questionsTableHandler.Edit(model);
+//                close(e);
+//            }else {
+//                new Alert(Alert.AlertType.ERROR,"Please fill all fields").show();
+//            }
 
         }else {
             String A = "True";
@@ -266,13 +299,19 @@ public class AddQuestionController  implements Initializable {
 
     }
 
-    private void Save_to_file(String s) throws IOException {
-
-        FileOutputStream outputStream = new FileOutputStream("test_file.html");
-        byte[] strToBytes = s.getBytes();
-        outputStream.write(strToBytes);
-        outputStream.close();
+    public void onAddAnswerClicked(ActionEvent e){
+        add_row();
     }
+
+
+//
+//    private void Save_to_file(String s) throws IOException {
+//
+//        FileOutputStream outputStream = new FileOutputStream("test_file.html");
+//        byte[] strToBytes = s.getBytes();
+//        outputStream.write(strToBytes);
+//        outputStream.close();
+//    }
 
     private boolean validate(String Q, String diff, String weight, String A, String B, String C, String D){
         if(Q.isEmpty() || A.isEmpty() || B.isEmpty() || C.isEmpty() || D.isEmpty()){
@@ -281,10 +320,10 @@ public class AddQuestionController  implements Initializable {
         else if(diff.equals("Difficulty") ){//|| weight.equals("Weight")
             return false;
         }
-        else if(!radio_answer_a.isSelected() && !radio_answer_b.isSelected()
-                && !radio_answer_c.isSelected() && !radio_answer_d.isSelected()){
-            return false;
-        }
+//        else if(!radio_answer_a.isSelected() && !radio_answer_b.isSelected()
+//                && !radio_answer_c.isSelected() && !radio_answer_d.isSelected()){
+//            return false;
+//        }
         return true;
     }
     private boolean validate(String Q, String diff, String weight){

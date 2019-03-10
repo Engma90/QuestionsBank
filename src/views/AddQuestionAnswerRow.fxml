@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controllers.AddQuestionAnswerRowController" spacing="10">
+        <Label fx:id="label" text="A"/>
+        <TextField prefWidth="500" fx:id="txt_answer"/>
+        <CheckBox fx:id="checkbox_right_answer"/>
+        <Button text="remove" fx:id="remove_answer" onAction="#onRemoveClicked"/>
+</HBox>

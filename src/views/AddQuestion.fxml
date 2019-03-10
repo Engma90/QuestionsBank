@@ -36,29 +36,32 @@
             </items>
         </ComboBox>
         </HBox>
-        <VBox fx:id="mcq_ui_group" spacing="10">
-            <HBox spacing="10">
-                <Label text="A"/>
-                <TextField prefWidth="500" fx:id="txt_answer_a"/>
-                <RadioButton fx:id="radio_answer_a"/>
-            </HBox>
-            <HBox spacing="10">
-                <Label text="B"/>
-                <TextField prefWidth="500" fx:id="txt_answer_b"/>
-                <RadioButton fx:id="radio_answer_b"/>
-            </HBox>
-            <HBox spacing="10">
-                <Label text="C"/>
-                <TextField prefWidth="500" fx:id="txt_answer_c"/>
-                <RadioButton fx:id="radio_answer_c"/>
-            </HBox>
-            <HBox spacing="10">
-                <Label text="D"/>
-                <TextField prefWidth="500" fx:id="txt_answer_d"/>
-                <RadioButton fx:id="radio_answer_d"/>
-            </HBox>
-        </VBox>
+        <VBox fx:id="mcq_ui_group">
+        <VBox fx:id="mcq_ui_answers_list" spacing="10">
 
+            <!--<HBox spacing="10">-->
+                <!--<Label text="A"/>-->
+                <!--<TextField prefWidth="500" fx:id="txt_answer_a"/>-->
+                <!--<RadioButton fx:id="radio_answer_a"/>-->
+            <!--</HBox>-->
+            <!--<HBox spacing="10">-->
+                <!--<Label text="B"/>-->
+                <!--<TextField prefWidth="500" fx:id="txt_answer_b"/>-->
+                <!--<RadioButton fx:id="radio_answer_b"/>-->
+            <!--</HBox>-->
+            <!--<HBox spacing="10">-->
+                <!--<Label text="C"/>-->
+                <!--<TextField prefWidth="500" fx:id="txt_answer_c"/>-->
+                <!--<RadioButton fx:id="radio_answer_c"/>-->
+            <!--</HBox>-->
+            <!--<HBox spacing="10">-->
+                <!--<Label text="D"/>-->
+                <!--<TextField prefWidth="500" fx:id="txt_answer_d"/>-->
+                <!--<RadioButton fx:id="radio_answer_d"/>-->
+            <!--</HBox>-->
+        </VBox>
+        <Button fx:id="add_answer" text="Add Answer" onAction="#onAddAnswerClicked"></Button>
+        </VBox>
         <VBox fx:id="true_false_ui_group">
             <HBox spacing="10">
                 <Label text="True"></Label>
