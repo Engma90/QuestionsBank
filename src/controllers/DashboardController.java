@@ -11,16 +11,13 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class DashboardController implements Initializable {
-    public static final String POST_GRAD = "post_grad";
-    public static final String UNDER_GRAD = "under_grad";
 
-    CoursesTableController coursesTableController;
-    ChaptersTableController chaptersTableController;
-    TopicsTableController topicsTableController;
-    QuestionsTableController questionsTableController;
+    private CoursesTableController coursesTableController;
+    private ChaptersTableController chaptersTableController;
+    private TopicsTableController topicsTableController;
+    private QuestionsTableController questionsTableController;
 
     public AnchorPane right_content, courses, chapters, topics;
-    public static String degree_category;
     public static String current_selected_dr_id;
 
     public DashboardController(){

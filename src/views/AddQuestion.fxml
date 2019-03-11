@@ -3,6 +3,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.web.HTMLEditor?>
 <?import java.lang.*?>
+<?import controllers.NumberField?>
 <AnchorPane
             xmlns:fx="http://javafx.com/fxml" prefHeight="700" prefWidth="700">
 
@@ -14,27 +15,37 @@
             <Label text="Type"/>
             <RadioButton text="MCQ" fx:id="radio_mcq"/>
             <RadioButton text="True/False" fx:id="radio_true_false"/>
+            <RadioButton text="Extended match" fx:id="radio_ext_match"/>
+
         </HBox>
         <HBox spacing="10">
-        <ComboBox value="Difficulty" fx:id="combo_q_diff">
-            <items>
-                <FXCollections fx:factory="observableArrayList">
-                    <String fx:id="easy" fx:value="Easy"/>
-                    <String fx:id="medium" fx:value="Medium"/>
-                    <String fx:id="hard" fx:value="Hard"/>
-                </FXCollections>
-            </items>
-        </ComboBox>
-            <Spinner min="1" max="100" editable="true" fx:id="spinner_q_diff"></Spinner>
-        <ComboBox value="Weight" fx:id="combo_q_weight">
-            <items>
-                <FXCollections fx:factory="observableArrayList">
-                    <String fx:id="wlow" fx:value="Low"/>
-                    <String fx:id="wmedium" fx:value="Medium"/>
-                    <String fx:id="whigh" fx:value="high"/>
-                </FXCollections>
-            </items>
-        </ComboBox>
+        <!--<ComboBox value="Difficulty" fx:id="combo_q_diff">-->
+            <!--<items>-->
+                <!--<FXCollections fx:factory="observableArrayList">-->
+                    <!--<String fx:id="easy" fx:value="Easy"/>-->
+                    <!--<String fx:id="medium" fx:value="Medium"/>-->
+                    <!--<String fx:id="hard" fx:value="Hard"/>-->
+                <!--</FXCollections>-->
+            <!--</items>-->
+        <!--</ComboBox>-->
+            <Label text="Difficulty"/>
+            <NumberField fx:id="txt_q_diff"/>
+
+            <Label text="Weight"/>
+            <NumberField fx:id="txt_q_weight"/>
+
+            <Label text="Expected Time"/>
+            <NumberField fx:id="txt_q_exp_time"/>
+
+        <!--<ComboBox value="Weight" fx:id="combo_q_weight">-->
+            <!--<items>-->
+                <!--<FXCollections fx:factory="observableArrayList">-->
+                    <!--<String fx:id="wlow" fx:value="Low"/>-->
+                    <!--<String fx:id="wmedium" fx:value="Medium"/>-->
+                    <!--<String fx:id="whigh" fx:value="high"/>-->
+                <!--</FXCollections>-->
+            <!--</items>-->
+        <!--</ComboBox>-->
         </HBox>
         <VBox fx:id="mcq_ui_group">
         <VBox fx:id="mcq_ui_answers_list" spacing="10">

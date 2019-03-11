@@ -2,6 +2,9 @@ package models;
 
 import javafx.beans.property.SimpleStringProperty;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class QuestionModel {
 
 
@@ -11,10 +14,9 @@ public class QuestionModel {
     private SimpleStringProperty question_type = new SimpleStringProperty("");
     private SimpleStringProperty question_text = new SimpleStringProperty("");
     private SimpleStringProperty question_weight = new SimpleStringProperty("");
+    private SimpleStringProperty expected_time = new SimpleStringProperty("");
     private String right_answer;
-    public String expected_time = "2";
-    private String[] answers = new String[4];
-    //public int isEdited, isDeleted, isInExam;
+    private List<AnswerModel> answers = new ArrayList<>();
 
     public QuestionModel(){
         this("", "", "", "", "", "");
@@ -26,7 +28,6 @@ public class QuestionModel {
         setQuestion_type(question_type);
         setQuestion_weight(w);
         setRaw_text(raw);
-
     }
 
     public String getId() {
@@ -59,6 +60,14 @@ public class QuestionModel {
         this.question_type.set(question_type);
     }
 
+    public String getExpected_time() {
+        return expected_time.get();
+    }
+
+    public void setExpected_time(String expected_time) {
+        this.expected_time.set(expected_time);
+    }
+
     public String getRight_answer() {
         return right_answer;
     }
@@ -67,11 +76,11 @@ public class QuestionModel {
         this.right_answer = right_answer;
     }
 
-    public String[] getAnswers() {
+    public List<AnswerModel> getAnswers() {
         return answers;
     }
 
-    public void setAnswers(String[] answers) {
+    public void setAnswers(List<AnswerModel> answers) {
         this.answers = answers;
     }
     public String getRaw_text() {

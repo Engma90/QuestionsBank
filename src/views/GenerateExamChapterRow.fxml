@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import controllers.NumberField?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controllers.GenerateExamChapterRowController"
+spacing="10">
+    <HBox
+            spacing="10">
+        <CheckBox fx:id="isSelected" prefWidth="20"></CheckBox>
+        <Label fx:id="lbl_chapter_name"></Label>
+
+    </HBox>
+        <VBox fx:id="content" spacing="5">
+
+        </VBox>
+
+</VBox>

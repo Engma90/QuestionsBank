@@ -1,3 +1,4 @@
+import controllers.rtf.RichTextDemo;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -24,6 +25,8 @@ public class Main extends Application {
         primaryStage.setMaximized(true);
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
+ //       RichTextDemo richTextDemo = new RichTextDemo(primaryStage);
+
     }
 
     public static void main(String[] args) {

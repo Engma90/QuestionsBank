@@ -3,6 +3,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
 
@@ -16,6 +18,18 @@
         <HBox spacing="10">
             <Label text="Course name"/>
             <TextField fx:id="course_name"/>
+        </HBox>
+        <HBox spacing="10">
+            <Label text="Course level"/>
+            <ComboBox fx:id="course_level" value="Undergraduates">
+
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:id="under" fx:value="Undergraduates"/>
+                        <String fx:id="post" fx:value="Postgraduates"/>
+                    </FXCollections>
+                </items>
+            </ComboBox>
         </HBox>
         <Button text="Add" fx:id="add_course" onAction="#onAddCourseClicked"/>
         <Button text="Edit" fx:id="edit_course" onAction="#onEditCourseClicked"/>

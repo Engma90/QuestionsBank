@@ -7,21 +7,63 @@
 <?import javafx.scene.layout.*?>
 
 <?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="controllers.CoursesTableController">
     <VBox spacing="10" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
           AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="0">
+        <HBox spacing="10">
     <Label text="Courses" />
+            <Label text="Filter"/>
+            <ComboBox fx:id="course_level_filter" value="All">
 
-    <ListView fx:id="courses_list_view" prefHeight="150" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
-              AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="0">
-        <items>
-            <FXCollections fx:factory="observableArrayList">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:id="all" fx:value="All"/>
+                        <String fx:id="under" fx:value="Undergraduates"/>
+                        <String fx:id="post" fx:value="Postgraduates"/>
+                    </FXCollections>
+                </items>
+            </ComboBox>
+        </HBox>
+    <!--<ListView fx:id="courses_table_view" prefHeight="150" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"-->
+              <!--AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="0">-->
+        <!--<items>-->
+            <!--<FXCollections fx:factory="observableArrayList">-->
 
-            </FXCollections>
-        </items>
-    </ListView>
+            <!--</FXCollections>-->
+        <!--</items>-->
+    <!--</ListView>-->
+
+
+        <TableView prefHeight="150" fx:id="courses_table_view" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
+                   AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="0" >
+
+            <columns>
+                <TableColumn text="Course" fx:id="col_course_name"  >
+                    <cellValueFactory><PropertyValueFactory property="name" />
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn text="Code" fx:id="col_course_code">
+                    <cellValueFactory><PropertyValueFactory property="code" />
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn text="Level" fx:id="col_course_level">
+                    <cellValueFactory><PropertyValueFactory property="level" />
+                    </cellValueFactory>
+                </TableColumn>
+                <!--<TableColumn text="Weight" fx:id="col_question_weight">-->
+                <!--<cellValueFactory><PropertyValueFactory property="question_weight" />-->
+                <!--</cellValueFactory>-->
+                <!--</TableColumn>-->
+            </columns>
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+
+                </FXCollections>
+            </items>
+        </TableView>
 
     <HBox spacing="10">
         <Button fx:id="add_course" onAction="#onAddCourseClicked" text="Add" />

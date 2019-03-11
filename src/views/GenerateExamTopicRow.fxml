@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.shape.Rectangle?>
+<?import controllers.NumberField?>
+<HBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controllers.GenerateExamTopicRowController"
+      spacing="10">
+        <Rectangle width="20"/>
+        <CheckBox fx:id="isSelected" prefWidth="20"></CheckBox>
+        <Label fx:id="lbl_topic_name" prefWidth="200"></Label>
+        <NumberField fx:id="diff_max_level" prefWidth="150"></NumberField>
+        <NumberField fx:id="chapter_number_of_questions" prefWidth="150"></NumberField>
+
+</HBox>

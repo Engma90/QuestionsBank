@@ -47,43 +47,45 @@
                 </ComboBox>
             </VBox>
         </HBox>
-    <ComboBox value="Number of models" fx:id="number_of_models">
-        <items>
-            <FXCollections fx:factory="observableArrayList">
-                <String fx:id="option1" fx:value="1"/>
-                <String fx:id="option2" fx:value="2"/>
-                <String fx:id="option3" fx:value="3"/>
-                <String fx:id="option4" fx:value="4"/>
-                <String fx:id="option5" fx:value="5"/>
-                <String fx:id="option6" fx:value="6"/>
+        <!--<ComboBox value="Number of models" fx:id="number_of_models">-->
+        <!--<items>-->
+        <!--<FXCollections fx:factory="observableArrayList">-->
+        <!--<String fx:id="option1" fx:value="1"/>-->
+        <!--<String fx:id="option2" fx:value="2"/>-->
+        <!--<String fx:id="option3" fx:value="3"/>-->
+        <!--<String fx:id="option4" fx:value="4"/>-->
+        <!--<String fx:id="option5" fx:value="5"/>-->
+        <!--<String fx:id="option6" fx:value="6"/>-->
 
-            </FXCollections>
-        </items>
-    </ComboBox>
+        <!--</FXCollections>-->
+        <!--</items>-->
+        <!--</ComboBox>-->
+        <HBox spacing="10">
+            <Label text="Number of models"></Label>
+            <NumberField fx:id="number_of_models"></NumberField>
+        </HBox>
         <VBox fx:id="same_or_different" spacing="5">
-        <RadioButton fx:id="radio_same" text="Same questions"/>
-        <RadioButton fx:id="radio_different" text="Different questions"/>
+            <RadioButton fx:id="radio_same" text="Same questions"/>
+            <RadioButton fx:id="radio_different" text="Different questions"/>
+            <CheckBox text="Shuffle answers" fx:id="shuffle_answers"/>
         </VBox>
 
-    <!--<VBox fx:id="shuffle" spacing="5">-->
-
-        <!--<RadioButton fx:id="radio_shuffle_questions" text="Shuffle question"/>-->
-
-    <!--</VBox>-->
         <Separator/>
         <HBox spacing="10">
-            <Label text="Exam chapters" prefWidth="240"/>
-            <Label text="Number of easy questions" prefWidth="200"/>
-            <Label text="Number of medium questions" prefWidth="200"/>
-            <Label text="Number of hard questions" prefWidth="200"/>
+            <Label text="Exam chapters and topics" prefWidth="270"/>
+            <Label text="Difficulty level" prefWidth="150"/>
+            <Label text="Number of questions" prefWidth="150"/>
+            <!--<Label text="Number of hard questions" prefWidth="200"/>-->
         </HBox>
-<ScrollPane minHeight="220" minWidth="500">
-    <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
-        <VBox fx:id="content" spacing="10">
+        <ScrollPane minHeight="220" minWidth="500">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <VBox fx:id="content" spacing="10">
 
-        </VBox>
-</ScrollPane>
-        <HBox spacing="20" AnchorPane.bottomAnchor="10"  AnchorPane.rightAnchor="10"
+            </VBox>
+        </ScrollPane>
+        <HBox spacing="20" AnchorPane.bottomAnchor="10" AnchorPane.rightAnchor="10"
               AnchorPane.leftAnchor="10" alignment="CENTER">
             <Button text="Generate" fx:id="generate" onAction="#onGenerateClicked"/>
             <Button text="Cancel" fx:id="cancel"/>

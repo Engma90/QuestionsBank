@@ -3,6 +3,7 @@ package controllers;
 import com.documents4j.api.DocumentType;
 import com.documents4j.api.IConverter;
 import com.documents4j.job.LocalConverter;
+import models.AnswerModel;
 import models.ExamModel;
 import models.QuestionModel;
 
@@ -34,10 +35,10 @@ public class FileExporter {
             body.append("<div>");
             body.append(qm.getQuestion_text().replace(htmlHeaderToRemove,"").replace(footer,""));
             int i =0;
-            for (String answer: qm.getAnswers()){
+            for (AnswerModel answer: qm.getAnswers()){
                 body.append((char) (65 + i));
                 body.append(" ");
-                body.append(answer);
+                body.append(answer.answer_text);
                 body.append("<br />");
                 i++;
             }
