@@ -98,13 +98,15 @@ public class DBSingletonHandler {
             for (int i = 0; i < params.length; i++)
                 pstmt.setString(i + 1, params[i]);
             System.out.println(sql);
+            for(String s:params)
+                System.out.print(s + "   ");
             pstmt.executeUpdate();
             ResultSet rs = pstmt.getGeneratedKeys();
             int last_inserted_id = -1;
             if (rs.next()) {
                 last_inserted_id = rs.getInt(1);
             }
-            System.out.println(rs);
+            //System.out.println(rs);
             pstmt.close();
             return last_inserted_id;
         } catch (Exception ex) {

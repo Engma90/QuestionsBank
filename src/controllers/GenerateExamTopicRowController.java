@@ -14,7 +14,7 @@ public class GenerateExamTopicRowController implements Initializable {
     public Label lbl_topic_name;
     public String topic_id;
     String topic_name;
-    public NumberField diff_max_level, chapter_number_of_questions;
+    public NumberField diff_max_level, topic_number_of_questions;
     public GenerateExamChapterRowController parent;
     @Override
     public void initialize(URL location, ResourceBundle resources) {

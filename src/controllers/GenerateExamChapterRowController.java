@@ -25,6 +25,7 @@ public class GenerateExamChapterRowController implements Initializable {
 
 
     String chapter_name;
+    String chapter_number;
     List<String> diff;
 
     @Override
@@ -32,10 +33,11 @@ public class GenerateExamChapterRowController implements Initializable {
 
     }
 
-    public void initUI(String chapter_id, String chapter_name, List<String> diff){
+    public void initUI(String chapter_id, String chapter_name, String chapter_number, List<String> diff){
         this.chapter_name = chapter_name;
         this.diff = diff;
         this.chapter_id = chapter_id;
+        this.chapter_number = chapter_number;
 //        this.diff = diff.stream()
 //                .map(String::toLowerCase)
 //                .collect(Collectors.toList());

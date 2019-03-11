@@ -111,6 +111,33 @@ public class QuestionsTableHandler {
     }
 
 
+    public ObservableList<QuestionModel> getQuestionList(TopicModel topicModel, String diff) {
+        questionList = FXCollections.observableArrayList();
+        String sql = MessageFormat.format(
+                "SELECT idQuestion,QuestionContent,QuestionDifficulty,QuestionType,QuestionWeight,QuestionExpectedTime FROM  question WHERE Topic_idTopic = {0} AND QuestionDifficulty IN (0, {1});"
+                , topicModel.id, diff);
+        ResultSet rs = DBSingletonHandler.getInstance().execute_query(sql);
+        try {
+            while (rs.next()) {
+
+                QuestionModel model = new QuestionModel(rs.getInt("idQuestion") + "", rs.getString("QuestionContent"), rs.getString("QuestionDifficulty"),
+                        rs.getString("QuestionType"), rs.getString("QuestionWeight"),"");
+                model.setExpected_time(rs.getString("QuestionExpectedTime"));
+                questionList.add(model);
+                getQuestionAnswersList(model, DBSingletonHandler.getInstance());
+            }
+            return questionList;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            //db.closeConnection();
+        }
+
+    }
+
+
     public ObservableList<QuestionModel> getQuestionList(String ch_id) {
         questionList = FXCollections.observableArrayList();
         //DBHandler db = new DBHandler();
