@@ -100,6 +100,7 @@ public class DBSingletonHandler {
             System.out.println(sql);
             for(String s:params)
                 System.out.print(s + "   ");
+            System.out.println();
             pstmt.executeUpdate();
             ResultSet rs = pstmt.getGeneratedKeys();
             int last_inserted_id = -1;
