@@ -16,7 +16,7 @@ public class QuestionModel {
     private SimpleStringProperty question_weight = new SimpleStringProperty("");
     private SimpleStringProperty expected_time = new SimpleStringProperty("");
     private String right_answer;
-    private List<AnswerModel> answers = new ArrayList<>();
+    private List<Answer> answers = new ArrayList<>();
 
     public QuestionModel(){
         this("", "", "", "", "", "");
@@ -76,11 +76,11 @@ public class QuestionModel {
         this.right_answer = right_answer;
     }
 
-    public List<AnswerModel> getAnswers() {
+    public List<Answer> getAnswers() {
         return answers;
     }
 
-    public void setAnswers(List<AnswerModel> answers) {
+    public void setAnswers(List<Answer> answers) {
         this.answers = answers;
     }
     public String getRaw_text() {

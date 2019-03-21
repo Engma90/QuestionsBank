@@ -28,20 +28,9 @@ import static com.sun.org.apache.xalan.internal.utils.SecuritySupport.getResourc
 
 
 public class Main extends Application {
-    private static final String QR_CODE_IMAGE_PATH = "./MyQRCode.png";
+
     @Override
     public void start(Stage primaryStage) throws IOException {
-
-
-        try {
-            generateQRCodeImage("is is my first QR Code", 350, 350, QR_CODE_IMAGE_PATH);
-        } catch (WriterException e) {
-            System.out.println("Could not generate QR Code, WriterException :: " + e.getMessage());
-        } catch (IOException e) {
-            System.out.println("Could not generate QR Code, IOException :: " + e.getMessage());
-        }
-
-
         Parent root;
         root = FXMLLoader.load(getClass().getResource("/views/Home.fxml"));
         Image icon = new Image(getClass().getResourceAsStream("logo.png"));
@@ -61,12 +50,5 @@ public class Main extends Application {
 
 
 
-        private static void generateQRCodeImage(String text, int width, int height, String filePath)
-            throws WriterException, IOException {
-            QRCodeWriter qrCodeWriter = new QRCodeWriter();
-            BitMatrix bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, width, height);
 
-            Path path = FileSystems.getDefault().getPath(filePath);
-            MatrixToImageWriter.writeToPath(bitMatrix, "PNG", path);
-        }
 }

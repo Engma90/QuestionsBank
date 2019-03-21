@@ -1,6 +1,6 @@
 package models;
 
-public class AnswerModel{
+public class Answer {
     public String answer_text;
     public int is_right_answer;
 }

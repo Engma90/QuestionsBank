@@ -1,10 +1,5 @@
 package models;
 
-import controllers.CoursesTableController;
-import controllers.DashboardController;
-
-import java.text.MessageFormat;
-
 public class GeneratorHandler {
     public boolean Add(ExamModel model) {
         //DBHandler db = new DBHandler();
@@ -20,7 +15,7 @@ public class GeneratorHandler {
                 ,model.getCourseCategory(), model.getDoctor_idDoctor()
         };
         int exam_id = DBSingletonHandler.getInstance().execute_PreparedStatement(sql,params);
-
+        model.setId(exam_id+"");
 
         for(ExamModelModel examModelModel:model.getExamModelModelList()) {
             examModelModel.setExam_idExam(exam_id+"");
@@ -30,7 +25,7 @@ public class GeneratorHandler {
             params = new String[]{
                     examModelModel.getExam_idExam(), examModelModel.getExamModelNumber()};
             int model_id = DBSingletonHandler.getInstance().execute_PreparedStatement(sql,params);
-
+            examModelModel.setId(model_id+"");
             for (ExamQuestionModel q : examModelModel.getExamQuestionsList()) {
                 q.setExamModel_idExamModel(model_id+"");
                 sql =
@@ -44,7 +39,7 @@ public class GeneratorHandler {
                 , q.getTopicName()};
                 int question_id = DBSingletonHandler.getInstance().execute_PreparedStatement(sql,params);
 
-                for (AnswerModel ans : q.getAnswers()) {
+                for (Answer ans : q.getAnswers()) {
 
                     sql =
                             "INSERT INTO examquestionanswer (AnswerLabel, AnswerContent, IsRightAnswer, ExamQuestion_idQuestion) " +

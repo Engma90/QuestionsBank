@@ -1,5 +1,6 @@
 package controllers;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -11,11 +12,12 @@ import javafx.scene.layout.VBox;
 import javafx.scene.web.HTMLEditor;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import models.AnswerModel;
+import models.Answer;
 import models.QuestionModel;
 import models.QuestionsTableHandler;
 import models.TopicModel;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -132,7 +134,7 @@ public class AddQuestionController implements Initializable {
             //edit_question.setDefaultButton(true);
             setPrevConfig();
         }
-
+        hideHTMLEditorToolbars(html_editor);
     }
 
     private void setPrevConfig() {
@@ -152,7 +154,7 @@ public class AddQuestionController implements Initializable {
             }
         } else if (model.getQuestion_type().equals("MCQ")) {
             radio_mcq.setSelected(true);
-            for (AnswerModel a : model.getAnswers()) {
+            for (Answer a : model.getAnswers()) {
                 AddQuestionAnswerRowController addQuestionAnswerRowController = add_row();
                 if(addQuestionAnswerRowController != null) {
                     addQuestionAnswerRowController.txt_answer.setText(a.answer_text);
@@ -164,6 +166,13 @@ public class AddQuestionController implements Initializable {
                 }
             }
         }
+        String imagePath = "C:\\Users\\Mohammad\\IdeaProjects\\QuestionsBank\\QRCode.png";
+//        ScreenCapture x = new ScreenCapture();
+//        String imagePath = x.captureScreen(scCaptureCount+++"", "C:\\work\\temp");
+//        String text = editor.getHtmlText();
+//        editor.setHtmlText(text+"&lt;img src='file:\\\\"+imagePath+"' >" );
+        File f = new File(imagePath);
+        html_editor.setHtmlText("<img src=' " + f.toURI() + "'/>");
     }
 
     public void onAddClicked(ActionEvent e) {
@@ -174,12 +183,12 @@ public class AddQuestionController implements Initializable {
         QuestionsTableHandler questionsTableHandler = new QuestionsTableHandler();
 
         if (radio_mcq.isSelected()) {
-            List<AnswerModel> answerModels = new ArrayList<>();
+            List<Answer> answers = new ArrayList<>();
             for (AddQuestionAnswerRowController a : answerRowControllers) {
-                AnswerModel answerModel = new AnswerModel();
-                answerModel.answer_text = a.txt_answer.getText();
-                answerModel.is_right_answer = a.checkbox_right_answer.isSelected() ? 1 : 0;
-                answerModels.add(answerModel);
+                Answer answer = new Answer();
+                answer.answer_text = a.txt_answer.getText();
+                answer.is_right_answer = a.checkbox_right_answer.isSelected() ? 1 : 0;
+                answers.add(answer);
             }
 //            if (validate(Q, diff, weight,A, B, C, D)){
 
@@ -189,7 +198,7 @@ public class AddQuestionController implements Initializable {
             model.setQuestion_weight(weight);
             model.setExpected_time(exp_time);
             model.setQuestion_type("MCQ");
-            model.setAnswers(answerModels);
+            model.setAnswers(answers);
             //model.setRight_answer(right_answer);
             questionsTableHandler.Add(topicModel, model);
             close(e);
@@ -202,22 +211,22 @@ public class AddQuestionController implements Initializable {
             String B = "False";
             if (validate(Q, diff, weight)) {
                 //String[] answers = new String[]{A,B};
-                List<AnswerModel> answerModels = new ArrayList<>();
-                AnswerModel answerModel = new AnswerModel();
-                answerModel.answer_text = "True";
-                answerModel.is_right_answer = radio_answer_true.isSelected() ? 1 : 0;
-                answerModels.add(answerModel);
-                answerModel = new AnswerModel();
-                answerModel.answer_text = "False";
-                answerModel.is_right_answer = radio_answer_false.isSelected() ? 1 : 0;
-                answerModels.add(answerModel);
+                List<Answer> answers = new ArrayList<>();
+                Answer answer = new Answer();
+                answer.answer_text = "True";
+                answer.is_right_answer = radio_answer_true.isSelected() ? 1 : 0;
+                answers.add(answer);
+                answer = new Answer();
+                answer.answer_text = "False";
+                answer.is_right_answer = radio_answer_false.isSelected() ? 1 : 0;
+                answers.add(answer);
 
                 model.setQuestion_text(Q);
                 model.setQuestion_diff(diff);
                 model.setQuestion_weight(weight);
                 model.setExpected_time(exp_time);
                 model.setQuestion_type("True/False");
-                model.setAnswers(answerModels);
+                model.setAnswers(answers);
                 //model.setRight_answer(right_answer);
                 questionsTableHandler.Add(topicModel, model);
                 close(e);
@@ -238,12 +247,12 @@ public class AddQuestionController implements Initializable {
         QuestionsTableHandler questionsTableHandler = new QuestionsTableHandler();
 
         if (radio_mcq.isSelected()) {
-            List<AnswerModel> answerModels = new ArrayList<>();
+            List<Answer> answers = new ArrayList<>();
             for (AddQuestionAnswerRowController a : answerRowControllers) {
-                AnswerModel answerModel = new AnswerModel();
-                answerModel.answer_text = a.txt_answer.getText();
-                answerModel.is_right_answer = a.checkbox_right_answer.isSelected() ? 1 : 0;
-                answerModels.add(answerModel);
+                Answer answer = new Answer();
+                answer.answer_text = a.txt_answer.getText();
+                answer.is_right_answer = a.checkbox_right_answer.isSelected() ? 1 : 0;
+                answers.add(answer);
             }
 //            if (validate(Q, diff, weight,A, B, C, D)){
 
@@ -253,7 +262,7 @@ public class AddQuestionController implements Initializable {
             model.setQuestion_weight(weight);
             model.setExpected_time(exp_time);
             model.setQuestion_type("MCQ");
-            model.setAnswers(answerModels);
+            model.setAnswers(answers);
             //model.setRight_answer(right_answer);
             questionsTableHandler.Edit(model);
             close(e);
@@ -266,22 +275,22 @@ public class AddQuestionController implements Initializable {
             String B = "False";
             if (validate(Q, diff, weight)) {
                 //String[] answers = new String[]{A,B};
-                List<AnswerModel> answerModels = new ArrayList<>();
-                AnswerModel answerModel = new AnswerModel();
-                answerModel.answer_text = "True";
-                answerModel.is_right_answer = radio_answer_true.isSelected() ? 1 : 0;
-                answerModels.add(answerModel);
-                answerModel = new AnswerModel();
-                answerModel.answer_text = "False";
-                answerModel.is_right_answer = radio_answer_false.isSelected() ? 1 : 0;
-                answerModels.add(answerModel);
+                List<Answer> answers = new ArrayList<>();
+                Answer answer = new Answer();
+                answer.answer_text = "True";
+                answer.is_right_answer = radio_answer_true.isSelected() ? 1 : 0;
+                answers.add(answer);
+                answer = new Answer();
+                answer.answer_text = "False";
+                answer.is_right_answer = radio_answer_false.isSelected() ? 1 : 0;
+                answers.add(answer);
 
                 model.setQuestion_text(Q);
                 model.setQuestion_diff(diff);
                 model.setQuestion_weight(weight);
                 model.setExpected_time(exp_time);
                 model.setQuestion_type("True/False");
-                model.setAnswers(answerModels);
+                model.setAnswers(answers);
                 //model.setRight_answer(right_answer);
                 questionsTableHandler.Edit(model);
                 close(e);
@@ -338,6 +347,21 @@ public class AddQuestionController implements Initializable {
             return false;
         }
         return true;
+    }
+
+
+    public static void hideHTMLEditorToolbars(final HTMLEditor editor)
+    {
+        editor.setVisible(false);
+        Platform.runLater(() -> {
+            Node[] nodes = editor.lookupAll(".tool-bar").toArray(new Node[0]);
+            for(Node node : nodes)
+            {
+                node.setVisible(false);
+                node.setManaged(false);
+            }
+            editor.setVisible(true);
+        });
     }
 
 

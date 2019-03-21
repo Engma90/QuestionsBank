@@ -8,13 +8,11 @@ package controllers.rtf;
 
 import static org.fxmisc.richtext.model.TwoDimensional.Bias.*;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -29,6 +27,7 @@ import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -37,6 +36,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import org.apache.commons.io.FileUtils;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.GenericStyledArea;
 import org.fxmisc.richtext.StyledTextArea;
@@ -53,7 +53,11 @@ import org.reactfx.SuspendableNo;
 import org.reactfx.util.Either;
 import org.reactfx.util.Tuple2;
 
-public class RichTextDemo {
+import javax.swing.*;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.EditorKit;
+
+public class RichTextDemo  extends Pane{
 
     // the saved/loaded files and their format are arbitrary and may change across versions
     private static final String RTFX_FILE_EXTENSION = ".rtfx";
@@ -88,11 +92,11 @@ public class RichTextDemo {
     private final SuspendableNo updatingToolbar = new SuspendableNo();
 
 
-    public RichTextDemo(){
-        //this(new Stage());
-    }
-    public RichTextDemo(Stage primaryStage) {
-        mainStage = primaryStage;
+//    public RichTextDemo(){
+//        //this(new Stage());
+//    }
+    public RichTextDemo() {
+        //mainStage = primaryStage;
 
         Button loadBtn = createButton("loadfile", this::loadDocument,
                 "Load document.\n\n" +
@@ -289,12 +293,16 @@ public class RichTextDemo {
         VBox.setVgrow(vsPane, Priority.ALWAYS);
         vbox.getChildren().addAll(toolBar1, toolBar2, vsPane);
 
-        Scene scene = new Scene(vbox, 600, 400);
-        scene.getStylesheets().add(RichTextDemo.class.getResource("/rtf/richtext/rich-text.css").toExternalForm());
-        primaryStage.setScene(scene);
-        area.requestFocus();
-        primaryStage.setTitle("Rich Text Demo");
-        primaryStage.show();
+        getChildren().add(vbox);
+        getStylesheets().add(RichTextDemo.class.getResource("/rtf/richtext/rich-text.css").toExternalForm());
+
+//        Scene scene = new Scene(vbox, 600, 400);
+//        scene.getStylesheets().add(RichTextDemo.class.getResource("/rtf/richtext/rich-text.css").toExternalForm());
+//        primaryStage.setScene(scene);
+//        area.requestFocus();
+//        primaryStage.setTitle("Rich Text Demo");
+//        primaryStage.show();
+
     }
 
     private Node createNode(StyledSegment<Either<String, LinkedImage>, TextStyle> seg,
@@ -411,7 +419,6 @@ public class RichTextDemo {
 
 
     private void saveDocument() {
-        new Alert(Alert.AlertType.ERROR, getText()).show();
         String initialDir = System.getProperty("user.dir");
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save document");
@@ -442,8 +449,58 @@ public class RichTextDemo {
         });
     }
 
-    public String getText(){
-        return area.getText();
+
+
+
+    public String getHtmlText(){
+        StyledDocument<ParStyle, Either<String, LinkedImage>, TextStyle> doc = area.getDocument();
+
+        // Use the Codec to save the document in a binary format
+        area.getStyleCodecs().ifPresent(codecs -> {
+            Codec<StyledDocument<ParStyle, Either<String, LinkedImage>, TextStyle>> codec =
+                    ReadOnlyStyledDocument.codec(codecs._1, codecs._2, area.getSegOps());
+            try {
+                FileOutputStream fos = new FileOutputStream("RTF.rtf");
+                //ByteArrayOutputStream baos = new ByteArrayOutputStream();
+               DataOutputStream dos = new DataOutputStream(fos);
+                codec.encode(dos, doc);
+                //byte[] result = baos.toByteArray();
+                //FileUtils.writeByteArrayToFile(new File("pathname.rtf"), result);
+//                try (FileOutputStream fos = new FileOutputStream("RTF.rtf")) {
+//                    fos.write(result);
+//
+//                }
+                Reader r = new FileReader("RTF.rtf");
+                new Alert(Alert.AlertType.ERROR, rtfToHtml(r)).show();
+                r.close();
+                //fos.close();
+            } catch (IOException fnfe) {
+                fnfe.printStackTrace();
+            }
+        });
+        return "asgdjsagdsajgdajgdjashg";
+    }
+
+
+    public static String rtfToHtml(Reader rtf) throws IOException {
+        JEditorPane p = new JEditorPane();
+        p.setContentType("text/rtf");
+        EditorKit kitRtf = p.getEditorKitForContentType("text/rtf");
+        try {
+            kitRtf.read(rtf, p.getDocument(), 0);
+            kitRtf = null;
+            EditorKit kitHtml = p.getEditorKitForContentType("text/html");
+            Writer writer = new StringWriter();
+            kitHtml.write(writer, p.getDocument(), 0, p.getDocument().getLength());
+            return writer.toString();
+        } catch (BadLocationException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void setHtmlText(String text){
+        area.appendText(text);
     }
 
 

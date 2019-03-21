@@ -4,13 +4,14 @@
 <?import javafx.scene.web.HTMLEditor?>
 <?import java.lang.*?>
 <?import controllers.NumberField?>
+<?import controllers.rtf.RichTextDemo?>
 <AnchorPane
             xmlns:fx="http://javafx.com/fxml" prefHeight="700" prefWidth="700">
 
     <VBox fx:id="container" spacing="10" AnchorPane.topAnchor="10" AnchorPane.leftAnchor="10" AnchorPane.bottomAnchor="10"
           AnchorPane.rightAnchor="10">
-        <HTMLEditor fx:id="html_editor"  AnchorPane.topAnchor="10" AnchorPane.leftAnchor="10"
-                    AnchorPane.bottomAnchor="10" AnchorPane.rightAnchor="10" maxHeight="400"/>
+        <HTMLEditor fx:id="html_editor" AnchorPane.topAnchor="10" AnchorPane.leftAnchor="10"
+                      AnchorPane.bottomAnchor="10" AnchorPane.rightAnchor="10" maxHeight="400"/>
         <HBox spacing="10">
             <Label text="Type"/>
             <RadioButton text="MCQ" fx:id="radio_mcq"/>

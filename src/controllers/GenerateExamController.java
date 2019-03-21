@@ -183,7 +183,7 @@ public class GenerateExamController implements Initializable {
                             examQuestionModel.setChapterNumber(cRow.chapter_number);
                             examQuestionModel.setTopicName(tRow.topic_name);
                             if(shuffle_answers.isSelected()){
-                                List<AnswerModel> temp = new ArrayList<>(qmodel.getAnswers());
+                                List<Answer> temp = new ArrayList<>(qmodel.getAnswers());
                                 Collections.shuffle(temp);
                                 qmodel.setAnswers(temp);
                             }

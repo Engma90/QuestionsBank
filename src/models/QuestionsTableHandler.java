@@ -1,8 +1,5 @@
 package models;
 
-import controllers.CoursesTableController;
-import controllers.DashboardController;
-import controllers.TopicsTableController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -215,13 +212,13 @@ public class QuestionsTableHandler {
                     "SELECT * FROM questionanswer where Question_idQuestion = {0};"
                     , model.getId());
             ResultSet rs_ans = db.execute_query(sql);
-            List<AnswerModel> temp_array;
+            List<Answer> temp_array;
             temp_array = new ArrayList<>();
             while (rs_ans.next()) {
-                AnswerModel answerModel = new AnswerModel();
-                answerModel.answer_text = rs_ans.getString("AnswerContent");
-                answerModel.is_right_answer = rs_ans.getInt("isRightAnswer");
-                temp_array.add(answerModel);
+                Answer answer = new Answer();
+                answer.answer_text = rs_ans.getString("AnswerContent");
+                answer.is_right_answer = rs_ans.getInt("isRightAnswer");
+                temp_array.add(answer);
             }
             model.setAnswers(temp_array);
         } catch (Exception ex) {

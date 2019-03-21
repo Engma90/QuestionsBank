@@ -17,15 +17,15 @@ public class ExamQuestionModel {
     private String ChapterName;
     private String ChapterNumber;
 
-    public List<AnswerModel> getAnswers() {
+    public List<Answer> getAnswers() {
         return answers;
     }
 
-    public void setAnswers(List<AnswerModel> answers) {
+    public void setAnswers(List<Answer> answers) {
         this.answers = answers;
     }
 
-    private List<AnswerModel> answers = new ArrayList<>();
+    private List<Answer> answers = new ArrayList<>();
 
     public ExamQuestionModel() {
     }
