@@ -8,19 +8,19 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import models.ChapterModel;
+import models.Chapter;
 import models.TopicListHandler;
-import models.TopicModel;
+import models.Topic;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class AddTopicController implements Initializable {
-    TopicModel model;
+    Topic model;
     String operation_type;
     public TextField topic_name;
     public Button add_topic, edit_topic;
-    public ChapterModel chapterModel;
+    public Chapter chapter;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -36,16 +36,16 @@ public class AddTopicController implements Initializable {
         }
     }
 
-    public AddTopicController(String operation_type,ChapterModel chapterModel, TopicModel model){
+    public AddTopicController(String operation_type, Chapter chapter, Topic model){
         this.operation_type = operation_type;
         this.model = model;
-        this.chapterModel = chapterModel;
+        this.chapter = chapter;
     }
 
     public void onAddTopicClicked(ActionEvent e){
-        //new TopicModel();
+        //new Topic();
         model.name = topic_name.getText();
-        boolean success = TopicListHandler.getInstance().Add(chapterModel, model);
+        boolean success = TopicListHandler.getInstance().Add(chapter, model);
 
         if(!success){
             new Alert(Alert.AlertType.ERROR,"Operation Failed").show();

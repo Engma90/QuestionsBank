@@ -3,11 +3,12 @@
 <?import javafx.scene.layout.*?>
 
 <?import javafx.scene.text.TextFlow?>
+<?import controllers.MyHtmlEditor?>
 <HBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="controllers.AddQuestionAnswerRowController" spacing="10">
         <Label fx:id="label" text="A"/>
-        <TextField prefWidth="500" fx:id="txt_answer"/>
+        <MyHtmlEditor prefWidth="500" fx:id="txt_answer"/>
         <!--<TextFlow prefWidth="500" fx:id="txt_answer" ></TextFlow>-->
         <CheckBox fx:id="checkbox_right_answer"/>
         <Button text="remove" fx:id="remove_answer" onAction="#onRemoveClicked"/>

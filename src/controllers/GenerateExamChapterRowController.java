@@ -21,7 +21,7 @@ public class GenerateExamChapterRowController implements Initializable {
     public String chapter_id;
     public VBox content;
     public List<GenerateExamTopicRowController> generateExamTopicRowControllerList;
-    public List<TopicModel> topicModelList;
+    public List<Topic> topicList;
 
 
     String chapter_name;
@@ -77,8 +77,8 @@ public class GenerateExamChapterRowController implements Initializable {
         });
 
         generateExamTopicRowControllerList = new ArrayList<>();
-        topicModelList = TopicListHandler.getInstance().getTopicsList(new ChapterModel(chapter_id,"",""));
-        for (TopicModel t : topicModelList) {
+        topicList = TopicListHandler.getInstance().getTopicsList(new Chapter(chapter_id,"",""));
+        for (Topic t : topicList) {
             addRow(t.id, t.name);
         }
     }

@@ -32,7 +32,7 @@ import java.util.ResourceBundle;
 
 public class AddQuestionAnswerRowController implements Initializable {
     public Label label;
-    public TextField txt_answer;
+    public MyHtmlEditor txt_answer;
     public CheckBox checkbox_right_answer;
     public Button remove_answer;
     public AddQuestionController addQuestionController;

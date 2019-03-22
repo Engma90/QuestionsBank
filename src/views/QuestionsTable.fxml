@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 
 <?import javafx.collections.FXCollections?>
-<?import models.QuestionModel?>
+<?import models.Question?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.web.HTMLEditor?>
 <AnchorPane xmlns="http://javafx.com/javafx"

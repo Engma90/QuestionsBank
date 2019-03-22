@@ -23,7 +23,7 @@ public class GenerateExamController implements Initializable {
     public CheckBox shuffle_answers;
     public RadioButton radio_same, radio_different;//, radio_shuffle_questions;
     List<GenerateExamChapterRowController> generateExamChapterRowControllerList;
-    List<ChapterModel> chapterModelList;
+    List<Chapter> chapterList;
 
 
     public TextField college_text, exam_duration, department_text, exam_date,
@@ -31,7 +31,7 @@ public class GenerateExamController implements Initializable {
     public TextArea note_text;
     public ComboBox exam_type;
 
-    public CourseModel courseModel = new CourseModel();
+    public Course course = new Course();
 
 
     @Override
@@ -91,13 +91,13 @@ public class GenerateExamController implements Initializable {
     }
 
     public void initUI(){
-        chapterModelList = ChaptersListHandler.getInstance().getChaptersList(courseModel);
-        for (ChapterModel c : chapterModelList) {
+        chapterList = ChaptersListHandler.getInstance().getChaptersList(course);
+        for (Chapter c : chapterList) {
             System.out.println("----------------------1");
-            List<QuestionModel> questionModelList = QuestionsTableController.questionsTableHandler.getQuestionList(c.id);
+            List<Question> questionList = QuestionsTableController.questionsTableHandler.getQuestionList(c.id);
             System.out.println("----------------------2");
             List<String> l = new ArrayList<String>();
-            for (QuestionModel q : questionModelList) {
+            for (Question q : questionList) {
                 if (!l.contains(q.getQuestion_diff())) {
                     l.add(q.getQuestion_diff());
                 }
@@ -116,79 +116,79 @@ public class GenerateExamController implements Initializable {
 
             if (selectedDirectory != null) {
                 System.out.println(selectedDirectory.getAbsolutePath());
-                List<ExamQuestionModel> exam_questions = getExamQuestionsList();
-                ExamModel examModel = new ExamModel();
-                examModel.setExamModelModelList(new ArrayList<>());
+                List<ExamQuestion> exam_questions = getExamQuestionsList();
+                Exam exam = new Exam();
+                exam.setExamModelList(new ArrayList<>());
                 if (exam_questions.size() > 0) {
                     if (radio_same.isSelected() || Integer.parseInt(number_of_models.getText()) == 1) {
                         for (int i = 0; i < Integer.parseInt(number_of_models.getText()); i++) {
-                            ExamModelModel examModelModel = new ExamModelModel();
-                            examModelModel.setExamModelNumber((i+1)+"");
-                            List<ExamQuestionModel> temp = new ArrayList<>(exam_questions);
+                            ExamModel examModel = new ExamModel();
+                            examModel.setExamModelNumber((i+1)+"");
+                            List<ExamQuestion> temp = new ArrayList<>(exam_questions);
                             Collections.shuffle(temp);
-                            examModelModel.setExamQuestionsList(temp);
-                            //Collections.shuffle(examModelModel.getExamQuestionsList());
+                            examModel.setExamQuestionsList(temp);
+                            //Collections.shuffle(examModel.getExamQuestionsList());
                             System.out.println("---------------------------------------------------------------------");
-                            System.out.println(examModelModel.getExamQuestionsList().get(0).getQuestionContent());
-                            examModel.getExamModelModelList().add(examModelModel);
+                            System.out.println(examModel.getExamQuestionsList().get(0).getQuestionContent());
+                            exam.getExamModelList().add(examModel);
                         }
 
                     } else if (radio_different.isSelected() && Integer.parseInt(number_of_models.getText()) > 1) {
                         for (int i = 0; i < Integer.parseInt(number_of_models.getText()); i++) {
                             exam_questions = getExamQuestionsList();
-                            ExamModelModel examModelModel = new ExamModelModel();
-                            examModelModel.setExamModelNumber((i+1)+"");
-                            List<ExamQuestionModel> temp = new ArrayList<>(exam_questions);
+                            ExamModel examModel = new ExamModel();
+                            examModel.setExamModelNumber((i+1)+"");
+                            List<ExamQuestion> temp = new ArrayList<>(exam_questions);
                             Collections.shuffle(temp);
-                            examModelModel.setExamQuestionsList(temp);
-                            examModel.getExamModelModelList().add(examModelModel);
-//                            addExamToDatabase(examModel);
-//                            new FileExporter().Export(examModel, selectedDirectory.getAbsolutePath());
+                            examModel.setExamQuestionsList(temp);
+                            exam.getExamModelList().add(examModel);
+//                            addExamToDatabase(exam);
+//                            new FileExporter().Export(exam, selectedDirectory.getAbsolutePath());
                         }
 
                     }
 
-                    addExamToDatabase(examModel);
-                    new FileExporter().Export(examModel, selectedDirectory.getAbsolutePath());
+                    addExamToDatabase(exam);
+                    new FileExporter().Export(exam, selectedDirectory.getAbsolutePath());
                     new Alert(Alert.AlertType.INFORMATION, "Operation Compleated").show();
                 }
             }
         //}
     }
-    private  List<ExamQuestionModel> getExamQuestionsList(){
-        //List<QuestionModel> rawQuestionsList = new ArrayList<QuestionModel>();
-        List<ExamQuestionModel> examQuestionList = new ArrayList<>();
+    private  List<ExamQuestion> getExamQuestionsList(){
+        //List<Question> rawQuestionsList = new ArrayList<Question>();
+        List<ExamQuestion> examQuestionList = new ArrayList<>();
         for (GenerateExamChapterRowController cRow : generateExamChapterRowControllerList) {
             if (cRow.isSelected.isSelected()) {
                 for(GenerateExamTopicRowController tRow:cRow.generateExamTopicRowControllerList){
                     if(tRow.isSelected.isSelected()){
                         QuestionsTableHandler questionsTableHandler = new QuestionsTableHandler();
-                        List<QuestionModel> temp_list = questionsTableHandler.getQuestionList(new TopicModel(tRow.topic_id,""), tRow.diff_max_level.getText());
+                        List<Question> temp_list = questionsTableHandler.getQuestionList(new Topic(tRow.topic_id,""), tRow.diff_max_level.getText());
                         Collections.shuffle(temp_list);
                         //get only desired number & convert to examQuestion
                         for(int i = 0; i<Integer.parseInt(tRow.topic_number_of_questions.getText()); i++){
-                            QuestionModel qmodel= temp_list.get(i);
-                            ExamQuestionModel examQuestionModel = new ExamQuestionModel();
-                            examQuestionModel.setQuestionContent(qmodel.getQuestion_text());
-                            examQuestionModel.setQuestionType(qmodel.getQuestion_type());
-                            examQuestionModel.setQuestionDifficulty(qmodel.getQuestion_diff());
-                            examQuestionModel.setQuestionWeight(qmodel.getQuestion_weight());
-                            examQuestionModel.setQuestionExpectedTime(qmodel.getExpected_time());
+                            Question qmodel= temp_list.get(i);
+                            ExamQuestion examQuestion = new ExamQuestion();
+                            examQuestion.setQuestionContent(qmodel.getQuestion_text());
+                            examQuestion.setQuestionType(qmodel.getQuestion_type());
+                            examQuestion.setQuestionDifficulty(qmodel.getQuestion_diff());
+                            examQuestion.setQuestionWeight(qmodel.getQuestion_weight());
+                            examQuestion.setQuestionExpectedTime(qmodel.getExpected_time());
 
-                            examQuestionModel.setAnswers(qmodel.getAnswers());
-                            examQuestionModel.setCourseName(courseModel.name);
-                            examQuestionModel.setCourseCode(courseModel.code);
-                            examQuestionModel.setCourseCategory(courseModel.level);
-                            examQuestionModel.setChapterName(cRow.chapter_name);
-                            examQuestionModel.setChapterNumber(cRow.chapter_number);
-                            examQuestionModel.setTopicName(tRow.topic_name);
+                            examQuestion.setAnswers(qmodel.getAnswers());
+                            examQuestion.setCourseName(course.name);
+                            examQuestion.setCourseCode(course.code);
+                            examQuestion.setCourseCategory(course.level);
+                            examQuestion.setChapterName(cRow.chapter_name);
+                            examQuestion.setChapterNumber(cRow.chapter_number);
+                            examQuestion.setTopicName(tRow.topic_name);
                             if(shuffle_answers.isSelected()){
                                 List<Answer> temp = new ArrayList<>(qmodel.getAnswers());
                                 Collections.shuffle(temp);
                                 qmodel.setAnswers(temp);
                             }
                             //rawQuestionsList.add(temp_list.get(i));
-                            examQuestionList.add(examQuestionModel);
+                            examQuestionList.add(examQuestion);
                         }
                     }
                 }
@@ -240,24 +240,24 @@ public class GenerateExamController implements Initializable {
         return input_val <= db_return;
     }
 
-    private void addExamToDatabase(ExamModel examModel) {
+    private void addExamToDatabase(Exam exam) {
         GeneratorHandler generatorHandler = new GeneratorHandler();
 
-        examModel.setDoctor_idDoctor(DashboardController.current_selected_dr_id);
-        examModel.setCollege(college_text.getText());
-        examModel.setDate(exam_date.getText());
-        examModel.setDepartment(department_text.getText());
-        examModel.setDuration(exam_duration.getText());
-        examModel.setExamCategory(courseModel.level);
-        examModel.setCourseCode(courseModel.code);
-        examModel.setExamName(exam_name_text.getText());
-        examModel.setNote(note_text.getText());
-        examModel.setCourseName(courseModel.name);
-        examModel.setCourseCategory(courseModel.level);
-        examModel.setExamType(exam_type.getValue().toString());
-        examModel.setTotalMarks(exam_total_marks.getText());
-        examModel.setExamLanguage("en");
-        generatorHandler.Add(examModel);
+        exam.setDoctor_idDoctor(DashboardController.current_selected_dr_id);
+        exam.setCollege(college_text.getText());
+        exam.setDate(exam_date.getText());
+        exam.setDepartment(department_text.getText());
+        exam.setDuration(exam_duration.getText());
+        exam.setExamCategory(course.level);
+        exam.setCourseCode(course.code);
+        exam.setExamName(exam_name_text.getText());
+        exam.setNote(note_text.getText());
+        exam.setCourseName(course.name);
+        exam.setCourseCategory(course.level);
+        exam.setExamType(exam_type.getValue().toString());
+        exam.setTotalMarks(exam_total_marks.getText());
+        exam.setExamLanguage("en");
+        generatorHandler.Add(exam);
     }
 
 

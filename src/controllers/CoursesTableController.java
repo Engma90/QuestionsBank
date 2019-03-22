@@ -15,7 +15,7 @@ import javafx.scene.control.TableView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import models.CourseModel;
+import models.Course;
 import models.CoursesListHandler;
 
 import java.io.IOException;
@@ -23,7 +23,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class CoursesTableController implements Initializable {
-    public TableView<CourseModel> courses_table_view;
+    public TableView<Course> courses_table_view;
     private ChaptersTableController chaptersTableController;
     public TableColumn col_course_name,col_course_code,col_course_level;
     public ComboBox<String> course_level_filter;
@@ -35,17 +35,17 @@ public class CoursesTableController implements Initializable {
         col_course_code.prefWidthProperty().bind(courses_table_view.widthProperty().divide(100).multiply(15));
         col_course_level.prefWidthProperty().bind(courses_table_view.widthProperty().divide(100).multiply(30));
 
-        courses_table_view.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<CourseModel>() {
+        courses_table_view.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Course>() {
             @Override
-            public void changed(ObservableValue<? extends CourseModel> observable, CourseModel oldValue, CourseModel newValue) {
+            public void changed(ObservableValue<? extends Course> observable, Course oldValue, Course newValue) {
 
                 int current_selected_index = courses_table_view.getSelectionModel().getSelectedIndex();//.getItems().indexOf(newValue);
                 if(current_selected_index >= 0) {
-                    chaptersTableController.courseModel = courses_table_view.getSelectionModel().getSelectedItem();
+                    chaptersTableController.course = courses_table_view.getSelectionModel().getSelectedItem();
                     chaptersTableController.refresh(true);
                 }
                 else {
-                    chaptersTableController.courseModel = new CourseModel();
+                    chaptersTableController.course = new Course();
                     chaptersTableController.refresh(false);
                 }
             }
@@ -132,7 +132,7 @@ public class CoursesTableController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/GenerateExam.fxml"));
             Parent root = loader.load();
             GenerateExamController generateExamController = loader.getController();
-            generateExamController.courseModel = courses_table_view.getSelectionModel().getSelectedItem();
+            generateExamController.course = courses_table_view.getSelectionModel().getSelectedItem();
             generateExamController.initUI();
             Stage stage = new Stage();
             stage.initModality(Modality.WINDOW_MODAL);

@@ -9,7 +9,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import models.CourseModel;
+import models.Course;
 import models.CoursesListHandler;
 
 
@@ -22,9 +22,9 @@ public class AddCourseController implements Initializable {
     public TextField course_name,course_code;
     public Button add_course, edit_course;
     private String operation_type;
-    private CourseModel model;
+    private Course model;
     public ComboBox<String> course_level;
-    public AddCourseController(String operation_type, CourseModel model){
+    public AddCourseController(String operation_type, Course model){
         this.operation_type = operation_type;
         this.model = model;
     }

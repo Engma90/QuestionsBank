@@ -8,10 +8,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import models.ChapterModel;
+import models.Chapter;
 import models.ChaptersListHandler;
-import models.CourseModel;
-import models.CoursesListHandler;
+import models.Course;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -22,12 +21,12 @@ public class AddChapterController implements Initializable {
     public TextField chapter_name,chapter_number;
     public Button add_chapter, edit_chapter;
     private String operation_type;
-    private ChapterModel model;
-    private CourseModel courseModel;
-    public AddChapterController(String operation_type, CourseModel courseModel, ChapterModel model){
+    private Chapter model;
+    private Course course;
+    public AddChapterController(String operation_type, Course course, Chapter model){
         this.operation_type = operation_type;
         this.model = model;
-        this.courseModel = courseModel;
+        this.course = course;
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -49,7 +48,7 @@ public class AddChapterController implements Initializable {
 //        System.out.println("chapter_name.getText()=" + chapter_name.getText());
         model.name = chapter_name.getText();
         model.number = chapter_number.getText();
-        boolean success = ChaptersListHandler.getInstance().Add(courseModel, model);
+        boolean success = ChaptersListHandler.getInstance().Add(course, model);
         if(!success){
             new Alert(Alert.AlertType.ERROR,"Operation Failed").show();
         }

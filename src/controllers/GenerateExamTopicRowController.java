@@ -3,10 +3,8 @@ package controllers;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
-import models.QuestionModel;
 
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class GenerateExamTopicRowController implements Initializable {

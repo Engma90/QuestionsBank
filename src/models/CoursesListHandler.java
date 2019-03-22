@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.text.MessageFormat;
 
 public class CoursesListHandler {
-    private ObservableList<CourseModel> coursesList = FXCollections.observableArrayList();
+    private ObservableList<Course> coursesList = FXCollections.observableArrayList();
 
 
     private static volatile CoursesListHandler instance = null;
@@ -53,7 +53,7 @@ public class CoursesListHandler {
         return DBSingletonHandler.getInstance().execute_sql(sql);
     }
 
-    public ObservableList<CourseModel> getCoursesList(String filter){
+    public ObservableList<Course> getCoursesList(String filter){
         //DBHandler db = new DBHandler();
         String sql;
         if(filter.equals("All")) {
@@ -69,7 +69,7 @@ public class CoursesListHandler {
         try {
             while (rs.next())
             {
-                coursesList.add(new CourseModel(rs.getInt("idCourse")+"",rs.getString("CourseName"),rs.getString("CourseCode"),rs.getString("CourseCategory")));
+                coursesList.add(new Course(rs.getInt("idCourse")+"",rs.getString("CourseName"),rs.getString("CourseCode"),rs.getString("CourseCategory")));
             }
             return coursesList;
 
@@ -83,7 +83,7 @@ public class CoursesListHandler {
 
     }
 
-    public ObservableList<CourseModel> getCachedList(){
+    public ObservableList<Course> getCachedList(){
         return this.coursesList;
     }
 }

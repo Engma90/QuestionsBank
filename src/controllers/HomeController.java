@@ -29,9 +29,11 @@ public class HomeController implements Initializable {
     public PasswordField login_password;
     public static boolean isLogged_in = false;
     static LoginHandler loginHandler;
-    public MyImageView login;
+    public MyButton login, signup;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        login_form.setVisible(false);
+        login_form.setManaged(false);
 //        login.setImage(new Image("/views/images/btnLogin.png"));
 //        if(isLogged_in){
 //            login_form.setVisible(false);
@@ -42,7 +44,6 @@ public class HomeController implements Initializable {
 //            login_form.setVisible(true);
 //            login_form.setManaged(true);
 //        }
-        login.setDisable1(false);
     }
 
     public void onLoginClicked(MouseEvent e) throws IOException{
@@ -64,7 +65,14 @@ public class HomeController implements Initializable {
 
 
     }
-    public void onSignupClicked(ActionEvent e){
+    public void onSigninClicked(MouseEvent e) throws IOException{
+
+        login_form.setVisible(true);
+        login_form.setManaged(true);
+
+
+    }
+    public void onSignupClicked(MouseEvent e){
         Parent root;
         try {
             root = FXMLLoader.load(getClass().getResource("/views/Signup.fxml"));

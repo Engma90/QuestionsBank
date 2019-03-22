@@ -1,7 +1,5 @@
 package models;
 
-import controllers.CoursesTableController;
-import controllers.DashboardController;
 import controllers.QuestionsTableController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,7 +8,7 @@ import java.sql.SQLException;
 import java.text.MessageFormat;
 
 public class ChaptersListHandler {
-    private ObservableList<ChapterModel> chaptersList;
+    private ObservableList<Chapter> chaptersList;
 
 
     private static volatile ChaptersListHandler instance = null;
@@ -30,21 +28,21 @@ public class ChaptersListHandler {
         }
         return instance;
     }
-    public boolean Add(CourseModel courseModel, ChapterModel model) {
+    public boolean Add(Course course, Chapter model) {
         //DBHandler db = new DBHandler();
         String sql = MessageFormat.format(
                 "insert into chapter (ChapterName, Course_idCourse, ChapterNumber) values (\"{0}\",{1},{2}) ;"
-                , model.name, courseModel.id,model.number);
+                , model.name, course.id,model.number);
         return DBSingletonHandler.getInstance().execute_sql(sql);
     }
-    public boolean Edit(ChapterModel model) {
+    public boolean Edit(Chapter model) {
         //DBHandler db = new DBHandler();
         String sql = MessageFormat.format(
                 "UPDATE chapter SET ChapterName = \"{0}\", ChapterNumber = {1} WHERE idChapter = {2} ;"
                 , model.name,model.number,model.id);
         return DBSingletonHandler.getInstance().execute_sql(sql);
     }
-    public boolean Delete(ChapterModel model) {
+    public boolean Delete(Chapter model) {
         QuestionsTableController.questionsTableHandler.DeleteAllSelectedChapterQuestions();
         //DBHandler db = new DBHandler();
         String sql = MessageFormat.format(
@@ -54,23 +52,23 @@ public class ChaptersListHandler {
     }
 //    boolean DeleteAllSelectedCourseChapters(){
 //        boolean success = false;
-//        for (ChapterModel ch: chaptersList){
+//        for (Chapter ch: chaptersList){
 //            success = Delete(ch);
 //        }
 //        return success;
 //    }
 
-    public ObservableList<ChapterModel> getChaptersList(CourseModel courseModel){
+    public ObservableList<Chapter> getChaptersList(Course course){
         chaptersList = FXCollections.observableArrayList();
         //DBHandler db = new DBHandler();
         String sql = MessageFormat.format(
                 "SELECT * FROM chapter WHERE Course_idCourse ={0};"
-                ,  courseModel.id);
+                ,  course.id);
         ResultSet rs =  DBSingletonHandler.getInstance().execute_query(sql);
         try {
             while (rs.next())
             {
-                chaptersList.add(new ChapterModel(rs.getInt("idChapter")+"",rs.getString("ChapterName"), rs.getInt("ChapterNumber")+""));
+                chaptersList.add(new Chapter(rs.getInt("idChapter")+"",rs.getString("ChapterName"), rs.getInt("ChapterNumber")+""));
             }
             return chaptersList;
 
@@ -84,7 +82,7 @@ public class ChaptersListHandler {
 
         }
 
-    public ObservableList<ChapterModel> getCachedList(){
+    public ObservableList<Chapter> getCachedList(){
         return this.chaptersList;
     }
 }

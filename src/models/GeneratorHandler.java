@@ -1,7 +1,7 @@
 package models;
 
 public class GeneratorHandler {
-    public boolean Add(ExamModel model) {
+    public boolean Add(Exam model) {
         //DBHandler db = new DBHandler();
 
         String sql =
@@ -17,16 +17,16 @@ public class GeneratorHandler {
         int exam_id = DBSingletonHandler.getInstance().execute_PreparedStatement(sql,params);
         model.setId(exam_id+"");
 
-        for(ExamModelModel examModelModel:model.getExamModelModelList()) {
-            examModelModel.setExam_idExam(exam_id+"");
+        for(ExamModel examModel :model.getExamModelList()) {
+            examModel.setExam_idExam(exam_id+"");
             sql =
                     "INSERT INTO exammodel (Exam_idExam,ExamModelNumber) " +
                             "VALUES (?,?);";
             params = new String[]{
-                    examModelModel.getExam_idExam(), examModelModel.getExamModelNumber()};
+                    examModel.getExam_idExam(), examModel.getExamModelNumber()};
             int model_id = DBSingletonHandler.getInstance().execute_PreparedStatement(sql,params);
-            examModelModel.setId(model_id+"");
-            for (ExamQuestionModel q : examModelModel.getExamQuestionsList()) {
+            examModel.setId(model_id+"");
+            for (ExamQuestion q : examModel.getExamQuestionsList()) {
                 q.setExamModel_idExamModel(model_id+"");
                 sql =
                         "INSERT INTO examquestion (QuestionContent,QuestionType,QuestionDifficulty, QuestionWeight, QuestionExpectedTime" +

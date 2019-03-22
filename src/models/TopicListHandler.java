@@ -1,7 +1,5 @@
 package models;
 
-import controllers.ChaptersTableController;
-import controllers.DashboardController;
 import controllers.QuestionsTableController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -29,22 +27,22 @@ public class TopicListHandler {
         return instance;
     }
     
-    private ObservableList<TopicModel> topicList;
-    public boolean Add(ChapterModel chapterModel, TopicModel model) {
+    private ObservableList<Topic> topicList;
+    public boolean Add(Chapter chapter, Topic model) {
         //DBHandler db = new DBHandler();
         String sql = MessageFormat.format(
                 "insert into topic (Name, Chapter_idChapter) values (\"{0}\",{1}) ;"
-                , model.name, chapterModel.id);
+                , model.name, chapter.id);
         return DBSingletonHandler.getInstance().execute_sql(sql);
     }
-    public boolean Edit(TopicModel model) {
+    public boolean Edit(Topic model) {
         //DBHandler db = new DBHandler();
         String sql = MessageFormat.format(
                 "UPDATE topic SET Name = \"{0}\"  WHERE idTopic = {1} ;"
                 , model.name,model.id);
         return DBSingletonHandler.getInstance().execute_sql(sql);
     }
-    public boolean Delete(TopicModel model) {
+    public boolean Delete(Topic model) {
         QuestionsTableController.questionsTableHandler.DeleteAllSelectedChapterQuestions();
         //DBHandler db = new DBHandler();
         String sql = MessageFormat.format(
@@ -54,23 +52,23 @@ public class TopicListHandler {
     }
 //    boolean DeleteAllSelectedCourseChapters(){
 //        boolean success = false;
-//        for (TopicModel ch: chaptersList){
+//        for (Topic ch: chaptersList){
 //            success = Delete(ch);
 //        }
 //        return success;
 //    }
 
-    public ObservableList<TopicModel> getTopicsList(ChapterModel chapterModel){
+    public ObservableList<Topic> getTopicsList(Chapter chapter){
         topicList = FXCollections.observableArrayList();
         //DBHandler db = new DBHandler();
         String sql = MessageFormat.format(
                 "SELECT * FROM topic WHERE Chapter_idChapter ={0};"
-                ,  chapterModel.id);
+                ,  chapter.id);
         ResultSet rs =  DBSingletonHandler.getInstance().execute_query(sql);
         try {
             while (rs.next())
             {
-                topicList.add(new TopicModel(rs.getInt("idTopic")+"",rs.getString("Name")));
+                topicList.add(new Topic(rs.getInt("idTopic")+"",rs.getString("Name")));
             }
             return topicList;
 
@@ -84,7 +82,7 @@ public class TopicListHandler {
 
     }
 
-    public ObservableList<TopicModel> getCachedList(){
+    public ObservableList<Topic> getCachedList(){
         return this.topicList;
     }
     

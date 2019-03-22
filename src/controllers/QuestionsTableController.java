@@ -15,9 +15,9 @@ import javafx.scene.control.TableView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import models.QuestionModel;
+import models.Question;
 import models.QuestionsTableHandler;
-import models.TopicModel;
+import models.Topic;
 import org.jsoup.Jsoup;
 
 import java.io.IOException;
@@ -26,16 +26,16 @@ import java.util.ResourceBundle;
 
 public class QuestionsTableController implements Initializable {
     public TableColumn col_question_text, col_question_type, col_question_diff, col_question_weight;
-    public TableView<QuestionModel> questions_table;
+    public TableView<Question> questions_table;
 
 //    public static String current_selected_question_id;
 //    public static int current_selected_question_index;
     public static QuestionsTableHandler questionsTableHandler;
-    public TopicModel topicModel;
+    public Topic topic;
 //    ContextMenu contextMenu;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        topicModel = new TopicModel();
+        topic = new Topic();
         col_question_text.prefWidthProperty().bind(questions_table.widthProperty().divide(10).multiply(8)); // w * 1/4
         col_question_type.prefWidthProperty().bind(questions_table.widthProperty().divide(10));
         col_question_diff.prefWidthProperty().bind(questions_table.widthProperty().divide(10));
@@ -52,9 +52,9 @@ public class QuestionsTableController implements Initializable {
 //        contextMenu.getItems().add(add);
 //        questions_table.setContextMenu(contextMenu);
 
-        questions_table.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<QuestionModel>() {
+        questions_table.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Question>() {
             @Override
-            public void changed(ObservableValue<? extends QuestionModel> observable, QuestionModel oldValue, QuestionModel newValue) {
+            public void changed(ObservableValue<? extends Question> observable, Question oldValue, Question newValue) {
                 System.out.println("Question:");
                 int current_selected_index = questions_table.getSelectionModel().getSelectedIndex();
                 if(current_selected_index >= 0){
@@ -78,7 +78,7 @@ public class QuestionsTableController implements Initializable {
         try {
             FXMLLoader loader = new
                     FXMLLoader(getClass().getResource("/views/AddQuestion.fxml"));
-            AddQuestionController addQuestionController =new AddQuestionController("Add", topicModel, new QuestionModel());
+            AddQuestionController addQuestionController =new AddQuestionController("Add", topic, new Question());
             loader.setController(addQuestionController);
             root = loader.load();
             Stage stage = new Stage();
@@ -105,7 +105,7 @@ public class QuestionsTableController implements Initializable {
         try {
             FXMLLoader loader = new
                     FXMLLoader(getClass().getResource("/views/AddQuestion.fxml"));
-            AddQuestionController addQuestionController =new AddQuestionController("Edit", topicModel, questions_table.getSelectionModel().getSelectedItem());
+            AddQuestionController addQuestionController =new AddQuestionController("Edit", topic, questions_table.getSelectionModel().getSelectedItem());
             loader.setController(addQuestionController);
             root = loader.load();
             Stage stage = new Stage();
@@ -127,7 +127,7 @@ public class QuestionsTableController implements Initializable {
         }
     }
     public void onDeleteQuestionClicked(ActionEvent e){
-        QuestionModel model = questions_table.getSelectionModel().getSelectedItem();//new QuestionModel();
+        Question model = questions_table.getSelectionModel().getSelectedItem();//new Question();
         //model.setId(current_selected_question_id);
         questionsTableHandler.DeleteQuestion(model);
 //        questions_table.getItems().clear();
@@ -143,15 +143,15 @@ public class QuestionsTableController implements Initializable {
     public void refresh(){
          //questionsTableHandler = new QuestionsTableHandler();
         questions_table.getItems().clear();
-        ObservableList<QuestionModel> temp_list = questionsTableHandler.getQuestionList(topicModel);
+        ObservableList<Question> temp_list = questionsTableHandler.getQuestionList(topic);
         if(temp_list.size() == 0){
 //            current_selected_question_index = -1;
 //            current_selected_question_id = "-1";
         }else {
-            for (QuestionModel questionModel: temp_list){
-                System.out.println((Jsoup.parse(questionModel.getQuestion_text()).text()));
-                questionModel.setRaw_text(((Jsoup.parse(questionModel.getQuestion_text()).text())));
-                System.out.println(questionModel.getRaw_text());
+            for (Question question : temp_list){
+                System.out.println((Jsoup.parse(question.getQuestion_text()).text()));
+                question.setRaw_text(((Jsoup.parse(question.getQuestion_text()).text())));
+                System.out.println(question.getRaw_text());
             }
             questions_table.setItems(temp_list);
             questions_table.getSelectionModel().selectFirst();

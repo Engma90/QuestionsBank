@@ -19,12 +19,12 @@ import java.util.concurrent.Future;
 
 public class FileExporter {
     private static final String QR_CODE_IMAGE_PATH = "./QRCode.png";
-    public void Export(ExamModel examModel, String dest){
+    public void Export(Exam exam, String dest){
 
-        for (ExamModelModel examModelModel:examModel.getExamModelModelList()) {
+        for (ExamModel examModel : exam.getExamModelList()) {
 
-            htmlExamWriter(examModel, examModelModel);
-            File htmlFile = new File("./" + examModel.getExamName() + examModelModel.getExamModelNumber() + ".html"), target = new File(dest + "\\" + examModel.getExamName() + examModelModel.getExamModelNumber() + ".pdf");
+            htmlExamWriter(exam, examModel);
+            File htmlFile = new File("./" + exam.getExamName() + examModel.getExamModelNumber() + ".html"), target = new File(dest + "\\" + exam.getExamName() + examModel.getExamModelNumber() + ".pdf");
             IConverter converter = LocalConverter.make();
             Future<Boolean> conversion = converter
                     .convert(htmlFile).as(DocumentType.MHTML)
@@ -37,10 +37,10 @@ public class FileExporter {
     }
 
 
-    private void htmlExamWriter(ExamModel model, ExamModelModel examModelModel){
+    private void htmlExamWriter(Exam model, ExamModel examModel){
 
         try {
-            generateQRCodeImage(model.getId() +"-"+ examModelModel.getId(), 32, 32, QR_CODE_IMAGE_PATH);
+            generateQRCodeImage(model.getId() +"-"+ examModel.getId(), 32, 32, QR_CODE_IMAGE_PATH);
         } catch (WriterException e) {
             System.out.println("Could not generate QR Code, WriterException :: " + e.getMessage());
         } catch (IOException e) {
@@ -61,7 +61,7 @@ public class FileExporter {
                 "</Table><hr>"+model.getNote()+"<hr>";
         StringBuilder body = new StringBuilder();
         String footer = "</body></html>";
-        for(ExamQuestionModel qm:examModelModel.getExamQuestionsList()){
+        for(ExamQuestion qm: examModel.getExamQuestionsList()){
             body.append("<div>");
             body.append(qm.getQuestionContent().replace(htmlHeaderToRemove,"").replace(footer,""));
             int i =0;
@@ -77,7 +77,7 @@ public class FileExporter {
 
         String html = examHeader+body.toString()+footer;
         try {
-            Save_to_file(html, model.getExamName()+examModelModel.getExamModelNumber()+".html");
+            Save_to_file(html, model.getExamName()+ examModel.getExamModelNumber()+".html");
         } catch (IOException e) {
             e.printStackTrace();
         }

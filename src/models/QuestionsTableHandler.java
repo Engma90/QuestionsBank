@@ -10,15 +10,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class QuestionsTableHandler {
-    private ObservableList<QuestionModel> questionList;
+    private ObservableList<Question> questionList;
 
-    public boolean Add(TopicModel topicModel, QuestionModel model) {
+    public boolean Add(Topic topic, Question model) {
         //DBHandler db = new DBHandler();
         String sql = "insert into question (QuestionContent, QuestionType, QuestionDifficulty, " +
                 "QuestionWeight, QuestionExpectedTime, Topic_idTopic) values (?,?,?,?,?,?);";
         int last_inserted_question_id = DBSingletonHandler.getInstance().execute_PreparedStatement(sql, new String[]
                 {model.getQuestion_text(), model.getQuestion_type(), model.getQuestion_diff(), model.getQuestion_weight(), model.getExpected_time(),
-                        topicModel.id});
+                        topic.id});
         for (int i = 0; i < model.getAnswers().size(); i++) {
             sql = MessageFormat.format(
                     "insert into questionanswer (AnswerLabel, AnswerContent, Question_idQuestion, IsRightAnswer" +
@@ -31,7 +31,7 @@ public class QuestionsTableHandler {
     }
 
 
-    public boolean Edit(QuestionModel model) {
+    public boolean Edit(Question model) {
         //DBHandler db = new DBHandler();
             String sql = "UPDATE question SET QuestionContent = ?, QuestionType = ?, QuestionDifficulty = ?, " +
                     "QuestionWeight =?, QuestionExpectedTime =? WHERE idQuestion =?;";
@@ -64,7 +64,7 @@ public class QuestionsTableHandler {
 
     }
 
-    public boolean DeleteQuestion( QuestionModel model){
+    public boolean DeleteQuestion( Question model){
         //DBHandler db = new DBHandler();
             boolean success1 = DeleteQuestionAnswers(model.getId());
             String sql = MessageFormat.format("DELETE FROM question  WHERE idQuestion = {0};", model.getId());
@@ -73,7 +73,7 @@ public class QuestionsTableHandler {
 
     }
     public boolean DeleteAllSelectedChapterQuestions(){
-        for (QuestionModel q:questionList){
+        for (Question q: questionList){
             System.out.println("Q_ID = "+q.getId());
             DeleteQuestion(q);
         }
@@ -81,16 +81,16 @@ public class QuestionsTableHandler {
     }
 
 
-    public ObservableList<QuestionModel> getQuestionList(TopicModel topicModel) {
+    public ObservableList<Question> getQuestionList(Topic topic) {
         questionList = FXCollections.observableArrayList();
                 String sql = MessageFormat.format(
                         "SELECT idQuestion,QuestionContent,QuestionDifficulty,QuestionType,QuestionWeight,QuestionExpectedTime FROM  question WHERE Topic_idTopic = {0};"
-                , topicModel.id);
+                , topic.id);
         ResultSet rs = DBSingletonHandler.getInstance().execute_query(sql);
         try {
             while (rs.next()) {
 
-                    QuestionModel model = new QuestionModel(rs.getInt("idQuestion") + "", rs.getString("QuestionContent"), rs.getString("QuestionDifficulty"),
+                    Question model = new Question(rs.getInt("idQuestion") + "", rs.getString("QuestionContent"), rs.getString("QuestionDifficulty"),
                             rs.getString("QuestionType"), rs.getString("QuestionWeight"),"");
                     model.setExpected_time(rs.getString("QuestionExpectedTime"));
                     questionList.add(model);
@@ -108,16 +108,16 @@ public class QuestionsTableHandler {
     }
 
 
-    public ObservableList<QuestionModel> getQuestionList(TopicModel topicModel, String diff) {
+    public ObservableList<Question> getQuestionList(Topic topic, String diff) {
         questionList = FXCollections.observableArrayList();
         String sql = MessageFormat.format(
                 "SELECT idQuestion,QuestionContent,QuestionDifficulty,QuestionType,QuestionWeight,QuestionExpectedTime FROM  question WHERE Topic_idTopic = {0} AND QuestionDifficulty IN (0, {1});"
-                , topicModel.id, diff);
+                , topic.id, diff);
         ResultSet rs = DBSingletonHandler.getInstance().execute_query(sql);
         try {
             while (rs.next()) {
 
-                QuestionModel model = new QuestionModel(rs.getInt("idQuestion") + "", rs.getString("QuestionContent"), rs.getString("QuestionDifficulty"),
+                Question model = new Question(rs.getInt("idQuestion") + "", rs.getString("QuestionContent"), rs.getString("QuestionDifficulty"),
                         rs.getString("QuestionType"), rs.getString("QuestionWeight"),"");
                 model.setExpected_time(rs.getString("QuestionExpectedTime"));
                 questionList.add(model);
@@ -135,7 +135,7 @@ public class QuestionsTableHandler {
     }
 
 
-    public ObservableList<QuestionModel> getQuestionList(String ch_id) {
+    public ObservableList<Question> getQuestionList(String ch_id) {
         questionList = FXCollections.observableArrayList();
         //DBHandler db = new DBHandler();
         System.out.println("------------------------------------------0");
@@ -150,7 +150,7 @@ public class QuestionsTableHandler {
         try {
             while (rs.next()) {
 
-                QuestionModel model = new QuestionModel(rs.getInt("idQuestion") + "", rs.getString("QuestionContent"), rs.getString("QuestionDifficulty"),
+                Question model = new Question(rs.getInt("idQuestion") + "", rs.getString("QuestionContent"), rs.getString("QuestionDifficulty"),
                         rs.getString("QuestionType"), rs.getString("QuestionWeight"),"");
                 model.setExpected_time(rs.getString("QuestionExpectedTime"));
                 questionList.add(model);
@@ -170,7 +170,7 @@ public class QuestionsTableHandler {
 
     }
 
-    public ObservableList<QuestionModel> getQuestionList(String ch_id, String diff) {
+    public ObservableList<Question> getQuestionList(String ch_id, String diff) {
         questionList = FXCollections.observableArrayList();
         //DBHandler db = new DBHandler();
         System.out.println("------------------------------------------0");
@@ -184,7 +184,7 @@ public class QuestionsTableHandler {
         try {
             while (rs.next()) {
 
-                QuestionModel model = new QuestionModel(rs.getInt("idQuestion") + "", rs.getString("QuestionContent"), rs.getString("QuestionDifficulty"),
+                Question model = new Question(rs.getInt("idQuestion") + "", rs.getString("QuestionContent"), rs.getString("QuestionDifficulty"),
                         rs.getString("QuestionType"), rs.getString("QuestionWeight"),"");
                 model.setExpected_time(rs.getString("QuestionExpectedTime"));
                 questionList.add(model);
@@ -202,11 +202,11 @@ public class QuestionsTableHandler {
         }
 
     }
-    public ObservableList<QuestionModel> getCachedList(){
+    public ObservableList<Question> getCachedList(){
         return this.questionList;
     }
 
-    private void getQuestionAnswersList(QuestionModel model, DBSingletonHandler db) {
+    private void getQuestionAnswersList(Question model, DBSingletonHandler db) {
         try {
             String sql = MessageFormat.format(
                     "SELECT * FROM questionanswer where Question_idQuestion = {0};"

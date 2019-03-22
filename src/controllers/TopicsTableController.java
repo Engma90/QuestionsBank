@@ -13,27 +13,26 @@ import javafx.scene.control.ListView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import models.ChapterModel;
-import models.CoursesListHandler;
+import models.Chapter;
+import models.Topic;
 import models.TopicListHandler;
-import models.TopicModel;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class TopicsTableController implements Initializable {
-    public ListView<TopicModel> topics_list_view;
+    public ListView<Topic> topics_list_view;
 //    static int current_selected_topic_index;
 //    public static String current_selected_topic_id;
     private QuestionsTableController questionsTableController;
-    public ChapterModel chapterModel;
+    public Chapter chapter;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        chapterModel = new ChapterModel();
-        topics_list_view.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TopicModel>() {
+        chapter = new Chapter();
+        topics_list_view.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Topic>() {
             @Override
-            public void changed(ObservableValue<? extends TopicModel> observable, TopicModel oldValue, TopicModel newValue) {
+            public void changed(ObservableValue<? extends Topic> observable, Topic oldValue, Topic newValue) {
 
                 int current_selected_index = topics_list_view.getSelectionModel().getSelectedIndex();
                 if(current_selected_index >= 0){
@@ -41,12 +40,12 @@ public class TopicsTableController implements Initializable {
 //                current_selected_topic_index = current_selected_index;
 
 //                System.out.println("topic="+current_selected_topic_index);
-                    questionsTableController.topicModel = topics_list_view.getSelectionModel().getSelectedItem();
+                    questionsTableController.topic = topics_list_view.getSelectionModel().getSelectedItem();
                 }
                 else {
 //                    current_selected_topic_id = "-1";
 //                    current_selected_topic_index = -1;
-                    questionsTableController.topicModel = new TopicModel();
+                    questionsTableController.topic = new Topic();
                 }
                 questionsTableController.refresh();
             }
@@ -61,7 +60,7 @@ public class TopicsTableController implements Initializable {
         try {
             FXMLLoader loader = new
                     FXMLLoader(getClass().getResource("/views/AddTopic.fxml"));
-            AddTopicController addTopicController =new AddTopicController("Add", chapterModel, new TopicModel());
+            AddTopicController addTopicController =new AddTopicController("Add", chapter, new Topic());
             loader.setController(addTopicController);
             root = loader.load();
             Stage stage = new Stage();
@@ -78,7 +77,7 @@ public class TopicsTableController implements Initializable {
 
                     }
 
-                    topics_list_view.setItems(TopicListHandler.getInstance().getTopicsList(chapterModel));
+                    topics_list_view.setItems(TopicListHandler.getInstance().getTopicsList(chapter));
                     topics_list_view.getSelectionModel().selectLast();
                 }
             });
@@ -93,7 +92,7 @@ public class TopicsTableController implements Initializable {
         try {
             FXMLLoader loader = new
                     FXMLLoader(getClass().getResource("/views/AddTopic.fxml"));
-            AddTopicController addTopicController =new AddTopicController("Edit", chapterModel, topics_list_view.getSelectionModel().getSelectedItem());
+            AddTopicController addTopicController =new AddTopicController("Edit", chapter, topics_list_view.getSelectionModel().getSelectedItem());
             loader.setController(addTopicController);
             root = loader.load();
             Stage stage = new Stage();
@@ -105,7 +104,7 @@ public class TopicsTableController implements Initializable {
                 public void handle(WindowEvent we) {
                     System.out.println("Closed");
                     topics_list_view.getItems().clear();
-                    topics_list_view.setItems(TopicListHandler.getInstance().getTopicsList(chapterModel));
+                    topics_list_view.setItems(TopicListHandler.getInstance().getTopicsList(chapter));
                     topics_list_view.getSelectionModel().selectLast();
                 }
             });
@@ -118,7 +117,7 @@ public class TopicsTableController implements Initializable {
     public void onDeleteTopicClicked(ActionEvent e){
         TopicListHandler.getInstance().Delete(topics_list_view.getSelectionModel().getSelectedItem());
         topics_list_view.getItems().clear();
-        topics_list_view.setItems(TopicListHandler.getInstance().getTopicsList(chapterModel));
+        topics_list_view.setItems(TopicListHandler.getInstance().getTopicsList(chapter));
         int selection = topics_list_view.getSelectionModel().getSelectedIndex() - 1;
         if(selection<0)
             selection = 0;
@@ -135,7 +134,7 @@ public class TopicsTableController implements Initializable {
         }
         int selection = topics_list_view.getSelectionModel().getSelectedIndex();
         topics_list_view.getItems().clear();
-        topics_list_view.setItems(TopicListHandler.getInstance().getTopicsList(chapterModel));
+        topics_list_view.setItems(TopicListHandler.getInstance().getTopicsList(chapter));
         if(topics_list_view.getItems().size() == 0){
 //            current_selected_topic_id = "-1";
 //            current_selected_topic_index = -1;

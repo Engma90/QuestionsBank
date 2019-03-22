@@ -13,9 +13,9 @@ import javafx.scene.web.HTMLEditor;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import models.Answer;
-import models.QuestionModel;
+import models.Question;
 import models.QuestionsTableHandler;
-import models.TopicModel;
+import models.Topic;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,19 +38,20 @@ public class AddQuestionController implements Initializable {
     public RadioButton radio_answer_true;
     public RadioButton radio_answer_false;
     public VBox mcq_ui_group, true_false_ui_group, mcq_ui_answers_list, container;
+    public ScrollPane answers_list_scroll_pane;
     //public TextField txt_answer_a, txt_answer_b, txt_answer_c, txt_answer_d;
     //public ComboBox<String> combo_q_weight,combo_q_diff;
 
     public NumberField txt_q_diff, txt_q_weight, txt_q_exp_time;
 
     private String operation_type;
-    private QuestionModel model;
-    private TopicModel topicModel;
+    private Question model;
+    private Topic topic;
 
-    public AddQuestionController(String operation_type, TopicModel topicModel, QuestionModel model) {
+    public AddQuestionController(String operation_type, Topic topic, Question model) {
         this.operation_type = operation_type;
         this.model = model;
-        this.topicModel = topicModel;
+        this.topic = topic;
 
     }
 
@@ -134,7 +135,6 @@ public class AddQuestionController implements Initializable {
             //edit_question.setDefaultButton(true);
             setPrevConfig();
         }
-        hideHTMLEditorToolbars(html_editor);
     }
 
     private void setPrevConfig() {
@@ -166,13 +166,7 @@ public class AddQuestionController implements Initializable {
                 }
             }
         }
-        String imagePath = "C:\\Users\\Mohammad\\IdeaProjects\\QuestionsBank\\QRCode.png";
-//        ScreenCapture x = new ScreenCapture();
-//        String imagePath = x.captureScreen(scCaptureCount+++"", "C:\\work\\temp");
-//        String text = editor.getHtmlText();
-//        editor.setHtmlText(text+"&lt;img src='file:\\\\"+imagePath+"' >" );
-        File f = new File(imagePath);
-        html_editor.setHtmlText("<img src=' " + f.toURI() + "'/>");
+
     }
 
     public void onAddClicked(ActionEvent e) {
@@ -200,7 +194,7 @@ public class AddQuestionController implements Initializable {
             model.setQuestion_type("MCQ");
             model.setAnswers(answers);
             //model.setRight_answer(right_answer);
-            questionsTableHandler.Add(topicModel, model);
+            questionsTableHandler.Add(topic, model);
             close(e);
 //            }else {
 //                new Alert(Alert.AlertType.ERROR,"Please fill all fields").show();
@@ -228,7 +222,7 @@ public class AddQuestionController implements Initializable {
                 model.setQuestion_type("True/False");
                 model.setAnswers(answers);
                 //model.setRight_answer(right_answer);
-                questionsTableHandler.Add(topicModel, model);
+                questionsTableHandler.Add(topic, model);
                 close(e);
             } else {
                 new Alert(Alert.AlertType.ERROR, "Please fill all fields").show();
@@ -350,19 +344,7 @@ public class AddQuestionController implements Initializable {
     }
 
 
-    public static void hideHTMLEditorToolbars(final HTMLEditor editor)
-    {
-        editor.setVisible(false);
-        Platform.runLater(() -> {
-            Node[] nodes = editor.lookupAll(".tool-bar").toArray(new Node[0]);
-            for(Node node : nodes)
-            {
-                node.setVisible(false);
-                node.setManaged(false);
-            }
-            editor.setVisible(true);
-        });
-    }
+
 
 
     private void close(ActionEvent e) {
