@@ -10,6 +10,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import static org.fxmisc.richtext.model.TwoDimensional.Bias.*;
+
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.GenericStyledArea;
 import org.fxmisc.richtext.StyledTextArea;
@@ -39,7 +42,6 @@ public class AddQuestionAnswerRowController implements Initializable {
     FXMLLoader loader;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
     }
 
     public void onRemoveClicked(ActionEvent e){

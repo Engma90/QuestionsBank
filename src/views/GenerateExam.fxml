@@ -18,7 +18,7 @@
         <HBox spacing="50">
             <VBox spacing="10">
                 <Label text="Exam name"></Label>
-                <TextField promptText="1st Year (Electronics and Communications Engineering)"
+                <TextField promptText="Computer Programming (1) - ECE 113C"
                            fx:id="exam_name_text"></TextField>
                 <Label text="College" fx:id="college_label"></Label>
                 <TextField fx:id="college_text"></TextField>
@@ -31,7 +31,8 @@
             <VBox spacing="10">
 
                 <Label text="Date"></Label>
-                <TextField promptText="Mon 05/01/2015" fx:id="exam_date"></TextField>
+                <!--<TextField promptText="Mon 05/01/2015" fx:id="exam_date"></TextField>-->
+                <DatePicker fx:id="exam_date"></DatePicker>
                 <Label text="Duration"></Label>
                 <TextField fx:id="exam_duration"></TextField>
                 <Label text="Total marks"></Label>

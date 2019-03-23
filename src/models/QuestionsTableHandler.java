@@ -20,12 +20,12 @@ public class QuestionsTableHandler {
                 {model.getQuestion_text(), model.getQuestion_type(), model.getQuestion_diff(), model.getQuestion_weight(), model.getExpected_time(),
                         topic.id});
         for (int i = 0; i < model.getAnswers().size(); i++) {
-            sql = MessageFormat.format(
+            sql =
                     "insert into questionanswer (AnswerLabel, AnswerContent, Question_idQuestion, IsRightAnswer" +
-                            ") values (\"{0}\",\"{1}\",{2},\"{3}\");"
-                    , ((char) (65 + i) + ""), model.getAnswers().get(i).answer_text, last_inserted_question_id,
-                    model.getAnswers().get(i).is_right_answer);
-            boolean success = DBSingletonHandler.getInstance().execute_sql(sql);
+                            ") values (?,?,?,?);";
+            int success = DBSingletonHandler.getInstance().execute_PreparedStatement(sql, new String[]{
+                    ((char) (65 + i) + ""), model.getAnswers().get(i).answer_text, last_inserted_question_id+"",
+                            model.getAnswers().get(i).is_right_answer+""});
         }
         return true;
     }
@@ -43,42 +43,42 @@ public class QuestionsTableHandler {
             boolean success = DBSingletonHandler.getInstance().execute_sql(sql);
 
 
-            for (int i = 0; i < model.getAnswers().size(); i++) {
-                sql = MessageFormat.format(
-                        "insert into questionanswer (AnswerLabel, AnswerContent, Question_idQuestion, IsRightAnswer" +
-                                ") values (\"{0}\",\"{1}\",{2},\"{3}\");"
-                        , ((char) (65 + i) + ""), model.getAnswers().get(i).answer_text, model.getId(),
-                        model.getAnswers().get(i).is_right_answer);
-                success = DBSingletonHandler.getInstance().execute_sql(sql);
-            }
+        for (int i = 0; i < model.getAnswers().size(); i++) {
+            sql =
+                    "insert into questionanswer (AnswerLabel, AnswerContent, Question_idQuestion, IsRightAnswer" +
+                            ") values (?,?,?,?);";
+            int success1 = DBSingletonHandler.getInstance().execute_PreparedStatement(sql, new String[]{
+                    ((char) (65 + i) + ""), model.getAnswers().get(i).answer_text, model.getId()+"",
+                    model.getAnswers().get(i).is_right_answer+""});
+        }
             return true;
 
     }
-    public boolean DeleteQuestionAnswers(String Q_id){
-
-        //DBHandler db = new DBHandler();
-
-        String sql = MessageFormat.format("DELETE FROM questionanswer WHERE Question_idQuestion = {0};", Q_id);
-        boolean success = DBSingletonHandler.getInstance().execute_sql(sql);
-        return success;
-
-    }
+//    public boolean DeleteQuestionAnswers(String Q_id){
+//
+//        //DBHandler db = new DBHandler();
+//
+//        String sql = MessageFormat.format("DELETE FROM questionanswer WHERE Question_idQuestion = {0};", Q_id);
+//        boolean success = DBSingletonHandler.getInstance().execute_sql(sql);
+//        return success;
+//
+//    }
 
     public boolean DeleteQuestion( Question model){
         //DBHandler db = new DBHandler();
-            boolean success1 = DeleteQuestionAnswers(model.getId());
+            //boolean success1 = DeleteQuestionAnswers(model.getId());
             String sql = MessageFormat.format("DELETE FROM question  WHERE idQuestion = {0};", model.getId());
             boolean success2 = DBSingletonHandler.getInstance().execute_sql(sql);
-            return success1 && success2;
+            return success2;
 
     }
-    public boolean DeleteAllSelectedChapterQuestions(){
-        for (Question q: questionList){
-            System.out.println("Q_ID = "+q.getId());
-            DeleteQuestion(q);
-        }
-        return true;
-    }
+//    public boolean DeleteAllSelectedChapterQuestions(){
+//        for (Question q: questionList){
+//            System.out.println("Q_ID = "+q.getId());
+//            DeleteQuestion(q);
+//        }
+//        return true;
+//    }
 
 
     public ObservableList<Question> getQuestionList(Topic topic) {

@@ -6,14 +6,19 @@
 <?import controllers.NumberField?>
 <?import controllers.rtf.RichTextDemo?>
 <?import javafx.geometry.Insets?>
+<?import controllers.MyHtmlEditor?>
 <AnchorPane
-        xmlns:fx="http://javafx.com/fxml" prefHeight="700" prefWidth="700">
+        xmlns:fx="http://javafx.com/fxml" >
+
 
     <VBox fx:id="container" spacing="10" AnchorPane.topAnchor="10" AnchorPane.leftAnchor="10"
           AnchorPane.bottomAnchor="10"
           AnchorPane.rightAnchor="10">
-        <HTMLEditor fx:id="html_editor" AnchorPane.topAnchor="10" AnchorPane.leftAnchor="10"
-                    AnchorPane.bottomAnchor="10" AnchorPane.rightAnchor="10" prefHeight="300" maxHeight="400"/>
+
+
+
+        <MyHtmlEditor fx:id="html_editor" AnchorPane.topAnchor="10" AnchorPane.leftAnchor="10"
+                      AnchorPane.bottomAnchor="10" AnchorPane.rightAnchor="10" prefHeight="300" maxHeight="300" />
         <HBox spacing="10">
             <Label text="Type"/>
             <RadioButton text="MCQ" fx:id="radio_mcq"/>
@@ -50,29 +55,34 @@
             <!--</items>-->
             <!--</ComboBox>-->
         </HBox>
-        <ScrollPane minHeight="200" maxHeight="300"  fx:id="answers_list_scroll_pane">
+        <ScrollPane vbarPolicy="ALWAYS" fitToWidth="true" minHeight="300" maxHeight="300"  fx:id="mcq_answers_list_scroll_pane">
             <padding>
-                <Insets top="10" right="10" bottom="10" left="10"/>
+                <Insets top="10" right="20" bottom="10" left="10"/>
             </padding>
-            <VBox fx:id="mcq_ui_group">
-                <VBox fx:id="mcq_ui_answers_list" spacing="10">
-                </VBox>
+            <VBox fx:id="mcq_ui_group" spacing="10" >
+                <VBox fx:id="mcq_ui_answers_list" spacing="10"/>
                 <Button fx:id="add_answer" text="Add Answer" onAction="#onAddAnswerClicked"></Button>
             </VBox>
         </ScrollPane>
-            <VBox fx:id="true_false_ui_group">
+        <ScrollPane vbarPolicy="NEVER" minHeight="300" maxHeight="300"  fx:id="true_false_answers_list_scroll_pane">
+        <padding>
+            <Insets top="10" right="10" bottom="10" left="10"/>
+        </padding>
+            <VBox fx:id="true_false_ui_group" minHeight="300" maxHeight="300">
                 <HBox spacing="10">
+                    <Label text="A)"></Label>
                     <Label text="True"></Label>
 
                     <RadioButton fx:id="radio_answer_true"></RadioButton>
                 </HBox>
                 <HBox spacing="10">
+                    <Label text="B)"></Label>
                     <Label text="False"></Label>
 
                     <RadioButton fx:id="radio_answer_false"></RadioButton>
                 </HBox>
             </VBox>
-
+        </ScrollPane>
         <HBox AnchorPane.leftAnchor="10" AnchorPane.bottomAnchor="10"
               AnchorPane.rightAnchor="10" alignment="BOTTOM_CENTER">
             <Button fx:id="add_question" text="Add" onAction="#onAddClicked" maxHeight="50" prefWidth="100"/>

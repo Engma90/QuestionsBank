@@ -43,7 +43,7 @@ public class ChaptersListHandler {
         return DBSingletonHandler.getInstance().execute_sql(sql);
     }
     public boolean Delete(Chapter model) {
-        QuestionsTableController.questionsTableHandler.DeleteAllSelectedChapterQuestions();
+        //QuestionsTableController.questionsTableHandler.DeleteAllSelectedChapterQuestions();
         //DBHandler db = new DBHandler();
         String sql = MessageFormat.format(
                 "DELETE  FROM chapter WHERE idChapter = {0} ;"

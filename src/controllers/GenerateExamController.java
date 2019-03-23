@@ -9,11 +9,14 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
+import javafx.util.StringConverter;
 import models.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class GenerateExamController implements Initializable {
@@ -26,8 +29,9 @@ public class GenerateExamController implements Initializable {
     List<Chapter> chapterList;
 
 
-    public TextField college_text, exam_duration, department_text, exam_date,
+    public TextField college_text, exam_duration, department_text,
             exam_total_marks, exam_name_text;
+    public DatePicker exam_date;
     public TextArea note_text;
     public ComboBox exam_type;
 
@@ -105,6 +109,34 @@ public class GenerateExamController implements Initializable {
 
             addRow(c.id, c.name,c.number, l);
         }
+
+        StringConverter<LocalDate> converter = new StringConverter<LocalDate>() {
+            DateTimeFormatter dateFormatter =
+                    DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            @Override
+            public String toString(LocalDate date) {
+                if (date != null) {
+                    return dateFormatter.format(date);
+                } else {
+                    return "";
+                }
+            }
+            @Override
+            public LocalDate fromString(String string) {
+                if (string != null && !string.isEmpty()) {
+                    return LocalDate.parse(string, dateFormatter);
+                } else {
+                    return null;
+                }
+            }
+        };
+        exam_date.setConverter(converter);
+
+        exam_name_text.setText(course.name + " - " + course.code);
+        college_text.setText("Faculty of Engineering (at Shoubra )");
+        department_text.setText("Electrical Engineering Department");
+        exam_date.setValue(LocalDate.now());
+
     }
 
     public void onGenerateClicked(ActionEvent e) {
@@ -164,10 +196,13 @@ public class GenerateExamController implements Initializable {
                     if(tRow.isSelected.isSelected()){
                         QuestionsTableHandler questionsTableHandler = new QuestionsTableHandler();
                         List<Question> temp_list = questionsTableHandler.getQuestionList(new Topic(tRow.topic_id,""), tRow.diff_max_level.getText());
+
                         Collections.shuffle(temp_list);
                         //get only desired number & convert to examQuestion
                         for(int i = 0; i<Integer.parseInt(tRow.topic_number_of_questions.getText()); i++){
+
                             Question qmodel= temp_list.get(i);
+
                             ExamQuestion examQuestion = new ExamQuestion();
                             examQuestion.setQuestionContent(qmodel.getQuestion_text());
                             examQuestion.setQuestionType(qmodel.getQuestion_type());
@@ -204,7 +239,7 @@ public class GenerateExamController implements Initializable {
     private boolean validate(){
         if(college_text.getText().isEmpty() || exam_name_text.getText().isEmpty()
         || department_text.getText().isEmpty() || note_text.getText().isEmpty()
-         || exam_date.getText().isEmpty() || exam_duration.getText().isEmpty()
+                || exam_duration.getText().isEmpty()
         || exam_total_marks.getText().isEmpty() || exam_type.getValue().toString().equals("Exam type")
         || number_of_models.getText().isEmpty()){
             new Alert(Alert.AlertType.ERROR, "Please fill all fields").show();
@@ -245,7 +280,7 @@ public class GenerateExamController implements Initializable {
 
         exam.setDoctor_idDoctor(DashboardController.current_selected_dr_id);
         exam.setCollege(college_text.getText());
-        exam.setDate(exam_date.getText());
+        exam.setDate(exam_date.getValue().getDayOfWeek().toString().substring(0,3) + " " + exam_date.getConverter().toString(exam_date.getValue()));
         exam.setDepartment(department_text.getText());
         exam.setDuration(exam_duration.getText());
         exam.setExamCategory(course.level);

@@ -43,7 +43,7 @@ public class TopicListHandler {
         return DBSingletonHandler.getInstance().execute_sql(sql);
     }
     public boolean Delete(Topic model) {
-        QuestionsTableController.questionsTableHandler.DeleteAllSelectedChapterQuestions();
+        //QuestionsTableController.questionsTableHandler.DeleteAllSelectedChapterQuestions();
         //DBHandler db = new DBHandler();
         String sql = MessageFormat.format(
                 "DELETE  FROM topic WHERE idTopic = {0} ;"

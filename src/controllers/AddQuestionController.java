@@ -1,6 +1,5 @@
 package controllers;
 
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -9,7 +8,6 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 
 import javafx.scene.layout.VBox;
-import javafx.scene.web.HTMLEditor;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import models.Answer;
@@ -17,7 +15,6 @@ import models.Question;
 import models.QuestionsTableHandler;
 import models.Topic;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -27,18 +24,16 @@ import java.util.ResourceBundle;
 public class AddQuestionController implements Initializable {
     private List<AddQuestionAnswerRowController> answerRowControllers;
     public Button add_question, edit_question, add_answer;
-    public HTMLEditor html_editor;
+    public MyHtmlEditor html_editor;
     public RadioButton radio_mcq;
     public RadioButton radio_true_false;
     public RadioButton radio_ext_match;
-    //public RadioButton radio_answer_a;
-    //public RadioButton radio_answer_b;
-    //public RadioButton radio_answer_c;
-    //public RadioButton radio_answer_d;
+
     public RadioButton radio_answer_true;
     public RadioButton radio_answer_false;
     public VBox mcq_ui_group, true_false_ui_group, mcq_ui_answers_list, container;
-    public ScrollPane answers_list_scroll_pane;
+
+    public ScrollPane mcq_answers_list_scroll_pane, true_false_answers_list_scroll_pane;
     //public TextField txt_answer_a, txt_answer_b, txt_answer_c, txt_answer_d;
     //public ComboBox<String> combo_q_weight,combo_q_diff;
 
@@ -55,21 +50,22 @@ public class AddQuestionController implements Initializable {
 
     }
 
-    private AddQuestionAnswerRowController add_row() {
-        try {
+    private AddQuestionAnswerRowController add_row() throws IOException {
+//        try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/AddQuestionAnswerRow.fxml"));
             Parent root = loader.load();
+
             mcq_ui_answers_list.getChildren().add((root));
             answerRowControllers.add((loader.getController()));
             ((AddQuestionAnswerRowController) loader.getController()).label.setText((char) (65 + (answerRowControllers.size() - 1)) + "");
             ((AddQuestionAnswerRowController) loader.getController()).addQuestionController = this;
             ((AddQuestionAnswerRowController) loader.getController()).loader = loader;
             return ((AddQuestionAnswerRowController) loader.getController());
-        } catch (IOException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, e.toString());
-            alert.show();
-            return null;
-        }
+//        } catch (IOException e) {
+//            Alert alert = new Alert(Alert.AlertType.ERROR, e.toString());
+//            alert.show();
+//            return null;
+//        }
     }
 
     public void remove_row(AddQuestionAnswerRowController ans) {
@@ -84,6 +80,8 @@ public class AddQuestionController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+
         answerRowControllers = new ArrayList<>();
 //        for (int i = 0; i < 5; i++) {
 //            add_row();
@@ -108,16 +106,16 @@ public class AddQuestionController implements Initializable {
 
         radio_mcq.selectedProperty().addListener((obs, wasPreviouslySelected, isNowSelected) -> {
             if (isNowSelected) {
-                mcq_ui_group.setVisible(true);
-                mcq_ui_group.setManaged(true);
-                true_false_ui_group.setVisible(false);
-                true_false_ui_group.setManaged(false);
+                mcq_answers_list_scroll_pane.setVisible(true);
+                mcq_answers_list_scroll_pane.setManaged(true);
+                true_false_answers_list_scroll_pane.setVisible(false);
+                true_false_answers_list_scroll_pane.setManaged(false);
 
             } else {
-                mcq_ui_group.setVisible(false);
-                mcq_ui_group.setManaged(false);
-                true_false_ui_group.setVisible(true);
-                true_false_ui_group.setManaged(true);
+                mcq_answers_list_scroll_pane.setVisible(false);
+                mcq_answers_list_scroll_pane.setManaged(false);
+                true_false_answers_list_scroll_pane.setVisible(true);
+                true_false_answers_list_scroll_pane.setManaged(true);
             }
         });
         radio_mcq.setSelected(true);
@@ -133,11 +131,15 @@ public class AddQuestionController implements Initializable {
             edit_question.setVisible(true);
             edit_question.setManaged(true);
             //edit_question.setDefaultButton(true);
-            setPrevConfig();
+            try {
+                setPrevConfig();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    private void setPrevConfig() {
+    private void setPrevConfig() throws IOException {
         html_editor.setHtmlText(model.getQuestion_text());
         txt_q_diff.setText(model.getQuestion_diff());
         txt_q_weight.setText(model.getQuestion_weight());
@@ -157,7 +159,7 @@ public class AddQuestionController implements Initializable {
             for (Answer a : model.getAnswers()) {
                 AddQuestionAnswerRowController addQuestionAnswerRowController = add_row();
                 if(addQuestionAnswerRowController != null) {
-                    addQuestionAnswerRowController.txt_answer.setText(a.answer_text);
+                    addQuestionAnswerRowController.txt_answer.setHtmlText(a.answer_text);
                     if(a.is_right_answer==1){
                         addQuestionAnswerRowController.checkbox_right_answer.setSelected(true);
                     }else {
@@ -180,7 +182,7 @@ public class AddQuestionController implements Initializable {
             List<Answer> answers = new ArrayList<>();
             for (AddQuestionAnswerRowController a : answerRowControllers) {
                 Answer answer = new Answer();
-                answer.answer_text = a.txt_answer.getText();
+                answer.answer_text = a.txt_answer.getHtmlText();
                 answer.is_right_answer = a.checkbox_right_answer.isSelected() ? 1 : 0;
                 answers.add(answer);
             }
@@ -244,7 +246,7 @@ public class AddQuestionController implements Initializable {
             List<Answer> answers = new ArrayList<>();
             for (AddQuestionAnswerRowController a : answerRowControllers) {
                 Answer answer = new Answer();
-                answer.answer_text = a.txt_answer.getText();
+                answer.answer_text = a.txt_answer.getHtmlText();
                 answer.is_right_answer = a.checkbox_right_answer.isSelected() ? 1 : 0;
                 answers.add(answer);
             }
@@ -304,19 +306,9 @@ public class AddQuestionController implements Initializable {
 
 //    }
 
-    public void onAddAnswerClicked(ActionEvent e) {
+    public void onAddAnswerClicked(ActionEvent e) throws IOException {
         add_row();
     }
-
-
-//
-//    private void Save_to_file(String s) throws IOException {
-//
-//        FileOutputStream outputStream = new FileOutputStream("test_file.html");
-//        byte[] strToBytes = s.getBytes();
-//        outputStream.write(strToBytes);
-//        outputStream.close();
-//    }
 
     private boolean validate(String Q, String diff, String weight, String A, String B, String C, String D) {
         if (Q.isEmpty() || A.isEmpty() || B.isEmpty() || C.isEmpty() || D.isEmpty()) {

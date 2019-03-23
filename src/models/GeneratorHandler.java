@@ -38,13 +38,13 @@ public class GeneratorHandler {
                 , q.getExamModel_idExamModel(), q.getCourseName(), q.getCourseCode(), q.getCourseCategory(), q.getChapterName(), q.getChapterNumber()
                 , q.getTopicName()};
                 int question_id = DBSingletonHandler.getInstance().execute_PreparedStatement(sql,params);
-
+                q.setId(question_id+"");
                 for (Answer ans : q.getAnswers()) {
 
                     sql =
                             "INSERT INTO examquestionanswer (AnswerLabel, AnswerContent, IsRightAnswer, ExamQuestion_idQuestion) " +
                                     "VALUES (?,?,?,?);";
-                    params = new String[]{"-", ans.answer_text, ans.is_right_answer+"", question_id+""};
+                    params = new String[]{"-", ans.answer_text, ans.is_right_answer+"", q.getId()};
                     DBSingletonHandler.getInstance().execute_PreparedStatement(sql,params);
 
                 }
