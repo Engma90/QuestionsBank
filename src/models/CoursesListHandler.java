@@ -55,6 +55,7 @@ public class CoursesListHandler {
 
     public ObservableList<Course> getCoursesList(String filter){
         //DBHandler db = new DBHandler();
+        coursesList = FXCollections.observableArrayList();
         String sql;
         if(filter.equals("All")) {
             sql = MessageFormat.format(

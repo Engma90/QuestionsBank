@@ -1,0 +1,56 @@
+#container{
+    //-fx-background-color:#231C58;
+        -fx-background-image:url('/views/images/dashboard_bg.png');
+        -fx-background-repeat: no-repeat;
+        -fx-background-size: 100% 100%;
+}
+SplitPane{
+    -fx-background-color:#231C58;
+    -fx-border-insets: 5;
+    -fx-background-insets: 5;
+
+}
+.table-view .column-header .label{
+
+    -fx-text-fill:#0f0f0f;
+    -fx-font-weight: bold;
+}
+.table-view{
+
+}
+.rounded-box{
+    -fx-border-radius: 0 20 20 20;
+    -fx-background-radius:0 20 20 20;
+    -fx-background-color:#373372;
+    -fx-padding:10;
+    //-fx-border-insets: 0 0 5 0;
+    //-fx-background-insets: 0 0 5 0;
+}
+.button{
+    -fx-background-color:#231C58;
+    -fx-border-radius: 20;
+    -fx-background-radius:20;
+    -fx-text-fill:#ffffff;
+    -fx-font-weight: bold;
+}
+.label{
+    -fx-text-fill:#FFFFFF;
+    -fx-font-weight: bold;
+
+}
+
+.rounded-header{
+    -fx-background-color:#F2C114;
+    -fx-border-radius: 10 10 0 0;
+    -fx-background-radius: 10 10 0 0;
+    -fx-text-fill:#ffffff;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+    -fx-font-size:1em;
+}
+
+.rounded-header.label{
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+    -fx-font-size:2em;
+    -fx-text-fill:#1C1763;
+}

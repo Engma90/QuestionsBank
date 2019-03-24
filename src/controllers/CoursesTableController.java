@@ -124,29 +124,7 @@ public class CoursesTableController implements Initializable {
         courses_table_view.getSelectionModel().select(selection);
     }
 
-    public void onGenerateExamClicked(ActionEvent e){
-        //Parent root;
-        try {
-            //root = FXMLLoader.load(getClass().getResource("/views/GenerateExam.fxml"));
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/GenerateExam.fxml"));
-            Parent root = loader.load();
-            GenerateExamController generateExamController = loader.getController();
-            generateExamController.course = courses_table_view.getSelectionModel().getSelectedItem();
-            generateExamController.initUI();
-            Stage stage = new Stage();
-            stage.initModality(Modality.WINDOW_MODAL);
-            stage.initOwner(((Node)e.getTarget()).getScene().getWindow());
-            stage.setTitle("Generate Exam");
-            stage.setMinHeight(700);
-            stage.setMinWidth(1000);
-            stage.setScene(new Scene(root));
-            stage.show();
-        }
-        catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
 
     public void refresh(){
         int selection = courses_table_view.getSelectionModel().getSelectedIndex();

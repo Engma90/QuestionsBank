@@ -7,14 +7,15 @@
 <?import javafx.scene.layout.*?>
 
 <?import javafx.collections.FXCollections?>
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controllers.TopicsTableController">
-    <VBox spacing="10" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
-          AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="0">
-        <Label text="Topics" />
-
-        <ListView fx:id="topics_list_view" prefHeight="150">
+<!--<AnchorPane xmlns="http://javafx.com/javafx"-->
+            <!--xmlns:fx="http://javafx.com/fxml"-->
+            <!--fx:controller="controllers.TopicsTableController">-->
+    <VBox xmlns="http://javafx.com/javafx"
+          xmlns:fx="http://javafx.com/fxml"
+          fx:controller="controllers.TopicsTableController">
+    <Label text="Topics" styleClass="rounded-header" prefWidth="150" prefHeight="30" alignment="CENTER"/>
+    <VBox spacing="10" styleClass="rounded-box">
+        <ListView fx:id="topics_list_view" VBox.vgrow="ALWAYS">
             <items>
                 <FXCollections fx:factory="observableArrayList">
 
@@ -22,12 +23,13 @@
             </items>
         </ListView>
 
-        <HBox spacing="10">
+        <HBox spacing="10" alignment="CENTER">
             <Button fx:id="add_topic" onAction="#onAddTopicClicked" text="Add" />
             <Button fx:id="edit_topic" text="Edit" onAction="#onEditTopicClicked" />
             <Button fx:id="delete_topic" text="Delete" onAction="#onDeleteTopicClicked" />
 
         </HBox>
     </VBox>
+    </VBox>
 
-</AnchorPane>
+<!--</AnchorPane>-->

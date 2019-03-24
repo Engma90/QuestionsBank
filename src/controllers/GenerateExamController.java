@@ -98,7 +98,7 @@ public class GenerateExamController implements Initializable {
         chapterList = ChaptersListHandler.getInstance().getChaptersList(course);
         for (Chapter c : chapterList) {
             System.out.println("----------------------1");
-            List<Question> questionList = QuestionsTableController.questionsTableHandler.getQuestionList(c.id);
+            List<Question> questionList = QuestionsTableHandler.getInstance().getQuestionList(c.id);
             System.out.println("----------------------2");
             List<String> l = new ArrayList<String>();
             for (Question q : questionList) {
@@ -194,8 +194,8 @@ public class GenerateExamController implements Initializable {
             if (cRow.isSelected.isSelected()) {
                 for(GenerateExamTopicRowController tRow:cRow.generateExamTopicRowControllerList){
                     if(tRow.isSelected.isSelected()){
-                        QuestionsTableHandler questionsTableHandler = new QuestionsTableHandler();
-                        List<Question> temp_list = questionsTableHandler.getQuestionList(new Topic(tRow.topic_id,""), tRow.diff_max_level.getText());
+                        //QuestionsTableHandler questionsTableHandler = new QuestionsTableHandler();
+                        List<Question> temp_list = QuestionsTableHandler.getInstance().getQuestionList(new Topic(tRow.topic_id,""), tRow.diff_max_level.getText());
 
                         Collections.shuffle(temp_list);
                         //get only desired number & convert to examQuestion

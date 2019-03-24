@@ -7,47 +7,53 @@
 <?import models.Question?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.web.HTMLEditor?>
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controllers.QuestionsTableController"
-            >
+<!--<AnchorPane xmlns="http://javafx.com/javafx"-->
+<!--xmlns:fx="http://javafx.com/fxml"-->
+<!--fx:controller="controllers.QuestionsTableController"-->
+<!--&gt;-->
 
-    <VBox spacing="10" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10"
-          AnchorPane.bottomAnchor="10" AnchorPane.topAnchor="10">
-    <TableView fx:id="questions_table" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10"
-               AnchorPane.bottomAnchor="10" AnchorPane.topAnchor="10" >
+<VBox spacing="10" xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controllers.QuestionsTableController">
 
-        <columns>
-            <TableColumn text="Question" fx:id="col_question_text"  >
-                <cellValueFactory><PropertyValueFactory property="raw_text" />
-                </cellValueFactory>
-            </TableColumn>
-            <TableColumn text="Type" fx:id="col_question_type">
-                <cellValueFactory><PropertyValueFactory property="question_type" />
-                </cellValueFactory>
-            </TableColumn>
-            <TableColumn text="Difficulty" fx:id="col_question_diff">
-                <cellValueFactory><PropertyValueFactory property="question_diff" />
-                </cellValueFactory>
-            </TableColumn>
-            <!--<TableColumn text="Weight" fx:id="col_question_weight">-->
+    <Label text="Questions" styleClass="rounded-header" prefWidth="150" prefHeight="30" alignment="CENTER"/>
+    <VBox spacing="10" styleClass="rounded-box" VBox.vgrow="ALWAYS">
+        <TableView fx:id="questions_table" VBox.vgrow="ALWAYS" opacity="0.95">
+
+            <columns>
+                <TableColumn text="Question" fx:id="col_question_text">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="raw_text"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn text="Type" fx:id="col_question_type">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="question_type"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn text="Difficulty" fx:id="col_question_diff">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="question_diff"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <!--<TableColumn text="Weight" fx:id="col_question_weight">-->
                 <!--<cellValueFactory><PropertyValueFactory property="question_weight" />-->
                 <!--</cellValueFactory>-->
-            <!--</TableColumn>-->
-        </columns>
-        <items>
-            <FXCollections fx:factory="observableArrayList">
+                <!--</TableColumn>-->
+            </columns>
+            <items>
+                <FXCollections fx:factory="observableArrayList">
 
-            </FXCollections>
-        </items>
-    </TableView>
-    <HBox spacing="20">
-        <Button fx:id="add" text="Add" onAction="#onAddClicked"></Button>
-        <Button fx:id="edit" text="Edit" onAction="#onEditClicked"></Button>
-        <Button fx:id="delete" onAction="#onDeleteQuestionClicked" text="Delete"></Button>
-        <Button fx:id="import_csv" text="Import CSV"></Button>
-        <Button fx:id="export_csv" text="Export CSV"></Button>
+                </FXCollections>
+            </items>
+        </TableView>
+        <HBox spacing="20" alignment="CENTER">
+            <Button fx:id="add" text="Add" onAction="#onAddClicked"></Button>
+            <Button fx:id="edit" text="Edit" onAction="#onEditClicked"></Button>
+            <Button fx:id="delete" onAction="#onDeleteQuestionClicked" text="Delete"></Button>
 
-    </HBox>
+
+        </HBox>
     </VBox>
-</AnchorPane>
+</VBox>
+        <!--</AnchorPane>-->

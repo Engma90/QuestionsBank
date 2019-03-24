@@ -11,6 +11,21 @@ import java.util.List;
 
 public class QuestionsTableHandler {
     private ObservableList<Question> questionList;
+    private static volatile QuestionsTableHandler instance = null;
+    private QuestionsTableHandler(){
+
+    }
+    public static QuestionsTableHandler getInstance() {
+        if (instance == null) {
+            // To provide thread-safe implementation.
+            synchronized (QuestionsTableHandler.class) {
+                if (instance == null) {
+                    instance = new QuestionsTableHandler();
+                }
+            }
+        }
+        return instance;
+    }
 
     public boolean Add(Topic topic, Question model) {
         //DBHandler db = new DBHandler();

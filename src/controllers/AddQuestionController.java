@@ -176,7 +176,7 @@ public class AddQuestionController implements Initializable {
         String diff = txt_q_diff.getText();
         String weight = txt_q_weight.getText();
         String exp_time = txt_q_exp_time.getText();
-        QuestionsTableHandler questionsTableHandler = new QuestionsTableHandler();
+        //QuestionsTableHandler questionsTableHandler = new QuestionsTableHandler();
 
         if (radio_mcq.isSelected()) {
             List<Answer> answers = new ArrayList<>();
@@ -196,7 +196,7 @@ public class AddQuestionController implements Initializable {
             model.setQuestion_type("MCQ");
             model.setAnswers(answers);
             //model.setRight_answer(right_answer);
-            questionsTableHandler.Add(topic, model);
+            QuestionsTableHandler.getInstance().Add(topic, model);
             close(e);
 //            }else {
 //                new Alert(Alert.AlertType.ERROR,"Please fill all fields").show();
@@ -224,7 +224,7 @@ public class AddQuestionController implements Initializable {
                 model.setQuestion_type("True/False");
                 model.setAnswers(answers);
                 //model.setRight_answer(right_answer);
-                questionsTableHandler.Add(topic, model);
+                QuestionsTableHandler.getInstance().Add(topic, model);
                 close(e);
             } else {
                 new Alert(Alert.AlertType.ERROR, "Please fill all fields").show();
@@ -240,7 +240,7 @@ public class AddQuestionController implements Initializable {
         String diff = txt_q_diff.getText();
         String weight = txt_q_weight.getText();
         String exp_time = txt_q_exp_time.getText();
-        QuestionsTableHandler questionsTableHandler = new QuestionsTableHandler();
+        //QuestionsTableHandler questionsTableHandler = new QuestionsTableHandler();
 
         if (radio_mcq.isSelected()) {
             List<Answer> answers = new ArrayList<>();
@@ -260,7 +260,7 @@ public class AddQuestionController implements Initializable {
             model.setQuestion_type("MCQ");
             model.setAnswers(answers);
             //model.setRight_answer(right_answer);
-            questionsTableHandler.Edit(model);
+            QuestionsTableHandler.getInstance().Edit(model);
             close(e);
 //            }else {
 //                new Alert(Alert.AlertType.ERROR,"Please fill all fields").show();
@@ -288,7 +288,7 @@ public class AddQuestionController implements Initializable {
                 model.setQuestion_type("True/False");
                 model.setAnswers(answers);
                 //model.setRight_answer(right_answer);
-                questionsTableHandler.Edit(model);
+                QuestionsTableHandler.getInstance().Edit(model);
                 close(e);
             } else {
                 new Alert(Alert.AlertType.ERROR, "Please fill all fields").show();

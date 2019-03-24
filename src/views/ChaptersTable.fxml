@@ -7,27 +7,28 @@
 <?import javafx.scene.layout.*?>
 
 <?import javafx.collections.FXCollections?>
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controllers.ChaptersTableController">
-    <VBox spacing="10" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
-          AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="0">
+<!--<AnchorPane xmlns="http://javafx.com/javafx"-->
+<!--xmlns:fx="http://javafx.com/fxml"-->
+<!--fx:controller="controllers.ChaptersTableController">-->
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controllers.ChaptersTableController">
+    <Label text="Chapters" styleClass="rounded-header" prefWidth="150" prefHeight="30" alignment="CENTER"/>
+    <VBox spacing="10" styleClass="rounded-box">
+        <ListView fx:id="chapters_list_view" VBox.vgrow="ALWAYS">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
 
-    <Label text="Chapters" />
+                </FXCollections>
+            </items>
+        </ListView>
 
-    <ListView fx:id="chapters_list_view" prefHeight="150">
-        <items>
-            <FXCollections fx:factory="observableArrayList">
+        <HBox spacing="10" alignment="CENTER">
+            <Button fx:id="add_chapter" onAction="#onAddChapterClicked" text="Add"/>
+            <Button fx:id="edit_chapter" text="Edit" onAction="#onEditChapterClicked"/>
+            <Button fx:id="delete_chapter" text="Delete" onAction="#onDeleteChapterClicked"/>
 
-            </FXCollections>
-        </items>
-    </ListView>
-
-    <HBox spacing="10">
-        <Button fx:id="add_chapter" onAction="#onAddChapterClicked" text="Add" />
-        <Button fx:id="edit_chapter" text="Edit" onAction="#onEditChapterClicked" />
-        <Button fx:id="delete_chapter" text="Delete" onAction="#onDeleteChapterClicked" />
-
-    </HBox>
+        </HBox>
     </VBox>
-</AnchorPane>
+</VBox>
+        <!--</AnchorPane>-->

@@ -7,39 +7,54 @@
 <?import javafx.scene.layout.*?>
 
 <?import javafx.collections.FXCollections?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.geometry.Insets?>
+<?import controllers.MyButton?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="controllers.SignupController"
-            prefHeight="400.0" prefWidth="600.0">
-    <VBox spacing="20" AnchorPane.topAnchor="20" AnchorPane.rightAnchor="20"
-          AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="20" alignment="CENTER">
-        <HBox spacing="38">
-            <Label text="College"></Label>
-            <ComboBox value="College" fx:id="combo_college">
+            prefHeight="450.0" prefWidth="600.0"
+            stylesheets="@css/Signup.css" fx:id="container">
+    <!--<padding>-->
+        <!--<Insets top="50" right="10" bottom="10" left="50"/>-->
+    <!--</padding>-->
+    <ImageView AnchorPane.leftAnchor="30" AnchorPane.topAnchor="30">
+        <Image url="/views/images/create_account.png"/>
+    </ImageView>
+    <VBox spacing="20" AnchorPane.topAnchor="100" AnchorPane.rightAnchor="50"
+           AnchorPane.leftAnchor="50" alignment="CENTER">
+        <padding>
+            <Insets top="0" right="50" bottom="0" left="50"/>
+        </padding>
+        <!--<HBox spacing="1">-->
+            <!--<Label text="College"></Label>-->
+            <ComboBox value="College" fx:id="combo_college" HBox.Hgrow="ALWAYS">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
 
                     </FXCollections>
                 </items>
             </ComboBox>
-        </HBox>
-        <HBox spacing="25">
-            <Label text="Full name"></Label>
-            <TextField fx:id="full_name"></TextField>
-        </HBox>
-        <HBox spacing="28">
-        <Label text="E-mail     "></Label>
-        <TextField fx:id="email"></TextField>
-    </HBox>
-        <HBox spacing="28">
-            <Label text="Password"></Label>
-            <PasswordField fx:id="password"></PasswordField>
-        </HBox>
-        <HBox spacing="10">
-            <Label text="Re password"></Label>
-            <PasswordField fx:id="re_password"></PasswordField>
-        </HBox>
-        <Button text="Signup" fx:id="signup" onAction="#onSignupClicked"></Button>
-    </VBox>
+        <!--</HBox>-->
+        <!--<HBox spacing="1">-->
+            <!--<Label text="Full name"></Label>-->
+            <TextField fx:id="full_name" promptText="Full name"></TextField>
+        <!--</HBox>-->
+        <!--<HBox spacing="1">-->
+        <!--<Label text="E-mail     "></Label>-->
+        <TextField fx:id="email" promptText="Email"></TextField>
+    <!--</HBox>-->
+        <!--<HBox spacing="1">-->
+            <!--<Label text="Password"></Label>-->
+            <PasswordField fx:id="password" promptText="Password"></PasswordField>
+        <!--</HBox>-->
+        <!--<HBox spacing="1">-->
+            <!--<Label text="Re password"></Label>-->
+            <PasswordField fx:id="re_password" promptText="Confirm Password"></PasswordField>
+        <!--</HBox>-->
 
+    </VBox>
+    <MyButton  AnchorPane.bottomAnchor="50" AnchorPane.leftAnchor="50" prefWidth="131" prefHeight="49"
+              fx:id="signup" onMouseClicked="#onSignupClicked" imageUrl="/views/images/btnReg.png"></MyButton>
 </AnchorPane>

@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import models.SignupHandler;
@@ -17,18 +18,18 @@ public class SignupController implements Initializable {
 
     public TextField full_name,email;
     public PasswordField password,re_password;
-    public Button signup;
+    public MyButton signup;
     public ComboBox<String> combo_college;
     private SignupHandler signupHandler;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         signupHandler = new SignupHandler();
-        signup.setDefaultButton(true);
+        //signup.setDefaultButton(true);
         combo_college.setItems(signupHandler.getCollegesList());
         combo_college.getSelectionModel().selectFirst();
 
     }
-    public void onSignupClicked(ActionEvent e){
+    public void onSignupClicked(MouseEvent e){
 
         if(validate()){
 
@@ -57,7 +58,7 @@ public class SignupController implements Initializable {
         }
     }
 
-    private void close(ActionEvent e){
+    private void close(MouseEvent e){
         // get a handle to the stage
         Stage stage = (Stage) ((Node)e.getSource()).getScene().getWindow();
         // do what you have to do

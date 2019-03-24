@@ -12,14 +12,17 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import models.Question;
 import models.QuestionsTableHandler;
 import models.Topic;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.jsoup.Jsoup;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -30,7 +33,7 @@ public class QuestionsTableController implements Initializable {
 
 //    public static String current_selected_question_id;
 //    public static int current_selected_question_index;
-    public static QuestionsTableHandler questionsTableHandler;
+    //public static QuestionsTableHandler questionsTableHandler;
     public Topic topic;
 //    ContextMenu contextMenu;
     @Override
@@ -40,7 +43,8 @@ public class QuestionsTableController implements Initializable {
         col_question_type.prefWidthProperty().bind(questions_table.widthProperty().divide(10));
         col_question_diff.prefWidthProperty().bind(questions_table.widthProperty().divide(10));
         //col_question_weight.prefWidthProperty().bind(questions_table.widthProperty().divide(10)); // w * 1/4
-        questionsTableHandler = new QuestionsTableHandler();
+        //questionsTableHandler = new QuestionsTableHandler();
+        //QuestionsTableHandler.getInstance();
         refresh();
 //        MenuItem add = new MenuItem("Add");
 //        add.setOnAction(new EventHandler<ActionEvent>() {
@@ -129,7 +133,7 @@ public class QuestionsTableController implements Initializable {
     public void onDeleteQuestionClicked(ActionEvent e){
         Question model = questions_table.getSelectionModel().getSelectedItem();//new Question();
         //model.setId(current_selected_question_id);
-        questionsTableHandler.DeleteQuestion(model);
+        QuestionsTableHandler.getInstance().DeleteQuestion(model);
 //        questions_table.getItems().clear();
 //        questions_table.setItems(questionsTableHandler.getQuestionList());
         int selection = questions_table.getSelectionModel().getSelectedIndex() - 1;
@@ -140,10 +144,13 @@ public class QuestionsTableController implements Initializable {
         questions_table.getSelectionModel().select(selection);
     }
 
+
+
+
     public void refresh(){
          //questionsTableHandler = new QuestionsTableHandler();
         questions_table.getItems().clear();
-        ObservableList<Question> temp_list = questionsTableHandler.getQuestionList(topic);
+        ObservableList<Question> temp_list = QuestionsTableHandler.getInstance().getQuestionList(topic);
         if(temp_list.size() == 0){
 //            current_selected_question_index = -1;
 //            current_selected_question_id = "-1";
