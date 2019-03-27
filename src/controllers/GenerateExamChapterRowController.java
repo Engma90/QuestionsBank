@@ -33,11 +33,11 @@ public class GenerateExamChapterRowController implements Initializable {
 
     }
 
-    public void initUI(String chapter_id, String chapter_name, String chapter_number, List<String> diff){
-        this.chapter_name = chapter_name;
-        this.diff = diff;
-        this.chapter_id = chapter_id;
-        this.chapter_number = chapter_number;
+    public void initUI(Chapter chapter){
+        this.chapter_name = chapter.name;
+        //this.diff = diff;
+        this.chapter_id = chapter.id;
+        this.chapter_number = chapter.number;
 //        this.diff = diff.stream()
 //                .map(String::toLowerCase)
 //                .collect(Collectors.toList());
@@ -78,9 +78,19 @@ public class GenerateExamChapterRowController implements Initializable {
 
         generateExamTopicRowControllerList = new ArrayList<>();
         topicList = TopicListHandler.getInstance().getTopicsList(new Chapter(chapter_id,"",""));
+        List<Question> l;
         for (Topic t : topicList) {
-            addRow(t.id, t.name);
+            l = QuestionsTableHandler.getInstance().getQuestionList(t);
+
+            int max_diff = Integer.MIN_VALUE;
+            for (Question question:l){
+                if(Integer.parseInt(question.getQuestion_diff())>max_diff)
+                    max_diff = Integer.parseInt(question.getQuestion_diff());
+            }
+            if(l.size() > 0)
+                addRow(t, l.size(), max_diff);
         }
+
     }
 
 //    public int[] getQuestionsDistribution(){
@@ -89,14 +99,15 @@ public class GenerateExamChapterRowController implements Initializable {
 //    }
 
 
-    private void addRow(String topic_id, String topic_name) {
+    private void addRow(Topic topic, int max_question, int max_diff) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/GenerateExamTopicRow.fxml"));
             Parent p = loader.load();
 
             generateExamTopicRowControllerList.add((loader.getController()));
-
-            ((GenerateExamTopicRowController) loader.getController()).initUI(topic_id, topic_name, this);
+            ((GenerateExamTopicRowController) loader.getController()).topic_number_of_questions.setMax(max_question);
+            ((GenerateExamTopicRowController) loader.getController()).diff_max_level.setMax(max_diff);
+            ((GenerateExamTopicRowController) loader.getController()).initUI(topic, this);
             content.getChildren().add((p));
         } catch (IOException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, e.toString());

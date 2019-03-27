@@ -14,7 +14,7 @@ import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SignupController implements Initializable {
+public class SignupController implements Initializable, IWindow {
 
     public TextField full_name,email;
     public PasswordField password,re_password;
@@ -28,6 +28,15 @@ public class SignupController implements Initializable {
         combo_college.setItems(signupHandler.getCollegesList());
         combo_college.getSelectionModel().selectFirst();
 
+    }
+    @Override
+    public Object setWindowData(Stage stage, Object initObject) {
+        stage.setMinWidth(600);
+        stage.setMaxWidth(600);
+        stage.setMinHeight(500);
+        stage.setMaxHeight(500);
+        stage.setTitle("Sign up");
+        return this;
     }
     public void onSignupClicked(MouseEvent e){
 
@@ -76,4 +85,6 @@ public class SignupController implements Initializable {
         }
         return false;
     }
+
+
 }

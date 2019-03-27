@@ -10,28 +10,31 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import models.*;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.concurrent.Future;
 
 public class FileExporter {
-    private static final String QR_CODE_IMAGE_PATH = "./QRCode.png";
-    public void Export(Exam exam, String dest){
-
+    public void Export(Exam exam, String dest, String format) {
         for (ExamModel examModel : exam.getExamModelList()) {
 
             htmlExamWriter(exam, examModel);
-            File htmlFile = new File("./" + exam.getExamName() + examModel.getExamModelNumber() + ".html"), target = new File(dest + "\\" + exam.getExamName() + examModel.getExamModelNumber() + ".pdf");
+            File htmlFile = new File("./" + exam.getExamName() + examModel.getExamModelNumber() + ".html");
+            File target = new File(dest + "\\" + exam.getExamName() + examModel.getExamModelNumber() + (format.equals("PDF")?".pdf":".docx"));
             IConverter converter = LocalConverter.make();
             Future<Boolean> conversion = converter
                     .convert(htmlFile).as(DocumentType.MHTML)
-                    .to(target).as(DocumentType.PDF)
+                    .to(target).as((format.equals("PDF")?DocumentType.PDF:DocumentType.DOCX))
                     .schedule();
-            converter.shutDown();
+//            Future<Boolean> conversion = converter
+//                    .convert(new BufferedReader(new InputStreamReader(new FileInputStream(htmlFile)))).as(DocumentType.MHTML)
+//                    .to(target).as((format.equals("PDF")?DocumentType.PDF:DocumentType.DOCX))
+//                    .schedule();
+//            converter.shutDown();
             htmlFile.delete();
+            new File("QR_"+examModel.getExamModelNumber()+".png").delete();
 
         }
     }
@@ -40,7 +43,7 @@ public class FileExporter {
     private void htmlExamWriter(Exam model, ExamModel examModel){
 
         try {
-            generateQRCodeImage(model.getId() +"-"+ examModel.getId(), 32, 32, QR_CODE_IMAGE_PATH);
+            generateQRCodeImage(model.getId() +"-"+ examModel.getId(), "QR_"+examModel.getExamModelNumber()+".png");
         } catch (WriterException e) {
             System.out.println("Could not generate QR Code, WriterException :: " + e.getMessage());
         } catch (IOException e) {
@@ -50,20 +53,12 @@ public class FileExporter {
 
         String htmlHeaderToRemove = "<html dir=\"ltr\"><head></head><body contenteditable=\"true\"><p>";
         String htmlFooterToRemove = "</p></body></html>";
-        String examHeader = "<html dir=\"ltr\"><head>" +
-                "<style>.padding-table-columns {padding:0 10px 0 10px; } body{ font-size: 12px; margin:0 0 0 0;}" +
-                ".padding-table-left-columns {padding:0 10px 0 50px; } body{ font-size: 12px; margin:0 0 0 0;}</style>" +
-                "</head><body contenteditable=\"true\">" +
-                "<Table ><tr><td><b>Benha University</b></td><td rowspan=\"2\" class=\"padding-table-columns\">" +
-                "<img src=\"logo.png\" height=\"64\" width=\"64\"></td><td><b>"+model.getExamType()+"</b></td></tr>" +
-                "<tr><td><b>"+model.getCollege()+"</b></td><td><b>Subject:</b><font size=\"2\"> "+model.getExamName()+"</font></td></tr>" +
-                "<tr><td><b>"+model.getDepartment()+"</b></td><td align=\"center\" rowspan=\"2\" class=\"padding-table-columns\"><img src=\"QRCode.png\" height=\"32\" width=\"32\">" +
-                "<td><b>Date:</b> "+model.getDate()+"</td></tr>" +
-                "<tr><td><b>1st Year </b></td><td class=\"padding-table-left-columns\"><b>Duration: "+model.getDuration()+"</b></td></tr>" +
-                "</Table><hr>"+model.getNote()+"<hr>";
         String examHeader2 = "<html dir=\"ltr\">" +
                 "<head>" +
-                "<style>td{ font-size: 0.9em; margin:0;} body{ margin:0 0 0 0;}</style>" +
+                "<style>td{ font-size: 0.9em; margin:0;} body{ margin:0 0 0 0;}" +
+                ".avoid-page-break{page-break-inside: avoid !important; margin: 4px 0 4px 0 !important; display:inline-block !important; position:relative;}" +
+                "</style>" +
+                "<meta charset=\"utf-8\"/>"+
                 "</head>\n" +
                 "<body>\n" +
                 "<Table width=\"100%\">\n" +
@@ -88,10 +83,10 @@ public class FileExporter {
                 "<td align=\"center\" width=\"20%\">\n" +
                 "<Table align=\"center\">\n" +
                 "<tr>\n" +
-                "<td align=\"center\"><img src=\"logo.png\" height=\"64\" width=\"64\"></td>\n" +
+                "<td align=\"center\"><img src=\"./src/views/images/logo.png\" height=\"64\" width=\"64\"></td>\n" +
                 "</tr>\n" +
                 "<tr>\n" +
-                "<td align=\"center\"><img src=\"QRCode.png\" height=\"32\" width=\"32\"></td>\n" +
+                "<td align=\"center\"><img src=\"QR_"+examModel.getExamModelNumber()+".png\" height=\"32\" width=\"32\"></td>\n" +
                 "</tr>\n" +
                 "</Table>\n" +
                 "</td>\n" +
@@ -114,30 +109,33 @@ public class FileExporter {
                 "</td>\n" +
                 "</tr>\n" +
                 "</Table>\n" +
-                "<hr>"+model.getNote()+"<hr>";
+                "<hr>"+model.getNote()+(model.getNote().isEmpty()?"":"<hr>");
         StringBuilder body = new StringBuilder();
 
         String footer = "</body></html>";
         int q_counter = 1;
-        for(ExamQuestion qm: examModel.getExamQuestionsList()){
+        for(ExamQuestion qm: examModel.getExamQuestionsList()) {
 
-            body.append("<div>");
+            body.append("<div class=\"avoid-page-break\">");
             body.append("<b><font size=\"4\">Question ");
             body.append(q_counter++);
-            body.append(":</font></b><br/>");
-            body.append(qm.getQuestionContent().replace(htmlHeaderToRemove,"").replace(htmlFooterToRemove,""));
-            int i =0;
-                body.append("<div>");
-                for (Answer answer: qm.getAnswers()){
-                    body.append((char) (65 + i));
-                    body.append(") ");
-                    body.append(answer.answer_text.replace(htmlHeaderToRemove,"").replace(htmlFooterToRemove,""));
-                    body.append("<br />");
-                    i++;
-                }
+            body.append(":</font></b>");
+            body.append(qm.getQuestionContent().replace(htmlHeaderToRemove, "").replace(htmlFooterToRemove, ""));
+            int i = 0;
+            body.append("<div class=\"avoid-page-break\">");
+            for (Answer answer : qm.getAnswers()) {
+                body.append("<div class=\"avoid-page-break\">");
+                body.append((char) (65 + i));
+                body.append(") ");
+                body.append(answer.answer_text.replace(htmlHeaderToRemove, "").replace(htmlFooterToRemove, ""));
+                //body.append("<br />");
                 body.append("</div>");
+                i++;
+            }
             body.append("</div>");
             body.append("<hr>");
+            body.append("</div>");
+
         }
 
         String html = examHeader2+body.toString()+footer;
@@ -151,17 +149,21 @@ public class FileExporter {
 
     private void Save_to_file(String s, String path) throws IOException {
 
-        FileOutputStream outputStream = new FileOutputStream(path);
-        byte[] strToBytes = s.getBytes();
-        outputStream.write(strToBytes);
-        outputStream.close();
+//        FileOutputStream outputStream = new FileOutputStream(path);
+//        byte[] strToBytes = s.getBytes();
+//        outputStream.write(strToBytes);
+//        outputStream.close();
+        try (OutputStreamWriter writer =
+                     new OutputStreamWriter(new FileOutputStream(new File(path)), StandardCharsets.UTF_8)) {
+            writer.write(s);
+        }
     }
 
 
-    private static void generateQRCodeImage(String text, int width, int height, String filePath)
+    private static void generateQRCodeImage(String text, String filePath)
             throws WriterException, IOException {
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
-        BitMatrix bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, width, height);
+        BitMatrix bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, 32, 32);
 
         Path path = FileSystems.getDefault().getPath(filePath);
         MatrixToImageWriter.writeToPath(bitMatrix, "PNG", path);

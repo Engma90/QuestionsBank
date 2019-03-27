@@ -1,6 +1,7 @@
 package controllers;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -17,7 +18,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 
-public class AddCourseController implements Initializable {
+public class AddCourseController implements Initializable, IWindow {
 
     public TextField course_name,course_code;
     public Button add_course, edit_course;
@@ -50,9 +51,12 @@ public class AddCourseController implements Initializable {
     }
     public void onAddCourseClicked(ActionEvent e){
         //CoursesListHandler coursesListHandler =new CoursesListHandler();
-        boolean success = CoursesListHandler.getInstance().Add(course_code.getText(),course_name.getText(),
-                DashboardController.current_selected_dr_id,course_level.getValue());
-        if(!success){
+        Course course = new Course();
+        course.name = course_name.getText();
+        course.code = course_code.getText();
+        course.level = course_level.getValue();
+        int success = CoursesListHandler.getInstance().Add(course);
+        if(success == -1){
             new Alert(Alert.AlertType.ERROR,"Operation Failed").show();
         }
         else {
@@ -80,4 +84,10 @@ public class AddCourseController implements Initializable {
 
     }
 
+    @Override
+    public Object setWindowData(Stage stage, Object initObject) {
+        stage.setTitle(this.operation_type+" Course");
+
+        return this;
+    }
 }

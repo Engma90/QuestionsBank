@@ -3,6 +3,7 @@ package controllers;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableListBase;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.scene.Cursor;
@@ -32,7 +33,6 @@ public class MyHtmlEditor extends HBox {
     //public static final String TOP_TOOLBAR = ".top-toolbar";
     public static final String BOTTOM_TOOLBAR = ".bottom-toolbar";
     public static final String WEB_VIEW = ".web-view";
-    //private static final String IMPORT_BUTTON_GENERAL = "logo.png";
 
     private final WebView mWebView;
     //private final ToolBar mTopToolBar;
@@ -40,9 +40,11 @@ public class MyHtmlEditor extends HBox {
 
 
     public MyHtmlEditor(){
-        this.setSpacing(10);
+        this.setSpacing(1);
         //this.setPrefWidth(1000);
-
+        //this.getStylesheets().clear();
+//        this.htmlEditor.setSt = FXCollections.observableArrayList();
+//        this.htmlEditor.getStylesheets().add("@css/modena/modena.css");
 
 
         button = new Button("^");
@@ -57,13 +59,10 @@ public class MyHtmlEditor extends HBox {
                 button.setText("^");
                 hideToolbars(this.htmlEditor);
                 htmlEditor.setPrefHeight(50);
-//                String imagePath = "C:\\Users\\Mohammad\\IdeaProjects\\QuestionsBank\\QRCode.png";
-//                File f = new File(imagePath);
-//                htmlEditor.setHtmlText("<img src=' " + f.toURI() + "'/>");
             }
             else {
                 button.setText("<");
-                htmlEditor.setPrefHeight(400);
+                htmlEditor.setPrefHeight(250);
                 showToolbars(this.htmlEditor);
             }
             isShown = !isShown;
@@ -100,9 +99,9 @@ public class MyHtmlEditor extends HBox {
 //
 //                ((Node) event.getSource()).setCursor(Cursor.HAND);
 //                /* Put a string on a dragboard */
-//                ClipboardContent content = new ClipboardContent();
-//                content.putString(htmlEditor.getHtmlText());
-//                db.setContent(content);
+//                ClipboardContent exam_content = new ClipboardContent();
+//                exam_content.putString(htmlEditor.getHtmlText());
+//                db.setContent(exam_content);
 //
 //                event.consume();
 //            }
@@ -152,7 +151,7 @@ public class MyHtmlEditor extends HBox {
             }
             //get mime type of the file
             String type = java.nio.file.Files.probeContentType(file.toPath());
-            //get html content
+            //get html exam_content
             byte[] data = org.apache.commons.io.FileUtils.readFileToByteArray(file);
             String base64data = java.util.Base64.getEncoder().encodeToString(data);
 //            System.out.println(base64data);
@@ -256,5 +255,17 @@ public class MyHtmlEditor extends HBox {
             }
             editor.setVisible(true);
         });
+    }
+
+    public void setToggleModeEnabled(boolean val){
+        if(val){
+            this.hideToolbars(this.htmlEditor);
+            this.button.setVisible(true);
+            this.button.setManaged(true);
+        }else {
+            this.showToolbars(this.htmlEditor);
+            this.button.setVisible(false);
+            this.button.setManaged(false);
+        }
     }
 }

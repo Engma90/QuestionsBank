@@ -3,7 +3,14 @@
         -fx-background-image:url('/views/images/dashboard_bg.png');
         -fx-background-repeat: no-repeat;
         -fx-background-size: 100% 100%;
+        -fx-font: 16px "Arial";
 }
+
+#logout-form{
+    -fx-text-alignment:right;
+}
+
+
 SplitPane{
     -fx-background-color:#231C58;
     -fx-border-insets: 5;
@@ -15,8 +22,8 @@ SplitPane{
     -fx-text-fill:#0f0f0f;
     -fx-font-weight: bold;
 }
-.table-view{
-
+.table-view, .list-view{
+    -fx-font: 13px "Arial";
 }
 .rounded-box{
     -fx-border-radius: 0 20 20 20;
@@ -32,6 +39,28 @@ SplitPane{
     -fx-background-radius:20;
     -fx-text-fill:#ffffff;
     -fx-font-weight: bold;
+
+    -fx-background-size: 13px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: 15px;
+    -fx-padding:5px 15px 5px 33px;
+    -fx-font: 14px "Arial";
+}
+
+.add-button{
+    -fx-background-image: url('/views/images/add_icon.png');
+}
+.edit-button{
+    -fx-background-image: url('/views/images/edit_icon.png');
+}
+.delete-button{
+    -fx-background-image: url('/views/images/delete_icon.png');
+}
+.generate-button{
+    -fx-background-color:#e33068;
+}
+.export-button{
+    -fx-background-image: url('/views/images/export_icon.png');
 }
 .label{
     -fx-text-fill:#FFFFFF;
@@ -44,13 +73,12 @@ SplitPane{
     -fx-border-radius: 10 10 0 0;
     -fx-background-radius: 10 10 0 0;
     -fx-text-fill:#ffffff;
-    -fx-font-weight: bold;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
-    -fx-font-size:1em;
 }
 
 .rounded-header.label{
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
-    -fx-font-size:2em;
-    -fx-text-fill:#1C1763;
+    -fx-font: 24px "Tahoma";
+     -fx-font-weight: bold;
+    -fx-text-fill:#020834;
 }

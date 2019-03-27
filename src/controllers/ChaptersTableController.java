@@ -4,20 +4,13 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.ListView;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import models.Chapter;
 import models.ChaptersListHandler;
 import models.Course;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -49,59 +42,31 @@ public class ChaptersTableController implements Initializable {
 
 
     public void onAddChapterClicked(ActionEvent e) {
-        Parent root;
-        try {
-            FXMLLoader loader = new
-                    FXMLLoader(getClass().getResource("/views/AddChapter.fxml"));
-            AddChapterController addChapterController = new AddChapterController("Add", course, new Chapter());
-            loader.setController(addChapterController);
-            root = loader.load();
-            Stage stage = new Stage();
-            stage.initModality(Modality.WINDOW_MODAL);
-            stage.initOwner(((Node) e.getTarget()).getScene().getWindow());
-            stage.setTitle("Add Chapter");
-            stage.setScene(new Scene(root));
-            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-                public void handle(WindowEvent we) {
-                    System.out.println("Closed");
-                    chapters_list_view.getItems().clear();
-                    chapters_list_view.setItems(ChaptersListHandler.getInstance().getChaptersList(course));
+        AddChapterController addChapterController = new AddChapterController("Add", course, new Chapter());
+        EventHandler<WindowEvent> onClose = new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent we) {
+                int count1 = chapters_list_view.getItems().size();
+                refresh(true);
+                int count2 = chapters_list_view.getItems().size();
+                if(count1 != count2)
                     chapters_list_view.getSelectionModel().selectLast();
-                }
-            });
-            stage.show();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+            }
+        };
+        new WindowLoader().load(e,"/views/AddChapter.fxml",addChapterController,onClose,true,false,null);
     }
 
 
     public void onEditChapterClicked(ActionEvent e) {
-        Parent root;
-        try {
-            FXMLLoader loader = new
-                    FXMLLoader(getClass().getResource("/views/AddChapter.fxml"));
-            AddChapterController addChapterController = new AddChapterController("Edit", course, chapters_list_view.getSelectionModel().getSelectedItem());
-            loader.setController(addChapterController);
-            root = loader.load();
-            Stage stage = new Stage();
-            stage.initModality(Modality.WINDOW_MODAL);
-            stage.initOwner(((Node) e.getTarget()).getScene().getWindow());
-            stage.setTitle("Edit Chapter");
-            stage.setScene(new Scene(root));
-            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-                public void handle(WindowEvent we) {
-                    System.out.println("Closed");
-                    int selection = chapters_list_view.getSelectionModel().getSelectedIndex();
-                    chapters_list_view.getItems().clear();
-                    chapters_list_view.setItems(ChaptersListHandler.getInstance().getChaptersList(course));
-                    chapters_list_view.getSelectionModel().select(selection);
-                }
-            });
-            stage.show();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        AddChapterController addChapterController = new AddChapterController("Edit", course, chapters_list_view.getSelectionModel().getSelectedItem());
+        EventHandler<WindowEvent> onClose = new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent we) {
+                int selection = chapters_list_view.getSelectionModel().getSelectedIndex();
+                chapters_list_view.getItems().clear();
+                chapters_list_view.setItems(ChaptersListHandler.getInstance().getChaptersList(course));
+                chapters_list_view.getSelectionModel().select(selection);
+            }
+        };
+        new WindowLoader().load(e,"/views/AddChapter.fxml",addChapterController,onClose,true,false,null);
     }
 
     public void onDeleteChapterClicked(ActionEvent e) {

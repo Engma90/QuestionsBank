@@ -1,5 +1,6 @@
 package models;
 
+
 import controllers.QuestionsTableController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -28,12 +29,11 @@ public class ChaptersListHandler {
         }
         return instance;
     }
-    public boolean Add(Course course, Chapter model) {
+    public int Add(Course course, Chapter model) {
         //DBHandler db = new DBHandler();
-        String sql = MessageFormat.format(
-                "insert into chapter (ChapterName, Course_idCourse, ChapterNumber) values (\"{0}\",{1},{2}) ;"
-                , model.name, course.id,model.number);
-        return DBSingletonHandler.getInstance().execute_sql(sql);
+        String sql = "insert into chapter (ChapterName, Course_idCourse, ChapterNumber) values (?,?,?) ;";
+               String[] params = new String[]{ model.name, course.id,model.number};
+        return DBSingletonHandler.getInstance().execute_PreparedStatement(sql, params);
     }
     public boolean Edit(Chapter model) {
         //DBHandler db = new DBHandler();

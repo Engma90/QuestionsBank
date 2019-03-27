@@ -19,7 +19,6 @@ import javafx.stage.WindowEvent;
 import models.Question;
 import models.QuestionsTableHandler;
 import models.Topic;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.jsoup.Jsoup;
 
 import java.io.File;
@@ -78,57 +77,87 @@ public class QuestionsTableController implements Initializable {
     }
 
     public void onAddClicked(ActionEvent e){
-        Parent root;
-        try {
-            FXMLLoader loader = new
-                    FXMLLoader(getClass().getResource("/views/AddQuestion.fxml"));
-            AddQuestionController addQuestionController =new AddQuestionController("Add", topic, new Question());
-            loader.setController(addQuestionController);
-            root = loader.load();
-            Stage stage = new Stage();
-            stage.initModality(Modality.WINDOW_MODAL);
-            stage.initOwner(((Node)e.getSource()).getScene().getWindow());
-            stage.setTitle("Add Question");
-            stage.setScene(new Scene(root));
-            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-                public void handle(WindowEvent we) {
-                    System.out.println("Closed");
-                    refresh();
+        AddQuestionController addQuestionController =new AddQuestionController("Add", topic, new Question());
+        EventHandler<WindowEvent> onClose = new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent we) {
+                int count1 = questions_table.getItems().size();
+                refresh();
+                int count2 = questions_table.getItems().size();
+                if(count1 != count2)
                     questions_table.getSelectionModel().selectLast();
-                }
-            });
-            stage.show();
-        }
-        catch (IOException ex) {
-            ex.printStackTrace();
-        }
+            }
+        };
+        new WindowLoader().load(e,"/views/AddQuestion.fxml",addQuestionController,onClose,true,false,null);
+//        Parent root;
+//        try {
+//            FXMLLoader loader = new
+//                    FXMLLoader(getClass().getResource("/views/AddQuestion.fxml"));
+//            AddQuestionController addQuestionController =new AddQuestionController("Add", topic, new Question());
+//            loader.setController(addQuestionController);
+//            root = loader.load();
+//            Stage stage = new Stage();
+//            stage.initModality(Modality.WINDOW_MODAL);
+//            stage.initOwner(((Node)e.getSource()).getScene().getWindow());
+
+//            stage.setScene(new Scene(root));
+//            stage.setTitle("Add Question");
+//            stage.setMinHeight(700);
+//            stage.setMinWidth(1000);
+//            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+//                public void handle(WindowEvent we) {
+//                    int count1 = questions_table.getItems().size();
+//                    refresh();
+//                    int count2 = questions_table.getItems().size();
+//                    if(count1 != count2)
+//                        questions_table.getSelectionModel().selectLast();
+//                }
+//            });
+//            stage.show();
+//        }
+//        catch (IOException ex) {
+//            ex.printStackTrace();
+//        }
     }
 
     public void onEditClicked(ActionEvent e){
-        Parent root;
-        try {
-            FXMLLoader loader = new
-                    FXMLLoader(getClass().getResource("/views/AddQuestion.fxml"));
-            AddQuestionController addQuestionController =new AddQuestionController("Edit", topic, questions_table.getSelectionModel().getSelectedItem());
-            loader.setController(addQuestionController);
-            root = loader.load();
-            Stage stage = new Stage();
-            stage.initModality(Modality.WINDOW_MODAL);
-            stage.initOwner(((Node)e.getTarget()).getScene().getWindow());
-            stage.setTitle("Edit Question");
-            stage.setScene(new Scene(root));
-            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-                public void handle(WindowEvent we) {
-                    int selection = questions_table.getSelectionModel().getSelectedIndex();
-                    refresh();
-                    questions_table.getSelectionModel().select(selection);
-                }
-            });
-            stage.show();
-        }
-        catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        AddQuestionController addQuestionController =new AddQuestionController("Edit", topic, questions_table.getSelectionModel().getSelectedItem());
+        EventHandler<WindowEvent> onClose = new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent we) {
+                int selection = questions_table.getSelectionModel().getSelectedIndex();
+                refresh();
+                questions_table.getSelectionModel().select(selection);
+            }
+        };
+        new WindowLoader().load(e,"/views/AddQuestion.fxml",addQuestionController,onClose,true,false,null);
+
+//        Parent root;
+//        try {
+//            FXMLLoader loader = new
+//                    FXMLLoader(getClass().getResource("/views/AddQuestion.fxml"));
+//            AddQuestionController addQuestionController =new AddQuestionController("Edit", topic, questions_table.getSelectionModel().getSelectedItem());
+//            loader.setController(addQuestionController);
+//            root = loader.load();
+//            Stage stage = new Stage();
+//            stage.initModality(Modality.WINDOW_MODAL);
+//            stage.initOwner(((Node)e.getTarget()).getScene().getWindow());
+//
+//            stage.setScene(new Scene(root));
+//
+//            stage.setTitle("Edit Question");
+//            stage.setMinHeight(700);
+//            stage.setMinWidth(1000);
+//            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+//                public void handle(WindowEvent we) {
+//                    int selection = questions_table.getSelectionModel().getSelectedIndex();
+//                    refresh();
+//                    questions_table.getSelectionModel().select(selection);
+//                }
+//            });
+//            stage.show();
+//        }
+//        catch (IOException ex) {
+//            ex.printStackTrace();
+//        }
     }
     public void onDeleteQuestionClicked(ActionEvent e){
         Question model = questions_table.getSelectionModel().getSelectedItem();//new Question();

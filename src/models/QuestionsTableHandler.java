@@ -27,7 +27,7 @@ public class QuestionsTableHandler {
         return instance;
     }
 
-    public boolean Add(Topic topic, Question model) {
+    public int Add(Topic topic, Question model) {
         //DBHandler db = new DBHandler();
         String sql = "insert into question (QuestionContent, QuestionType, QuestionDifficulty, " +
                 "QuestionWeight, QuestionExpectedTime, Topic_idTopic) values (?,?,?,?,?,?);";
@@ -42,7 +42,7 @@ public class QuestionsTableHandler {
                     ((char) (65 + i) + ""), model.getAnswers().get(i).answer_text, last_inserted_question_id+"",
                             model.getAnswers().get(i).is_right_answer+""});
         }
-        return true;
+        return last_inserted_question_id;
     }
 
 
@@ -126,7 +126,7 @@ public class QuestionsTableHandler {
     public ObservableList<Question> getQuestionList(Topic topic, String diff) {
         questionList = FXCollections.observableArrayList();
         String sql = MessageFormat.format(
-                "SELECT idQuestion,QuestionContent,QuestionDifficulty,QuestionType,QuestionWeight,QuestionExpectedTime FROM  question WHERE Topic_idTopic = {0} AND QuestionDifficulty IN (0, {1});"
+                "SELECT idQuestion,QuestionContent,QuestionDifficulty,QuestionType,QuestionWeight,QuestionExpectedTime FROM  question WHERE Topic_idTopic = {0} AND QuestionDifficulty <= {1};"
                 , topic.id, diff);
         ResultSet rs = DBSingletonHandler.getInstance().execute_query(sql);
         try {
@@ -150,7 +150,7 @@ public class QuestionsTableHandler {
     }
 
 
-    public ObservableList<Question> getQuestionList(String ch_id) {
+    public ObservableList<Question> getQuestionList(Chapter chapter) {
         questionList = FXCollections.observableArrayList();
         //DBHandler db = new DBHandler();
         System.out.println("------------------------------------------0");
@@ -159,7 +159,7 @@ public class QuestionsTableHandler {
                         "JOIN topic b ON a.Topic_idTopic = b.idTopic) " +
                         "JOIN chapter c ON b.Chapter_idChapter = c.idChapter) " +
                         "where idChapter = {0};"
-                , ch_id);
+                , chapter.id);
         ResultSet rs = DBSingletonHandler.getInstance().execute_query(sql);
         System.out.println("------------------------------------------1");
         try {

@@ -59,9 +59,9 @@
         </TableView>
 
         <HBox spacing="10" alignment="CENTER">
-            <Button fx:id="add_course" onAction="#onAddCourseClicked" text="Add"/>
-            <Button fx:id="edit_course" text="Edit" onAction="#onEditCourseClicked"/>
-            <Button fx:id="delete_course" text="Delete" onAction="#onDeleteCourseClicked"/>
+            <Button fx:id="add_course" onAction="#onAddCourseClicked" text="Add" styleClass="add-button"/>
+            <Button fx:id="edit_course" text="Edit" onAction="#onEditCourseClicked" styleClass="edit-button"/>
+            <Button fx:id="delete_course" text="Delete" onAction="#onDeleteCourseClicked" styleClass="delete-button"/>
 
 
             <!--<Button fx:id="previous_exam" onAction="#onGenerateExamClicked" text="Previous exams" />-->

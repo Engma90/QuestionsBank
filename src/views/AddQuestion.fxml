@@ -4,21 +4,13 @@
 <?import javafx.scene.web.HTMLEditor?>
 <?import java.lang.*?>
 <?import controllers.NumberField?>
-<?import controllers.rtf.RichTextDemo?>
 <?import javafx.geometry.Insets?>
 <?import controllers.MyHtmlEditor?>
-<AnchorPane
-        xmlns:fx="http://javafx.com/fxml" >
-
-
-    <VBox fx:id="container" spacing="10" AnchorPane.topAnchor="10" AnchorPane.leftAnchor="10"
-          AnchorPane.bottomAnchor="10"
-          AnchorPane.rightAnchor="10">
-
-
-
-        <MyHtmlEditor fx:id="html_editor" AnchorPane.topAnchor="10" AnchorPane.leftAnchor="10"
-                      AnchorPane.bottomAnchor="10" AnchorPane.rightAnchor="10" prefHeight="300" maxHeight="300" />
+    <VBox xmlns:fx="http://javafx.com/fxml"  spacing="10" stylesheets="@css/AddQuestion.css" fx:id="container" prefHeight="600" prefWidth="900">
+    <padding>
+        <Insets top="10" right="10" bottom="10" left="10"/>
+    </padding>
+        <MyHtmlEditor fx:id="html_editor"  prefHeight="300" maxHeight="300" stylesheets="@css/modena/modena.css"/>
         <HBox spacing="10">
             <Label text="Type"/>
             <RadioButton text="MCQ" fx:id="radio_mcq"/>
@@ -57,18 +49,20 @@
         </HBox>
         <ScrollPane vbarPolicy="ALWAYS" fitToWidth="true" minHeight="300" maxHeight="300"  fx:id="mcq_answers_list_scroll_pane">
             <padding>
-                <Insets top="10" right="20" bottom="10" left="10"/>
+                <Insets top="10" right="10" bottom="10" left="10"/>
             </padding>
-            <VBox fx:id="mcq_ui_group" spacing="10" >
-                <VBox fx:id="mcq_ui_answers_list" spacing="10"/>
-                <Button fx:id="add_answer" text="Add Answer" onAction="#onAddAnswerClicked"></Button>
+            <StackPane styleClass="transparent" VBox.vgrow="ALWAYS">
+            <VBox fx:id="mcq_ui_group" spacing="10" styleClass="transparent" VBox.vgrow="ALWAYS">
+                <VBox fx:id="mcq_ui_answers_list" spacing="10" styleClass="transparent" VBox.vgrow="ALWAYS"/>
+                <Button fx:id="add_answer" text="Add Answer" onAction="#onAddAnswerClicked" styleClass="add-button"></Button>
             </VBox>
+            </StackPane>
         </ScrollPane>
-        <ScrollPane vbarPolicy="NEVER" minHeight="300" maxHeight="300"  fx:id="true_false_answers_list_scroll_pane">
+        <ScrollPane  fitToWidth="true" vbarPolicy="NEVER" minHeight="300" maxHeight="300"  fx:id="true_false_answers_list_scroll_pane">
         <padding>
             <Insets top="10" right="10" bottom="10" left="10"/>
         </padding>
-            <VBox fx:id="true_false_ui_group" minHeight="300" maxHeight="300">
+            <VBox VBox.vgrow="ALWAYS" spacing="20" fx:id="true_false_ui_group" minHeight="300" maxHeight="300" styleClass="transparent">
                 <HBox spacing="10">
                     <Label text="A)"></Label>
                     <Label text="True"></Label>
@@ -83,11 +77,8 @@
                 </HBox>
             </VBox>
         </ScrollPane>
-        <HBox AnchorPane.leftAnchor="10" AnchorPane.bottomAnchor="10"
-              AnchorPane.rightAnchor="10" alignment="BOTTOM_CENTER">
-            <Button fx:id="add_question" text="Add" onAction="#onAddClicked" maxHeight="50" prefWidth="100"/>
-            <Button fx:id="edit_question" text="Edit" onAction="#onEditClicked" maxHeight="50" prefWidth="100"/>
+        <HBox alignment="BOTTOM_CENTER">
+            <Button fx:id="add_question" text="Add" onAction="#onAddClicked" maxHeight="50" styleClass="add-button"/>
+            <Button fx:id="edit_question" text="Edit" onAction="#onEditClicked" maxHeight="50" styleClass="edit-button"/>
         </HBox>
     </VBox>
-
-</AnchorPane>

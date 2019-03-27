@@ -1,0 +1,80 @@
+#container{
+    -fx-background-color:#454580;//#160e27;
+}
+ScrollPane{
+    -fx-background:#52528f;//#120e34;
+}
+//#exam_content{
+//    -fx-background-color:#120e34;
+//}
+TextField, PasswordField, RadioButton, CheckBox, NumberField, .date-picker .text-field, .context-menu{
+    -fx-font: 16px "Arial";
+    -fx-background-color:#52528f;//#1B173D;
+    -fx-text-fill:#ffffff;
+    -fx-prompt-text-fill: #74737d;
+    -fx-border-color: grey;
+    -fx-border-width: 1;
+}
+
+RadioButton{
+    -fx-border-width: 0;
+    -fx-background-color:transparent;
+}
+CheckBox{
+    -fx-border-width: 0;
+    -fx-background-color:transparent;
+}
+
+.date-picker .text-field{
+    -fx-font: 16px "Arial" !important;
+    -fx-background-color:#52528f !important;
+    -fx-text-fill:#ffffff !important;
+    -fx-prompt-text-fill: #74737d !important;
+    -fx-border-color: grey !important;
+    -fx-border-width: 1 !important;
+}
+
+
+.text-area {
+    -fx-control-inner-background: #52528f;
+    -fx-text-fill: #ffffff;
+    -fx-prompt-text-fill: #74737d;
+}
+
+.label{
+    -fx-text-fill: #FFFFFF;
+}
+
+.button {
+    -fx-background-color:#231C58;
+    -fx-border-radius: 20;
+    -fx-background-radius:20;
+    -fx-text-fill:#ffffff;
+    -fx-font-weight: bold;
+
+    -fx-background-size: 13px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: 15px;
+    -fx-padding:5px 15px 5px 33px;
+}
+
+#generate{
+    -fx-background-color:#e33068;
+}
+
+.add-button{
+    -fx-background-image: url('/views/images/add_icon.png');
+}
+.edit-button{
+    -fx-background-image: url('/views/images/edit_icon.png');
+}
+.delete-button{
+    -fx-background-image: url('/views/images/delete_icon.png');
+}
+
+.combo-box .cell{
+    -fx-text-fill: #FFFFFF;
+    -fx-font: 16px "Arial";
+    -fx-background-color:#52528f;
+    -fx-pref-width:200;
+}

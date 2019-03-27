@@ -1,4 +1,7 @@
 #container{
+    -fx-background-color:#160e27;
+}
+#footer{
     -fx-background-image:url('/views/images/signup_bg.png');
     -fx-background-repeat: no-repeat;
     -fx-background-size: 100% 100%;

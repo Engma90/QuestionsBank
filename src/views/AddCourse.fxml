@@ -8,31 +8,45 @@
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
 
-            prefHeight="250.0" prefWidth="300.0">
+            prefHeight="250.0" prefWidth="300.0" fx:id="container" stylesheets="@css/SimpleForm.css">
     <VBox spacing="20" AnchorPane.topAnchor="20" AnchorPane.rightAnchor="20"
           AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="20" alignment="CENTER">
-        <HBox spacing="10">
-            <Label text="Course code "/>
-            <TextField fx:id="course_code"/>
-        </HBox>
-        <HBox spacing="10">
-            <Label text="Course name"/>
-            <TextField fx:id="course_name"/>
-        </HBox>
-        <HBox spacing="10">
-            <Label text="Course level"/>
-            <ComboBox fx:id="course_level" value="Undergraduates">
+        <!--<HBox spacing="10">-->
+        <!--<Label text="Course code "/>-->
+        <TextField fx:id="course_code" promptText="Course code"/>
+        <!--</HBox>-->
+        <!--<HBox spacing="10">-->
+        <!--<Label text="Course name"/>-->
+        <TextField fx:id="course_name" promptText="Course name"/>
+        <!--</HBox>-->
+        <!--<HBox spacing="10" HBox.hgrow="ALWAYS">-->
+        <!--<Label text="Course level"/>-->
+        <ComboBox fx:id="course_level" value="Undergraduates" maxWidth="Infinity">
 
-                <items>
-                    <FXCollections fx:factory="observableArrayList">
-                        <String fx:id="under" fx:value="Undergraduates"/>
-                        <String fx:id="post" fx:value="Postgraduates"/>
-                    </FXCollections>
-                </items>
-            </ComboBox>
-        </HBox>
-        <Button text="Add" fx:id="add_course" onAction="#onAddCourseClicked"/>
-        <Button text="Edit" fx:id="edit_course" onAction="#onEditCourseClicked"/>
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:id="under" fx:value="Undergraduates"/>
+                    <String fx:id="post" fx:value="Postgraduates"/>
+                </FXCollections>
+            </items>
+        </ComboBox>
+
+        <ComboBox value="Year" fx:id="year" maxWidth="Infinity">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="1st Year"/>
+                    <String fx:value="2nd Year"/>
+                    <String fx:value="3rd Year"/>
+                    <String fx:value="4th Year"/>
+                    <String fx:value="5th Year"/>
+                    <String fx:value="6th Year"/>
+                    <String fx:value="7th Year"/>
+                </FXCollections>
+            </items>
+        </ComboBox>
+        <!--</HBox>-->
+        <Button text="Add" fx:id="add_course" onAction="#onAddCourseClicked" styleClass="add-button"/>
+        <Button text="Edit" fx:id="edit_course" onAction="#onEditCourseClicked" styleClass="edit-button"/>
     </VBox>
 
 </AnchorPane>

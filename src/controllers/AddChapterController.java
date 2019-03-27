@@ -16,7 +16,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 
-public class AddChapterController implements Initializable {
+public class AddChapterController implements Initializable, IWindow {
 
     public TextField chapter_name,chapter_number;
     public Button add_chapter, edit_chapter;
@@ -48,8 +48,8 @@ public class AddChapterController implements Initializable {
 //        System.out.println("chapter_name.getText()=" + chapter_name.getText());
         model.name = chapter_name.getText();
         model.number = chapter_number.getText();
-        boolean success = ChaptersListHandler.getInstance().Add(course, model);
-        if(!success){
+        int success = ChaptersListHandler.getInstance().Add(course, model);
+        if(success == -1){
             new Alert(Alert.AlertType.ERROR,"Operation Failed").show();
         }
         else {
@@ -79,4 +79,9 @@ public class AddChapterController implements Initializable {
     }
 
 
+    @Override
+    public Object setWindowData(Stage stage, Object initObject) {
+        stage.setTitle(this.operation_type+" Chapter");
+        return null;
+    }
 }

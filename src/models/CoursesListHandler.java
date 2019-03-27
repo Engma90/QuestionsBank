@@ -30,12 +30,12 @@ public class CoursesListHandler {
         return instance;
     }
 
-    public boolean Add(String code, String name, String dr_id, String level) {
+    public int Add(Course course) {
         //DBHandler db = new DBHandler();
-        String sql = MessageFormat.format(
-                "insert into course (CourseCategory, CourseName, CourseCode,Doctor_idDoctor) values (\"{0}\",\"{1}\",\"{2}\",{3}) ;"
-                , level, name, code, dr_id);
-        return DBSingletonHandler.getInstance().execute_sql(sql);
+        String sql =
+                "insert into course (CourseCategory, CourseName, CourseCode,Doctor_idDoctor) values (?, ?, ?, ?) ;";
+                String[] params = new String[]{ course.level, course.name, course.code, DashboardController.current_selected_dr_id};
+       return DBSingletonHandler.getInstance().execute_PreparedStatement(sql, params);
     }
     public boolean Edit(String code, String name, String level, String id) {
         //DBHandler db = new DBHandler();

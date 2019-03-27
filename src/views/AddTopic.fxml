@@ -6,16 +6,16 @@
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
 
-            prefHeight="250.0" prefWidth="300.0">
+            prefHeight="250.0" prefWidth="300.0" fx:id="container" stylesheets="@css/SimpleForm.css">
     <VBox spacing="20" AnchorPane.topAnchor="20" AnchorPane.rightAnchor="20"
           AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="20" alignment="CENTER">
 
-        <HBox spacing="10">
-            <Label text="Topic name"/>
-            <TextField fx:id="topic_name"/>
-        </HBox>
-        <Button text="Add" fx:id="add_topic" onAction="#onAddTopicClicked"/>
-        <Button text="Edit" fx:id="edit_topic" onAction="#onEditTopicClicked"/>
+        <!--<HBox spacing="10">-->
+            <!--<Label text="Topic name"/>-->
+            <TextField fx:id="topic_name" promptText="Topic name" />
+        <!--</HBox>-->
+        <Button text="Add" fx:id="add_topic" onAction="#onAddTopicClicked" styleClass="add-button"/>
+        <Button text="Edit" fx:id="edit_topic" onAction="#onEditTopicClicked" styleClass="edit-button"/>
     </VBox>
 
 </AnchorPane>

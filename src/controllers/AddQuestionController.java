@@ -1,5 +1,7 @@
 package controllers;
 
+import com.sun.javafx.css.Style;
+import com.sun.javafx.css.Stylesheet;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -21,7 +23,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class AddQuestionController implements Initializable {
+import static javafx.application.Application.STYLESHEET_MODENA;
+import static javafx.application.Application.setUserAgentStylesheet;
+
+public class AddQuestionController implements Initializable, IWindow {
     private List<AddQuestionAnswerRowController> answerRowControllers;
     public Button add_question, edit_question, add_answer;
     public MyHtmlEditor html_editor;
@@ -52,15 +57,15 @@ public class AddQuestionController implements Initializable {
 
     private AddQuestionAnswerRowController add_row() throws IOException {
 //        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/AddQuestionAnswerRow.fxml"));
-            Parent root = loader.load();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/AddQuestionAnswerRow.fxml"));
+        Parent root = loader.load();
 
-            mcq_ui_answers_list.getChildren().add((root));
-            answerRowControllers.add((loader.getController()));
-            ((AddQuestionAnswerRowController) loader.getController()).label.setText((char) (65 + (answerRowControllers.size() - 1)) + "");
-            ((AddQuestionAnswerRowController) loader.getController()).addQuestionController = this;
-            ((AddQuestionAnswerRowController) loader.getController()).loader = loader;
-            return ((AddQuestionAnswerRowController) loader.getController());
+        mcq_ui_answers_list.getChildren().add((root));
+        answerRowControllers.add((loader.getController()));
+        ((AddQuestionAnswerRowController) loader.getController()).label.setText((char) (65 + (answerRowControllers.size() - 1)) + "");
+        ((AddQuestionAnswerRowController) loader.getController()).addQuestionController = this;
+        ((AddQuestionAnswerRowController) loader.getController()).loader = loader;
+        return ((AddQuestionAnswerRowController) loader.getController());
 //        } catch (IOException e) {
 //            Alert alert = new Alert(Alert.AlertType.ERROR, e.toString());
 //            alert.show();
@@ -81,11 +86,17 @@ public class AddQuestionController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-
+        html_editor.setToggleModeEnabled(false);
+        radio_ext_match.setDisable(true);
         answerRowControllers = new ArrayList<>();
-//        for (int i = 0; i < 5; i++) {
-//            add_row();
-//        }
+
+        txt_q_exp_time.setMin(0);
+        txt_q_exp_time.setMax(Integer.MAX_VALUE);
+        txt_q_diff.setMin(0);
+        txt_q_diff.setMax(100);
+        txt_q_weight.setMin(0);
+        txt_q_weight.setMax(10);
+
 
 //        combo_q_weight.setVisible(false);
 //        combo_q_weight.setManaged(false);
@@ -120,6 +131,13 @@ public class AddQuestionController implements Initializable {
         });
         radio_mcq.setSelected(true);
         if (this.operation_type.contains("Add")) {
+            for (int i = 0; i < 4; i++) {
+                try {
+                    add_row();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
             edit_question.setVisible(false);
             edit_question.setManaged(false);
             add_question.setVisible(true);
@@ -158,11 +176,11 @@ public class AddQuestionController implements Initializable {
             radio_mcq.setSelected(true);
             for (Answer a : model.getAnswers()) {
                 AddQuestionAnswerRowController addQuestionAnswerRowController = add_row();
-                if(addQuestionAnswerRowController != null) {
+                if (addQuestionAnswerRowController != null) {
                     addQuestionAnswerRowController.txt_answer.setHtmlText(a.answer_text);
-                    if(a.is_right_answer==1){
+                    if (a.is_right_answer == 1) {
                         addQuestionAnswerRowController.checkbox_right_answer.setSelected(true);
-                    }else {
+                    } else {
                         addQuestionAnswerRowController.checkbox_right_answer.setSelected(false);
                     }
                 }
@@ -336,9 +354,6 @@ public class AddQuestionController implements Initializable {
     }
 
 
-
-
-
     private void close(ActionEvent e) {
         // get a handle to the stage
         Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
@@ -347,6 +362,13 @@ public class AddQuestionController implements Initializable {
 
     }
 
+    @Override
+    public Object setWindowData(Stage stage, Object initObject) {
+        stage.setTitle(operation_type + " Question");
+        stage.setMinHeight(700);
+        stage.setMinWidth(1000);
+        return null;
+    }
 }
 
 

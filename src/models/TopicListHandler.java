@@ -28,12 +28,11 @@ public class TopicListHandler {
     }
     
     private ObservableList<Topic> topicList;
-    public boolean Add(Chapter chapter, Topic model) {
+    public int Add(Chapter chapter, Topic model) {
         //DBHandler db = new DBHandler();
-        String sql = MessageFormat.format(
-                "insert into topic (Name, Chapter_idChapter) values (\"{0}\",{1}) ;"
-                , model.name, chapter.id);
-        return DBSingletonHandler.getInstance().execute_sql(sql);
+        String sql = "insert into topic (Name, Chapter_idChapter) values (?,?) ;";
+                String[]params = new String[]{model.name, chapter.id};
+        return DBSingletonHandler.getInstance().execute_PreparedStatement(sql, params);
     }
     public boolean Edit(Topic model) {
         //DBHandler db = new DBHandler();

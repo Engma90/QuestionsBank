@@ -8,12 +8,12 @@
       fx:controller="controllers.GenerateExamChapterRowController"
 spacing="10">
     <HBox
-            spacing="10">
+            spacing="10" HBox.hgrow="ALWAYS" maxWidth="Infinity" >
         <CheckBox fx:id="isSelected" prefWidth="20"></CheckBox>
-        <Label fx:id="lbl_chapter_name"></Label>
+        <Label fx:id="lbl_chapter_name" HBox.hgrow="ALWAYS" maxWidth="Infinity"></Label>
 
-    </HBox>
-        <VBox fx:id="content" spacing="5">
+    </HBox >
+        <VBox fx:id="content" spacing="5" HBox.hgrow="ALWAYS" maxWidth="Infinity" >
 
         </VBox>
 

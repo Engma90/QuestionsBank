@@ -15,7 +15,7 @@ import models.Topic;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class AddTopicController implements Initializable {
+public class AddTopicController implements Initializable, IWindow {
     Topic model;
     String operation_type;
     public TextField topic_name;
@@ -45,9 +45,9 @@ public class AddTopicController implements Initializable {
     public void onAddTopicClicked(ActionEvent e){
         //new Topic();
         model.name = topic_name.getText();
-        boolean success = TopicListHandler.getInstance().Add(chapter, model);
+        int success = TopicListHandler.getInstance().Add(chapter, model);
 
-        if(!success){
+        if(success == -1){
             new Alert(Alert.AlertType.ERROR,"Operation Failed").show();
         }
         else {
@@ -73,5 +73,11 @@ public class AddTopicController implements Initializable {
         // do what you have to do
         stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
 
+    }
+
+    @Override
+    public Object setWindowData(Stage stage, Object initObject) {
+        stage.setTitle(this.operation_type+" Topic");
+        return null;
     }
 }

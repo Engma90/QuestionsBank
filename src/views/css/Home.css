@@ -3,3 +3,8 @@
     -fx-background-repeat: no-repeat;
     -fx-background-size: 100% 100%;
 }
+#footer{
+    -fx-background-image:url('/views/images/bg_footer.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 100% 100%;
+}
