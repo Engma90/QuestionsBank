@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class GenerateExamChapterRowController implements Initializable {
+public class GenerateExamChapterRowController implements Initializable,IUpdatable {
     public CheckBox isSelected;
     public Label lbl_chapter_name;
     public String chapter_id;
@@ -38,28 +38,7 @@ public class GenerateExamChapterRowController implements Initializable {
         //this.diff = diff;
         this.chapter_id = chapter.id;
         this.chapter_number = chapter.number;
-//        this.diff = diff.stream()
-//                .map(String::toLowerCase)
-//                .collect(Collectors.toList());
-
         this.lbl_chapter_name.setText(chapter_name);
-        //difficulties = new NumberField[3];
-//        Easy.setPromptText("Easy");
-//        Medium.setPromptText("Medium");
-//        Hard.setPromptText("Hard");
-//        difficulties[0] = Easy;
-//        difficulties[1] = Medium;
-//        difficulties[2] = Hard;
-
-//        difficulties[0].setDisable(true);
-//        difficulties[1].setDisable(true);
-//        difficulties[2].setDisable(true);
-//        for (int i =0; i< 3; i++){
-//            if(diff.contains(difficulties[i].getId())){
-//                difficulties[i].setDisable(false);
-//            }
-//        }
-
         lbl_chapter_name.setMaxWidth(200);
         lbl_chapter_name.setMinWidth(200);
         isSelected.setSelected(true);
@@ -77,7 +56,7 @@ public class GenerateExamChapterRowController implements Initializable {
         });
 
         generateExamTopicRowControllerList = new ArrayList<>();
-        topicList = TopicListHandler.getInstance().getTopicsList(new Chapter(chapter_id,"",""));
+        topicList = TopicListHandler.getInstance().getList(new Chapter(chapter_id,"",""));
         List<Question> l;
         for (Topic t : topicList) {
             l = QuestionsTableHandler.getInstance().getQuestionList(t);
@@ -92,11 +71,6 @@ public class GenerateExamChapterRowController implements Initializable {
         }
 
     }
-
-//    public int[] getQuestionsDistribution(){
-//        int number_of_questions = getNumber_of_questions();
-//        return null;
-//    }
 
 
     private void addRow(Topic topic, int max_question, int max_diff) {
@@ -115,7 +89,20 @@ public class GenerateExamChapterRowController implements Initializable {
         }
     }
 
-    public void refreshSelection(){
+//    void refreshSelection(){
+//        int count = 0;
+//        for (GenerateExamTopicRowController t:generateExamTopicRowControllerList){
+//            if(t.isSelected.isSelected())
+//                count++;
+//        }
+//        if(count == 0)
+//            isSelected.setSelected(false);
+//        else
+//            isSelected.setSelected(true);
+//    }
+
+    @Override
+    public void update() {
         int count = 0;
         for (GenerateExamTopicRowController t:generateExamTopicRowControllerList){
             if(t.isSelected.isSelected())
@@ -126,5 +113,4 @@ public class GenerateExamChapterRowController implements Initializable {
         else
             isSelected.setSelected(true);
     }
-
 }

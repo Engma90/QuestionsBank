@@ -34,6 +34,7 @@
                 </FXCollections>
             </items>
         </ComboBox>
+        <TextField fx:id="department" promptText="department"/>
         <TextField fx:id="full_name" promptText="Full name"/>
         <TextField fx:id="email" promptText="Email"/>
         <PasswordField fx:id="password" promptText="Password"/>

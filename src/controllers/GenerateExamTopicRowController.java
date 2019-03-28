@@ -14,13 +14,13 @@ public class GenerateExamTopicRowController implements Initializable {
     public String topic_id;
     String topic_name;
     public NumberField diff_max_level, topic_number_of_questions;
-    public GenerateExamChapterRowController parent;
+    public IUpdatable parent;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
     }
 
-    public void initUI(Topic topic, GenerateExamChapterRowController parent){
+    public void initUI(Topic topic, IUpdatable parent){
         this.topic_name = topic.name;
         this.topic_id = topic.id;
         this.parent = parent;
@@ -31,9 +31,9 @@ public class GenerateExamTopicRowController implements Initializable {
         isSelected.setSelected(true);
         isSelected.setOnAction(e ->{
             if(((CheckBox)e.getSource()).isSelected()){
-                parent.refreshSelection();
+                parent.update();
             }else {
-                parent.refreshSelection();
+                parent.update();
             }
         });
     }

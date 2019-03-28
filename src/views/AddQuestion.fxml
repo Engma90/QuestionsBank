@@ -10,7 +10,7 @@
     <padding>
         <Insets top="10" right="10" bottom="10" left="10"/>
     </padding>
-        <MyHtmlEditor fx:id="html_editor"  prefHeight="300" maxHeight="300" stylesheets="@css/modena/modena.css"/>
+        <MyHtmlEditor fx:id="question_html_editor"  prefHeight="300" maxHeight="300" stylesheets="@css/modena/modena.css"/>
         <HBox spacing="10">
             <Label text="Type"/>
             <RadioButton text="MCQ" fx:id="radio_mcq"/>

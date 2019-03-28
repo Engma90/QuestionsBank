@@ -7,12 +7,19 @@ public class Exam {
     private String Doctor_idDoctor;
     private String Date;
     private String ExamName;
-    private String ExamCategory;
+    //private String ExamCategory;
     private String CourseName;
     private String College;
     private String Department;
     private String Note;
     private String ExamType;
+    private String year;
+    private String Duration;
+    private String TotalMarks;
+    private String ExamLanguage;
+    private String CourseLevel;
+    private String CourseCode;
+    private List<ExamModel> examModelList;
 
     public String getId() {
         return id;
@@ -44,14 +51,6 @@ public class Exam {
 
     public void setExamName(String examName) {
         ExamName = examName;
-    }
-
-    public String getExamCategory() {
-        return ExamCategory;
-    }
-
-    public void setExamCategory(String examCategory) {
-        ExamCategory = examCategory;
     }
 
     public String getCourseName() {
@@ -118,12 +117,12 @@ public class Exam {
         ExamLanguage = examLanguage;
     }
 
-    public String getCourseCategory() {
-        return CourseCategory;
+    public String getCourseLevel() {
+        return CourseLevel;
     }
 
-    public void setCourseCategory(String courseCategory) {
-        CourseCategory = courseCategory;
+    public void setCourseLevel(String courseLevel) {
+        CourseLevel = courseLevel;
     }
 
     public String getCourseCode() {
@@ -134,6 +133,14 @@ public class Exam {
         CourseCode = courseCode;
     }
 
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
     public List<ExamModel> getExamModelList() {
         return examModelList;
     }
@@ -141,14 +148,6 @@ public class Exam {
     public void setExamModelList(List<ExamModel> examModelList) {
         this.examModelList = examModelList;
     }
-
-    private String Duration;
-    private String TotalMarks;
-    private String ExamLanguage;
-    private String CourseCategory;
-    private String CourseCode;
-    private List<ExamModel> examModelList;
-
 
     public Exam() {
 

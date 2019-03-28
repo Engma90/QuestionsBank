@@ -24,9 +24,9 @@
         </ListView>
 
         <HBox spacing="10" alignment="CENTER">
-            <Button fx:id="add_topic" onAction="#onAddTopicClicked" text="Add" styleClass="add-button"/>
-            <Button fx:id="edit_topic" text="Edit" onAction="#onEditTopicClicked" styleClass="edit-button"/>
-            <Button fx:id="delete_topic" text="Delete" onAction="#onDeleteTopicClicked" styleClass="delete-button"/>
+            <Button fx:id="btn_add" onAction="#onAddTopicClicked" text="Add" styleClass="add-button"/>
+            <Button fx:id="btn_edit" text="Edit" onAction="#onEditTopicClicked" styleClass="edit-button"/>
+            <Button fx:id="btn_delete" text="Delete" onAction="#onDeleteTopicClicked" styleClass="delete-button"/>
 
         </HBox>
     </VBox>

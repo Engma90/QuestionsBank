@@ -58,7 +58,7 @@ public class ChaptersListHandler {
 //        return success;
 //    }
 
-    public ObservableList<Chapter> getChaptersList(Course course){
+    public ObservableList<Chapter> getList(Course course){
         chaptersList = FXCollections.observableArrayList();
         //DBHandler db = new DBHandler();
         String sql = MessageFormat.format(

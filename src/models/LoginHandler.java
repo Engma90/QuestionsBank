@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.text.MessageFormat;
 
 public class LoginHandler {
-    public Doctor dr = new Doctor();
+    private Doctor doctor = new Doctor();
     public boolean login(String email, String password) {
         //DBHandler db = new DBHandler();
         String sql = MessageFormat.format(
@@ -18,19 +18,36 @@ public class LoginHandler {
         try {
             if(rs.next())
             {
-                dr_id = rs.getInt("idDoctor");
-                dr.id = dr_id + "";
-                dr.name = rs.getString("DoctorName");
+                doctor.setId( rs.getInt("idDoctor")+"");
+                doctor.setName(rs.getString("DoctorName"));
+                doctor.setEmail(rs.getString("DoctorEmail"));
+                doctor.setDepartment(rs.getString("DoctorDepartment"));
 
+                int College_idCollege = rs.getInt("College_idCollege");
+                sql = MessageFormat.format(
+                        "SELECT * FROM College WHERE idCollege =\"{0}\" ;"
+                        ,  College_idCollege);
+                rs =  DBSingletonHandler.getInstance().execute_query(sql);
+                if(rs.next())
+                {
+                    doctor.setCollege(rs.getString("Name"));
+                    int University_idUniversity = rs.getInt("University_idUniversity");
+                    sql = MessageFormat.format(
+                            "SELECT * FROM University WHERE idUniversity =\"{0}\" ;"
+                            ,  University_idUniversity);
+                    rs =  DBSingletonHandler.getInstance().execute_query(sql);
+                    if(rs.next())
+                    {
+                        doctor.setUniversity(rs.getString("Name"));
+                    }
+                }
 
-                DashboardController.current_selected_dr_id = dr_id+"";
+                //DashboardController.current_selected_dr_id = dr_id+"";
+                DashboardController.doctor = doctor;
                 return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        }
-        finally {
-            //db.closeConnection();
         }
         return false;
     }

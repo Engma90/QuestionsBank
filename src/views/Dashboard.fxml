@@ -24,7 +24,7 @@
                 <Insets right="20" />
             </padding>
             <VBox alignment="CENTER_RIGHT">
-                <Label text="Dr.Shady EL Mashad"/>
+                <Label text="Dr.Shady EL Mashad" fx:id="doctor_name"/>
                 <Label text="Logout" fx:id="logout" onMouseClicked="#onLogoutClicked"/>
             </VBox>
             <ImageView>

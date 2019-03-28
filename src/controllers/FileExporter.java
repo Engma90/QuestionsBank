@@ -14,8 +14,9 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-
+//Todo: check converter race condition on deleting an using files
 public class FileExporter {
     public void Export(Exam exam, String dest, String format) {
         for (ExamModel examModel : exam.getExamModelList()) {
@@ -33,8 +34,25 @@ public class FileExporter {
 //                    .to(target).as((format.equals("PDF")?DocumentType.PDF:DocumentType.DOCX))
 //                    .schedule();
 //            converter.shutDown();
+            converter.shutDown();
             htmlFile.delete();
             new File("QR_"+examModel.getExamModelNumber()+".png").delete();
+//            int retries = 0;
+//            while (retries++ < 10) {
+//                try {
+//                    if (conversion.get()){
+//                        htmlFile.delete();
+//                        new File("QR_"+examModel.getExamModelNumber()+".png").delete();
+//                        break;
+//                    }
+//                    Thread.sleep(100);
+//                } catch (InterruptedException | ExecutionException e) {
+//                    htmlFile.delete();
+//                    new File("QR_"+examModel.getExamModelNumber()+".png").delete();
+//                    e.printStackTrace();
+//                }
+//
+//            }
 
         }
     }
@@ -75,7 +93,7 @@ public class FileExporter {
                 "<td><b>"+model.getDepartment()+"</b></td>\n" +
                 "</tr>\n" +
                 "<tr>\n" +
-                "<td><b>1st Year</b></td>\n" +
+                "<td><b>"+model.getYear()+"</b></td>\n" +
                 "</tr>\n" +
                 "</Table>\n" +
                 "</td>\n" +

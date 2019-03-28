@@ -18,23 +18,29 @@ import java.util.ResourceBundle;
 
 public class AddChapterController implements Initializable, IWindow {
 
-    public TextField chapter_name,chapter_number;
+    public TextField chapter_name;
+    public NumberField chapter_number;
     public Button add_chapter, edit_chapter;
     private String operation_type;
     private Chapter model;
     private Course course;
-    public AddChapterController(String operation_type, Course course, Chapter model){
+    private boolean isADDorEdeitClicked = false;
+
+    public AddChapterController(String operation_type, Course course, Chapter model) {
         this.operation_type = operation_type;
         this.model = model;
         this.course = course;
     }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        if(this.operation_type.contains("Add")){
+        chapter_number.setDefaultVal(1);
+        chapter_number.setMin(1);
+        if (this.operation_type.contains("Add")) {
             edit_chapter.setVisible(false);
             edit_chapter.setManaged(false);
             add_chapter.setDefaultButton(true);
-        }else {
+        } else {
             add_chapter.setVisible(false);
             add_chapter.setManaged(false);
             chapter_name.setText(model.name);
@@ -42,37 +48,46 @@ public class AddChapterController implements Initializable, IWindow {
             edit_chapter.setDefaultButton(true);
         }
     }
-    public void onAddChapterClicked(ActionEvent e){
-        //ChaptersListHandler chaptersListHandler =DashboardController.chaptersListHandler;
-//        System.out.println("current_selected_course_id=" + DashboardController.current_selected_course_id);
-//        System.out.println("chapter_name.getText()=" + chapter_name.getText());
-        model.name = chapter_name.getText();
-        model.number = chapter_number.getText();
-        int success = ChaptersListHandler.getInstance().Add(course, model);
-        if(success == -1){
-            new Alert(Alert.AlertType.ERROR,"Operation Failed").show();
-        }
-        else {
-            close(e);
+
+    public void onAddChapterClicked(ActionEvent e) {
+        if (validate()) {
+            isADDorEdeitClicked = true;
+            model.name = chapter_name.getText();
+            model.number = chapter_number.getText();
+            int success = ChaptersListHandler.getInstance().Add(course, model);
+            if (success == -1) {
+                new Alert(Alert.AlertType.ERROR, "Operation Failed").show();
+            } else {
+                close(e);
+            }
+        } else {
+            new Alert(Alert.AlertType.ERROR, "Please fill all fields").show();
         }
     }
 
-    public void onEditChapterClicked(ActionEvent e){
-        //ChaptersListHandler chaptersListHandler =new ChaptersListHandler();
-        model.name = chapter_name.getText();
-        model.number = chapter_number.getText();
-        boolean success = ChaptersListHandler.getInstance().Edit(model);
-        if(!success){
-            new Alert(Alert.AlertType.ERROR,"Operation Failed").show();
-        }
-        else {
-            close(e);
+    public void onEditChapterClicked(ActionEvent e) {
+        if (validate()) {
+            isADDorEdeitClicked = true;
+            model.name = chapter_name.getText();
+            model.number = chapter_number.getText();
+            boolean success = ChaptersListHandler.getInstance().Edit(model);
+            if (!success) {
+                new Alert(Alert.AlertType.ERROR, "Operation Failed").show();
+            } else {
+                close(e);
+            }
+        } else {
+            new Alert(Alert.AlertType.ERROR, "Please fill all fields").show();
         }
     }
 
-    private void close(ActionEvent e){
+    private boolean validate() {
+        return !chapter_number.getText().isEmpty() && !chapter_name.getText().isEmpty();
+    }
+
+    private void close(ActionEvent e) {
         // get a handle to the stage
-        Stage stage = (Stage) ((Node)e.getSource()).getScene().getWindow();
+        Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
         // do what you have to do
         stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
 
@@ -80,8 +95,23 @@ public class AddChapterController implements Initializable, IWindow {
 
 
     @Override
-    public Object setWindowData(Stage stage, Object initObject) {
-        stage.setTitle(this.operation_type+" Chapter");
-        return null;
+    public boolean isSaveOnCloseRequired() {
+        return false;
     }
+
+    @Override
+    public boolean isSaveAndExitClicked() {
+        return isADDorEdeitClicked;
+    }
+
+    @Override
+    public Object setWindowData(Stage stage, Object initObject) {
+        stage.setTitle(this.operation_type + " Chapter");
+        stage.setMinHeight(300);
+        stage.setMinWidth(400);
+        stage.setMaxHeight(300);
+        stage.setMaxWidth(400);
+        return this;
+    }
+
 }

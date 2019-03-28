@@ -11,12 +11,11 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
-
+//Todo: add year col to course
 class QBBackup {
     private List<String[]> CourseCSVList, ChapterCSVList, TopicCSVList, QuestionCSVList, AnswerCSVList;
     public QBBackup(){
@@ -34,7 +33,7 @@ class QBBackup {
         add_row(TopicCSVList, new String[]{"Id", "Chapter_ID", "Name"});
         add_row(QuestionCSVList, new String[]{"Id", "Topic_ID", "Content", "Type", "Difficulty", "Time", "Weight"});
         add_row(AnswerCSVList, new String[]{"Id", "Question_ID", "Content", "isRightAnswer"});
-        List<Course> coursesList = FXCollections.observableArrayList();//CoursesListHandler.getInstance().getCoursesList("All");
+        List<Course> coursesList = FXCollections.observableArrayList();//CoursesListHandler.getInstance().getList("All");
         coursesList.add(_course);
         int course_id = 0;
         int chapter_id = 0;
@@ -46,14 +45,14 @@ class QBBackup {
             add_row(CourseCSVList,
                     new String[]{(course_id++ + 1) + "", course.getName(), course.getCode(), course.getLevel()});
 
-            List<Chapter> chaptersList = ChaptersListHandler.getInstance().getChaptersList(course);
+            List<Chapter> chaptersList = ChaptersListHandler.getInstance().getList(course);
 
 
             for (Chapter chapter : chaptersList) {
                 add_row(ChapterCSVList,
                         new String[]{(chapter_id++ + 1) + "", (course_id) + "", chapter.name, chapter.number});
 
-                List<Topic> topicsList = TopicListHandler.getInstance().getTopicsList(chapter);
+                List<Topic> topicsList = TopicListHandler.getInstance().getList(chapter);
 
 
                 for (Topic topic : topicsList) {

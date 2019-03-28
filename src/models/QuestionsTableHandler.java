@@ -2,6 +2,7 @@ package models;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.jsoup.Jsoup;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,9 +13,11 @@ import java.util.List;
 public class QuestionsTableHandler {
     private ObservableList<Question> questionList;
     private static volatile QuestionsTableHandler instance = null;
-    private QuestionsTableHandler(){
+
+    private QuestionsTableHandler() {
 
     }
+
     public static QuestionsTableHandler getInstance() {
         if (instance == null) {
             // To provide thread-safe implementation.
@@ -39,8 +42,8 @@ public class QuestionsTableHandler {
                     "insert into questionanswer (AnswerLabel, AnswerContent, Question_idQuestion, IsRightAnswer" +
                             ") values (?,?,?,?);";
             int success = DBSingletonHandler.getInstance().execute_PreparedStatement(sql, new String[]{
-                    ((char) (65 + i) + ""), model.getAnswers().get(i).answer_text, last_inserted_question_id+"",
-                            model.getAnswers().get(i).is_right_answer+""});
+                    ((char) (65 + i) + ""), model.getAnswers().get(i).answer_text, last_inserted_question_id + "",
+                    model.getAnswers().get(i).is_right_answer + ""});
         }
         return last_inserted_question_id;
     }
@@ -48,14 +51,14 @@ public class QuestionsTableHandler {
 
     public boolean Edit(Question model) {
         //DBHandler db = new DBHandler();
-            String sql = "UPDATE question SET QuestionContent = ?, QuestionType = ?, QuestionDifficulty = ?, " +
-                    "QuestionWeight =?, QuestionExpectedTime =? WHERE idQuestion =?;";
+        String sql = "UPDATE question SET QuestionContent = ?, QuestionType = ?, QuestionDifficulty = ?, " +
+                "QuestionWeight =?, QuestionExpectedTime =? WHERE idQuestion =?;";
 
-            int last_inserted_question_id = DBSingletonHandler.getInstance().execute_PreparedStatement(sql, new String[]
-                    {model.getQuestion_text(), model.getQuestion_type(), model.getQuestion_diff(), model.getQuestion_weight(), model.getExpected_time(), model.getId()});
+        int last_inserted_question_id = DBSingletonHandler.getInstance().execute_PreparedStatement(sql, new String[]
+                {model.getQuestion_text(), model.getQuestion_type(), model.getQuestion_diff(), model.getQuestion_weight(), model.getExpected_time(), model.getId()});
 
-            sql = MessageFormat.format("DELETE FROM questionanswer WHERE Question_idQuestion = {0};", model.getId());
-            boolean success = DBSingletonHandler.getInstance().execute_sql(sql);
+        sql = MessageFormat.format("DELETE FROM questionanswer WHERE Question_idQuestion = {0};", model.getId());
+        boolean success = DBSingletonHandler.getInstance().execute_sql(sql);
 
 
         for (int i = 0; i < model.getAnswers().size(); i++) {
@@ -63,10 +66,10 @@ public class QuestionsTableHandler {
                     "insert into questionanswer (AnswerLabel, AnswerContent, Question_idQuestion, IsRightAnswer" +
                             ") values (?,?,?,?);";
             int success1 = DBSingletonHandler.getInstance().execute_PreparedStatement(sql, new String[]{
-                    ((char) (65 + i) + ""), model.getAnswers().get(i).answer_text, model.getId()+"",
-                    model.getAnswers().get(i).is_right_answer+""});
+                    ((char) (65 + i) + ""), model.getAnswers().get(i).answer_text, model.getId() + "",
+                    model.getAnswers().get(i).is_right_answer + ""});
         }
-            return true;
+        return true;
 
     }
 //    public boolean DeleteQuestionAnswers(String Q_id){
@@ -79,12 +82,12 @@ public class QuestionsTableHandler {
 //
 //    }
 
-    public boolean DeleteQuestion( Question model){
+    public boolean DeleteQuestion(Question model) {
         //DBHandler db = new DBHandler();
-            //boolean success1 = DeleteQuestionAnswers(model.getId());
-            String sql = MessageFormat.format("DELETE FROM question  WHERE idQuestion = {0};", model.getId());
-            boolean success2 = DBSingletonHandler.getInstance().execute_sql(sql);
-            return success2;
+        //boolean success1 = DeleteQuestionAnswers(model.getId());
+        String sql = MessageFormat.format("DELETE FROM question  WHERE idQuestion = {0};", model.getId());
+        boolean success2 = DBSingletonHandler.getInstance().execute_sql(sql);
+        return success2;
 
     }
 //    public boolean DeleteAllSelectedChapterQuestions(){
@@ -98,19 +101,21 @@ public class QuestionsTableHandler {
 
     public ObservableList<Question> getQuestionList(Topic topic) {
         questionList = FXCollections.observableArrayList();
-                String sql = MessageFormat.format(
-                        "SELECT idQuestion,QuestionContent,QuestionDifficulty,QuestionType,QuestionWeight,QuestionExpectedTime FROM  question WHERE Topic_idTopic = {0};"
+        String sql = MessageFormat.format(
+                "SELECT idQuestion,QuestionContent,QuestionDifficulty,QuestionType,QuestionWeight,QuestionExpectedTime FROM  question WHERE Topic_idTopic = {0};"
                 , topic.id);
         ResultSet rs = DBSingletonHandler.getInstance().execute_query(sql);
         try {
             while (rs.next()) {
 
-                    Question model = new Question(rs.getInt("idQuestion") + "", rs.getString("QuestionContent"), rs.getString("QuestionDifficulty"),
-                            rs.getString("QuestionType"), rs.getString("QuestionWeight"),"");
-                    model.setExpected_time(rs.getString("QuestionExpectedTime"));
-                    questionList.add(model);
-                    getQuestionAnswersList(model, DBSingletonHandler.getInstance());
+                Question model = new Question(rs.getInt("idQuestion") + "", rs.getString("QuestionContent"), rs.getString("QuestionDifficulty"),
+                        rs.getString("QuestionType"), rs.getString("QuestionWeight"), "");
+                model.setExpected_time(rs.getString("QuestionExpectedTime"));
+                questionList.add(model);
+                getQuestionAnswersList(model, DBSingletonHandler.getInstance());
+                model.setRaw_text(((Jsoup.parse(model.getQuestion_text()).text())));
             }
+
             return questionList;
 
         } catch (SQLException e) {
@@ -133,7 +138,7 @@ public class QuestionsTableHandler {
             while (rs.next()) {
 
                 Question model = new Question(rs.getInt("idQuestion") + "", rs.getString("QuestionContent"), rs.getString("QuestionDifficulty"),
-                        rs.getString("QuestionType"), rs.getString("QuestionWeight"),"");
+                        rs.getString("QuestionType"), rs.getString("QuestionWeight"), "");
                 model.setExpected_time(rs.getString("QuestionExpectedTime"));
                 questionList.add(model);
                 getQuestionAnswersList(model, DBSingletonHandler.getInstance());
@@ -166,7 +171,7 @@ public class QuestionsTableHandler {
             while (rs.next()) {
 
                 Question model = new Question(rs.getInt("idQuestion") + "", rs.getString("QuestionContent"), rs.getString("QuestionDifficulty"),
-                        rs.getString("QuestionType"), rs.getString("QuestionWeight"),"");
+                        rs.getString("QuestionType"), rs.getString("QuestionWeight"), "");
                 model.setExpected_time(rs.getString("QuestionExpectedTime"));
                 questionList.add(model);
                 System.out.println("------------------------------------------2");
@@ -200,7 +205,7 @@ public class QuestionsTableHandler {
             while (rs.next()) {
 
                 Question model = new Question(rs.getInt("idQuestion") + "", rs.getString("QuestionContent"), rs.getString("QuestionDifficulty"),
-                        rs.getString("QuestionType"), rs.getString("QuestionWeight"),"");
+                        rs.getString("QuestionType"), rs.getString("QuestionWeight"), "");
                 model.setExpected_time(rs.getString("QuestionExpectedTime"));
                 questionList.add(model);
                 System.out.println("------------------------------------------2");
@@ -217,7 +222,8 @@ public class QuestionsTableHandler {
         }
 
     }
-    public ObservableList<Question> getCachedList(){
+
+    public ObservableList<Question> getCachedList() {
         return this.questionList;
     }
 

@@ -31,7 +31,7 @@
             </items>
         </ComboBox>
 
-        <ComboBox value="Year" fx:id="year" maxWidth="Infinity">
+        <ComboBox value="1st Year" fx:id="year" maxWidth="Infinity">
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="1st Year"/>

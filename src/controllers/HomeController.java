@@ -31,13 +31,23 @@ public class HomeController implements Initializable, IWindow  {
 //        if(isLogged_in){
 //            login_form.setVisible(false);
 //            login_form.setManaged(false);
-//            dr_name.setText(loginHandler.dr.name);
+//            dr_name.setText(loginHandler.doctor.name);
 //        }else {
 //            login.setDefaultButton(true);
 //            login_form.setVisible(true);
 //            login_form.setManaged(true);
 //        }
 
+    }
+
+    @Override
+    public boolean isSaveOnCloseRequired() {
+        return false;
+    }
+
+    @Override
+    public boolean isSaveAndExitClicked() {
+        return false;
     }
 
     @Override

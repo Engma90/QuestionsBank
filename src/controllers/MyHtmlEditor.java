@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableListBase;
 import javafx.event.EventHandler;
+import javafx.geometry.NodeOrientation;
 import javafx.geometry.Orientation;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
@@ -18,6 +19,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.web.HTMLEditor;
 import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
+import org.jsoup.Jsoup;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,9 +28,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class MyHtmlEditor extends HBox {
+
     private Button button;
     private HTMLEditor htmlEditor;
     private boolean isShown = false;
+
+    public void setParentController(IUpdatable parentController) {
+        this.parentController = parentController;
+    }
+
+    private IUpdatable parentController;
 
     //public static final String TOP_TOOLBAR = ".top-toolbar";
     public static final String BOTTOM_TOOLBAR = ".bottom-toolbar";
@@ -40,6 +49,7 @@ public class MyHtmlEditor extends HBox {
 
 
     public MyHtmlEditor(){
+
         this.setSpacing(1);
         //this.setPrefWidth(1000);
         //this.getStylesheets().clear();
@@ -52,6 +62,10 @@ public class MyHtmlEditor extends HBox {
         htmlEditor.setPrefHeight(50);
         htmlEditor.setPrefWidth(700);
         this.getChildren().add(htmlEditor);
+
+
+
+
         this.getChildren().add(button);
         hideToolbars(this.htmlEditor);
         button.setOnAction(e ->{
@@ -75,40 +89,14 @@ public class MyHtmlEditor extends HBox {
         //HBox.setHgrow(mWebView,Priority.ALWAYS);
         //mTopToolBar = (ToolBar) this.htmlEditor.lookup(TOP_TOOLBAR);
         mBottomToolBar = (ToolBar) this.htmlEditor.lookup(BOTTOM_TOOLBAR);
-//        this.mWebView.setOnDragDetected(new EventHandler<MouseEvent>() {
-//            @Override
-//            public void handle(MouseEvent event) {
-//                Dragboard db = mWebView.startDragAndDrop(TransferMode.ANY);
-//                if(db.hasUrl())
-//                    new Alert(Alert.AlertType.ERROR, "Imageee").show();
-//                //event.consume();
-//            }
-//        });
-//        this.mWebView.setOnDragDone(new EventHandler<DragEvent>() {
-//            @Override
-//            public void handle(DragEvent event) {
-//                event.consume();
-//            }
-//        });
-//        this.mWebView.setOnDragDropped(new EventHandler<DragEvent>() {
-//            @Override
-//            public void handle(DragEvent event) {
-//                /* drag was detected, start a drag-and-drop gesture*/
-//                /* allow any transfer mode */
-//                Dragboard db = mWebView.startDragAndDrop(TransferMode.MOVE);
-//
-//                ((Node) event.getSource()).setCursor(Cursor.HAND);
-//                /* Put a string on a dragboard */
-//                ClipboardContent exam_content = new ClipboardContent();
-//                exam_content.putString(htmlEditor.getHtmlText());
-//                db.setContent(exam_content);
-//
-//                event.consume();
-//            }
-//        });
 
         createCustomButtons();
-        this.htmlEditor.setHtmlText("<html />");
+        //this.htmlEditor.setHtmlText("<html />");
+
+        //TODO: change orientation when click on rtl and reverse on ltr
+        //htmlEditor.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+        //mBottomToolBar.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
+        //mTopToolBar.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
     }
 
     private void createCustomButtons() {
@@ -209,6 +197,7 @@ public class MyHtmlEditor extends HBox {
                         + "})(\"%s\");", html);
         //execute script
         mWebView.getEngine().executeScript(script);
+
     }
 
 //    public String getText(){
@@ -221,6 +210,9 @@ public class MyHtmlEditor extends HBox {
 
     public String getHtmlText(){
         return this.htmlEditor.getHtmlText();
+    }
+    public String getRawText(){
+        return Jsoup.parse(getHtmlText()).text();
     }
 
     public void setHtmlText(String text){

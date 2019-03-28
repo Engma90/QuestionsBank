@@ -23,6 +23,8 @@ public class AddQuestionAnswerRowController implements Initializable {
     }
 
     public void onRemoveClicked(ActionEvent e){
-        addQuestionController.remove_row(this);
+        if (Dialog.CreateDialog("Confirmation","Are you sure?" , "Yes", "No")) {
+            addQuestionController.remove_row(this);
+        }
     }
 }

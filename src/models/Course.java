@@ -6,14 +6,17 @@ public class Course {
     public String code;
     public String level;
 
+    public String year;
+
     public Course(){
-        this("-1", "", "","");
+        this("-1", "", "","","");
     }
-    public Course(String id, String name, String code, String level) {
+    public Course(String id, String name, String code, String level, String year) {
         this.id = id;
         this.name = name;
         this.code = code;
         this.level = level;
+        this.year = year;
     }
     @Override
     public String toString(){
@@ -52,6 +55,14 @@ public class Course {
 
     public void setLevel(String level) {
         this.level = level;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
     }
 
 }

@@ -57,7 +57,7 @@ public class TopicListHandler {
 //        return success;
 //    }
 
-    public ObservableList<Topic> getTopicsList(Chapter chapter){
+    public ObservableList<Topic> getList(Chapter chapter){
         topicList = FXCollections.observableArrayList();
         //DBHandler db = new DBHandler();
         String sql = MessageFormat.format(

@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 
 public class SignupController implements Initializable, IWindow {
 
-    public TextField full_name,email;
+    public TextField full_name,email,department;
     public PasswordField password,re_password;
     public MyButton signup;
     public ComboBox<String> combo_college;
@@ -29,6 +29,17 @@ public class SignupController implements Initializable, IWindow {
         combo_college.getSelectionModel().selectFirst();
 
     }
+
+    @Override
+    public boolean isSaveOnCloseRequired() {
+        return false;
+    }
+
+    @Override
+    public boolean isSaveAndExitClicked() {
+        return false;
+    }
+
     @Override
     public Object setWindowData(Stage stage, Object initObject) {
         stage.setMinWidth(600);
@@ -42,7 +53,7 @@ public class SignupController implements Initializable, IWindow {
 
         if(validate()){
 
-            if(signupHandler.Signup(full_name.getText(), email.getText(), password.getText(),(combo_college.getSelectionModel().getSelectedIndex()+1)+"")){
+            if(signupHandler.Signup(full_name.getText(), email.getText(), password.getText(),(combo_college.getSelectionModel().getSelectedIndex()+1)+"",department.getText())){
                 close(e);
             }
             else {
@@ -79,7 +90,7 @@ public class SignupController implements Initializable, IWindow {
     {
         if (email != null)
         {
-            Pattern p = Pattern.compile("^([A-Za-z_01-9].*?)([@])([a-z]+).([a-z]*?).([a-z]+)$");
+            Pattern p = Pattern.compile("^([A-Za-z_01-9].*?)([@])([a-z]+).([a-z]+).([a-z]+).([a-z]+)$");
             Matcher m = p.matcher(email);
             return m.find();
         }

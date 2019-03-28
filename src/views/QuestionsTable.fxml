@@ -48,9 +48,9 @@
             </items>
         </TableView>
         <HBox spacing="20" alignment="CENTER">
-            <Button fx:id="add" text="Add" onAction="#onAddClicked" styleClass="add-button"></Button>
-            <Button fx:id="edit" text="Edit" onAction="#onEditClicked" styleClass="edit-button"></Button>
-            <Button fx:id="delete" onAction="#onDeleteQuestionClicked" text="Delete" styleClass="delete-button"></Button>
+            <Button fx:id="btn_add" text="Add" onAction="#onAddClicked" styleClass="add-button"></Button>
+            <Button fx:id="btn_edit" text="Edit" onAction="#onEditClicked" styleClass="edit-button"></Button>
+            <Button fx:id="btn_delete" onAction="#onDeleteQuestionClicked" text="Delete" styleClass="delete-button"></Button>
 
 
         </HBox>

@@ -19,23 +19,23 @@
         <HBox spacing="50">
             <VBox spacing="10">
                 <TextField promptText="Exam name, Computer Programming (1) - ECE 113C"
-                           fx:id="exam_name_text"></TextField>
-                <TextField fx:id="college_text" promptText="College"></TextField>
+                           fx:id="exam_name_text"/>
+                <TextField fx:id="college_text" promptText="College"/>
                 <!--<Label text="Department"></Label>-->
-                <TextField fx:id="department_text" promptText="Department"></TextField>
+                <TextField fx:id="department_text" promptText="Department"/>
                 <!--<Label text="Note"></Label>-->
                 <TextArea promptText="Notes, Attempt 5 of the following questions (including questions 1 and 2)"
-                          fx:id="note_text" VBox.vgrow="NEVER" maxHeight="75"></TextArea>
+                          fx:id="note_text" VBox.vgrow="NEVER" maxHeight="115"/>
             </VBox>
             <VBox spacing="10">
 
                 <!--<Label text="Date"></Label>-->
                 <!--<TextField promptText="Mon 05/01/2015" fx:id="exam_date"></TextField>-->
-                <DatePicker fx:id="exam_date" stylesheets="@css/modena/modena.css"></DatePicker>
+                <DatePicker fx:id="exam_date" stylesheets="@css/modena/modena.css"/>
                 <!--<Label text="Duration"></Label>-->
-                <TextField fx:id="exam_duration" promptText="Duration"></TextField>
+                <TextField fx:id="exam_duration" promptText="Duration"/>
                 <!--<Label text="Total marks"></Label>-->
-                <TextField fx:id="exam_total_marks" promptText="Total marks"></TextField>
+                <TextField fx:id="exam_total_marks" promptText="Total marks"/>
                 <ComboBox value="Exam type" fx:id="exam_type">
                     <items>
                         <FXCollections fx:factory="observableArrayList">
@@ -50,6 +50,19 @@
                         <FXCollections fx:factory="observableArrayList">
                             <String fx:value="English"/>
                             <String fx:value="Arabic"/>
+                        </FXCollections>
+                    </items>
+                </ComboBox>
+                <ComboBox value="1st Year" fx:id="exam_year" maxWidth="Infinity">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="1st Year"/>
+                            <String fx:value="2nd Year"/>
+                            <String fx:value="3rd Year"/>
+                            <String fx:value="4th Year"/>
+                            <String fx:value="5th Year"/>
+                            <String fx:value="6th Year"/>
+                            <String fx:value="7th Year"/>
                         </FXCollections>
                     </items>
                 </ComboBox>
@@ -69,8 +82,8 @@
         <!--</items>-->
         <!--</ComboBox>-->
         <HBox spacing="10">
-            <Label text="Number of models"></Label>
-            <NumberField fx:id="number_of_models"></NumberField>
+            <Label text="Number of models"/>
+            <NumberField fx:id="number_of_models"/>
             <HBox fx:id="same_or_different" spacing="10">
                 <RadioButton fx:id="radio_same" text="Same questions"/>
                 <RadioButton fx:id="radio_different" text="Different questions"/>
@@ -102,9 +115,9 @@
             <padding>
                 <Insets right="10"/>
             </padding>
-            <Label HBox.hgrow="ALWAYS" maxWidth="Infinity"></Label>
-            <Label text="Total number of questions:" prefWidth="150" textAlignment="CENTER"></Label>
-            <NumberField disable="true" fx:id="lbl_sum" prefWidth="150"></NumberField>
+            <Label HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+            <Label text="Total number of questions:" prefWidth="150" textAlignment="CENTER"/>
+            <NumberField disable="true" fx:id="lbl_sum" prefWidth="150"/>
         </HBox>
     </VBox>
     </VBox>

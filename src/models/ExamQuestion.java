@@ -11,11 +11,11 @@ public class ExamQuestion {
     private String QuestionWeight;
     private String QuestionExpectedTime;
     private String ExamModel_idExamModel;
-    private String CourseName;
-    private String CourseCode;
-    private String CourseCategory;
-    private String ChapterName;
-    private String ChapterNumber;
+//    private String CourseName;
+//    private String CourseCode;
+//    private String CourseLevel;
+//    private String ChapterName;
+//    private String ChapterNumber;
 
     public List<Answer> getAnswers() {
         return answers;
@@ -30,7 +30,7 @@ public class ExamQuestion {
     public ExamQuestion() {
     }
 
-    private String TopicName;
+//    private String TopicName;
 
     public String getId() {
         return id;
@@ -88,51 +88,51 @@ public class ExamQuestion {
         ExamModel_idExamModel = examModel_idExamModel;
     }
 
-    public String getCourseName() {
-        return CourseName;
-    }
-
-    public void setCourseName(String courseName) {
-        CourseName = courseName;
-    }
-
-    public String getCourseCode() {
-        return CourseCode;
-    }
-
-    public void setCourseCode(String courseCode) {
-        CourseCode = courseCode;
-    }
-
-    public String getCourseCategory() {
-        return CourseCategory;
-    }
-
-    public void setCourseCategory(String courseCategory) {
-        CourseCategory = courseCategory;
-    }
-
-    public String getChapterName() {
-        return ChapterName;
-    }
-
-    public void setChapterName(String chapterName) {
-        ChapterName = chapterName;
-    }
-
-    public String getChapterNumber() {
-        return ChapterNumber;
-    }
-
-    public void setChapterNumber(String chapterNumber) {
-        ChapterNumber = chapterNumber;
-    }
-
-    public String getTopicName() {
-        return TopicName;
-    }
-
-    public void setTopicName(String topicName) {
-        TopicName = topicName;
-    }
+//    public String getCourseName() {
+//        return CourseName;
+//    }
+//
+//    public void setCourseName(String courseName) {
+//        CourseName = courseName;
+//    }
+//
+//    public String getCourseCode() {
+//        return CourseCode;
+//    }
+//
+//    public void setCourseCode(String courseCode) {
+//        CourseCode = courseCode;
+//    }
+//
+//    public String getCourseLevel() {
+//        return CourseLevel;
+//    }
+//
+//    public void setCourseLevel(String courseLevel) {
+//        CourseLevel = courseLevel;
+//    }
+//
+//    public String getChapterName() {
+//        return ChapterName;
+//    }
+//
+//    public void setChapterName(String chapterName) {
+//        ChapterName = chapterName;
+//    }
+//
+//    public String getChapterNumber() {
+//        return ChapterNumber;
+//    }
+//
+//    public void setChapterNumber(String chapterNumber) {
+//        ChapterNumber = chapterNumber;
+//    }
+//
+//    public String getTopicName() {
+//        return TopicName;
+//    }
+//
+//    public void setTopicName(String topicName) {
+//        TopicName = topicName;
+//    }
 }
