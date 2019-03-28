@@ -16,7 +16,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-//Todo: check converter race condition on deleting an using files
+//Todo: check converter race condition on deleting and using large files with images
 public class FileExporter {
     public void Export(Exam exam, String dest, String format) {
         for (ExamModel examModel : exam.getExamModelList()) {

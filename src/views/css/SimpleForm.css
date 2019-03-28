@@ -60,6 +60,7 @@ CheckBox{
 
 #generate{
     -fx-background-color:#e33068;
+    -fx-background-image: url('/views/images/generate_icon.png');
 }
 
 .add-button{

@@ -303,8 +303,8 @@ public class AddQuestionController implements Initializable, IWindow {
     }
 
 
-// Todo: add listeners to all node to invalidate save status ICachInvadidatable
-// or implement IUpdatable here and call it in Html, Numberfield, radio, rows
+/* Todo: add listeners to all node to invalidate save status ICachInvadidatable
+    or implement IUpdatable here and call it in Html, Numberfield, radio, rows */
 
 //    public static ArrayList<Node> getAllNodes(Parent root) {
 //        ArrayList<Node> nodes = new ArrayList<Node>();

@@ -28,7 +28,7 @@ class QBBackup {
     void qbExport(Course _course,String DestPath) {
 
 
-        add_row(CourseCSVList, new String[]{"Id", "Name", "Code", "Level"});
+        add_row(CourseCSVList, new String[]{"Id", "Name", "Code", "Level", "Year"});
         add_row(ChapterCSVList, new String[]{"Id", "Course_ID", "Name", "Number"});
         add_row(TopicCSVList, new String[]{"Id", "Chapter_ID", "Name"});
         add_row(QuestionCSVList, new String[]{"Id", "Topic_ID", "Content", "Type", "Difficulty", "Time", "Weight"});
@@ -43,7 +43,7 @@ class QBBackup {
 
         for (Course course : coursesList) {
             add_row(CourseCSVList,
-                    new String[]{(course_id++ + 1) + "", course.getName(), course.getCode(), course.getLevel()});
+                    new String[]{(course_id++ + 1) + "", course.getName(), course.getCode(), course.getLevel(), course.getYear()});
 
             List<Chapter> chaptersList = ChaptersListHandler.getInstance().getList(course);
 
@@ -122,6 +122,7 @@ class QBBackup {
                 course.name = course_data[1];
                 course.code = course_data[2];
                 course.level = course_data[3];
+                course.year = course_data[4];
                 course.id = CoursesListHandler.getInstance().Add(course) + "";
                 for (String[] chapter_data : ChapterCSVList) {
                     //String fake_chapter_id = chapter_data[0];

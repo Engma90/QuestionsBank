@@ -58,6 +58,10 @@ SplitPane{
 }
 .generate-button{
     -fx-background-color:#e33068;
+    -fx-background-image: url('/views/images/generate_icon.png');
+}
+.import-button{
+    -fx-background-image: url('/views/images/import_icon.png');
 }
 .export-button{
     -fx-background-image: url('/views/images/export_icon.png');
