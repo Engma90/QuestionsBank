@@ -90,6 +90,7 @@ public class SignupController implements Initializable, IWindow {
     {
         if (email != null)
         {
+            //Todo: email 4 parts regex check
             Pattern p = Pattern.compile("^([A-Za-z_01-9].*?)([@])([a-z]+).([a-z]+).([a-z]+).([a-z]+)$");
             Matcher m = p.matcher(email);
             return m.find();

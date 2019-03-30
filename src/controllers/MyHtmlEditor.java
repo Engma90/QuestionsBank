@@ -49,7 +49,7 @@ public class MyHtmlEditor extends HBox {
 
 
     public MyHtmlEditor(){
-
+        //Todo: handle drag and drop image
         this.setSpacing(1);
         //this.setPrefWidth(1000);
         //this.getStylesheets().clear();
@@ -146,7 +146,7 @@ public class MyHtmlEditor extends HBox {
 //            System.out.println(type);
             String htmlData = String.format(
                     //"<a href=""></a>",
-                    "<img src=\"data:%s;base64,%s\">",
+                    "<img src=\"data:%s;base64,%s\"/>",
                     type, base64data);
             //System.out.println(htmlData);
             //insert html
@@ -165,6 +165,7 @@ public class MyHtmlEditor extends HBox {
                 .replace("\r", "\\r")
                 .replace("\n", "\\n");
         //get script
+        //Todo: Add css class no-page-break to this divs
         String script = String.format(
                 "(function(html) {"
                         + "  var sel, range;"

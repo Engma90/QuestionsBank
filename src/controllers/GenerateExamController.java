@@ -127,7 +127,7 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
         exam_date.setValue(LocalDate.now());
 
     }
-
+    //Todo: Separate import exam to db from exporting to avoid db redundancy (word and pdf)
     public void onGenerateClicked(ActionEvent e) {
         //if(validate()) {
         DirectoryChooser directoryChooser = new DirectoryChooser();
@@ -168,7 +168,8 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
                 }
 
                 addExamToDatabase(exam);
-                new FileExporter().Export(exam, selectedDirectory.getAbsolutePath(), format.getValue().toString());
+                new FileExporter().getExporter(FileExporter.LIBRE_OFFICE)
+                        .exportExam(exam, selectedDirectory.getAbsolutePath(), format.getValue());
                 new Alert(Alert.AlertType.INFORMATION, "Operation Compleated").show();
             }
         }
@@ -294,6 +295,7 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
 
     @Override
     public void update() {
+        //Todo: Check for avalable number of question below selected level on change
         int sum = 0;
         for (GenerateExamChapterRowController gecrc : generateExamChapterRowControllerList) {
             for (GenerateExamTopicRowController getrc : gecrc.generateExamTopicRowControllerList) {

@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
-//Todo: add year col to course
+//Todo: cleanup after finish
 class QBBackup {
     private List<String[]> CourseCSVList, ChapterCSVList, TopicCSVList, QuestionCSVList, AnswerCSVList;
     public QBBackup(){
