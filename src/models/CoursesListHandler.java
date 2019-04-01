@@ -33,14 +33,14 @@ public class CoursesListHandler {
     public int Add(Course course) {
         //DBHandler db = new DBHandler();
         String sql =
-                "insert into course (CourseLevel, CourseName, CourseCode, CourseYear,Doctor_idDoctor) values (?, ?, ?, ?, ?) ;";
+                "insert into Course (CourseLevel, CourseName, CourseCode, CourseYear,Doctor_idDoctor) values (?, ?, ?, ?, ?) ;";
                 String[] params = new String[]{ course.level, course.name, course.code,course.year, DashboardController.doctor.getId()};
        return DBSingletonHandler.getInstance().execute_PreparedStatement(sql, params);
     }
     public boolean Edit(Course course) {
         //DBHandler db = new DBHandler();
         String sql = MessageFormat.format(
-                "UPDATE course SET CourseName =\"{0}\" , CourseCode = \"{1}\", CourseLevel = \"{2}\", CourseYear = \"{3}\"  WHERE idCourse = {4}  ;"
+                "UPDATE Course SET CourseName =\"{0}\" , CourseCode = \"{1}\", CourseLevel = \"{2}\", CourseYear = \"{3}\"  WHERE idCourse = {4}  ;"
                 ,course.name, course.code, course.level, course.year, course.id);
         return DBSingletonHandler.getInstance().execute_sql(sql);
     }
@@ -48,7 +48,7 @@ public class CoursesListHandler {
         //DBHandler db = new DBHandler();
         //boolean success = DashboardController.chaptersListHandler.DeleteAllSelectedCourseChapters();
         String sql = MessageFormat.format(
-                "DELETE FROM course WHERE idCourse = {0}  ;",
+                "DELETE FROM Course WHERE idCourse = {0}  ;",
                  id);
         return DBSingletonHandler.getInstance().execute_sql(sql);
     }
@@ -59,11 +59,11 @@ public class CoursesListHandler {
         String sql;
         if(filter.equals("All")) {
             sql = MessageFormat.format(
-                    "SELECT * FROM course WHERE Doctor_idDoctor ={0};"
+                    "SELECT * FROM Course WHERE Doctor_idDoctor ={0};"
                     , DashboardController.doctor.getId());
         }else {
             sql = MessageFormat.format(
-                    "SELECT * FROM course WHERE Doctor_idDoctor ={0} AND CourseLevel = \"{1}\";"
+                    "SELECT * FROM Course WHERE Doctor_idDoctor ={0} AND CourseLevel = \"{1}\";"
                     , DashboardController.doctor.getId(), filter);
         }
         ResultSet rs =  DBSingletonHandler.getInstance().execute_query(sql);

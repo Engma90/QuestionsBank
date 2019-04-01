@@ -44,11 +44,36 @@ class FileExporterLibreOffice implements IFileExporter {
                     return true;
                 }
             }
+            new Alert(Alert.AlertType.ERROR, "Please install LibreOffice").show();
+            return false;
+
         } else if (PlatformUtil.isLinux()) {
+            //Todo: check for libreOffice on linux
             possibleBinaryPath.add("soffice");
-            return true;
+
+            try {
+                Process p = Runtime.getRuntime().exec
+                        ("soffice -h");
+                BufferedReader input =
+                        new BufferedReader
+                                (new InputStreamReader(p.getInputStream()));
+                String outputLine;
+                while ((outputLine = input.readLine()) != null) {
+                    if(outputLine.toLowerCase().contains("LibreOffice".toLowerCase())){
+                        selectedBinaryPath = "soffice";
+                        return true;
+                    }
+                    System.out.println(outputLine);
+                }
+                input.close();
+                new Alert(Alert.AlertType.ERROR, "Please install LibreOffice").show();
+                return false;
+            } catch (Exception err) {
+                err.printStackTrace();
+                return false;
+            }
         }
-        new Alert(Alert.AlertType.ERROR, "Please install LibreOffice").show();
+        new Alert(Alert.AlertType.ERROR, "Not supported OS").show();
         return false;
     }
 
@@ -106,23 +131,40 @@ class FileExporterLibreOffice implements IFileExporter {
                     "do (" +
                     "\"" + selectedBinaryPath + "\"" + " --headless --norestore --writer --convert-to docx " +
                     "\"" + "%f" + "\"";
+            if (format.equals("PDF")) {
+
+                String tmp_cmd = cmd + " --outdir "
+                        + "\"" + FileSystems.getDefault().getPath("").toAbsolutePath() + "\\" + TEMP_DIR + "\"" + ")";
+                runCMD(tmp_cmd);
+                cmd = cmd.replace("--convert-to docx","--convert-to pdf")
+                        .replace("*.html","*.docx");
+                cmd += " --outdir "
+                        + "\"" + dest + "\"" + ")";
+            } else {
+                cmd += " --outdir "
+                        + "\"" + dest + "\"" + ")";
+            }
+
         } else if (PlatformUtil.isLinux()) {
             //cmd = //"/bin/bash -c " +
-                    //selectedBinaryPath + " --headless --norestore --writer --convert-to docx *.html";
-        }
-        if (format.equals("PDF")) {
+                    cmd = selectedBinaryPath + " --headless --norestore --writer --convert-to docx "+
+                            FileSystems.getDefault().getPath("").toAbsolutePath() + "\\" + TEMP_DIR + "\\" + "*.html";
 
-            String tmp_cmd = cmd + " --outdir "
-                    + "\"" + FileSystems.getDefault().getPath("").toAbsolutePath() + "\\" + TEMP_DIR + "\"" + ")";
-            runCMD(tmp_cmd);
-            cmd = cmd.replace("--convert-to docx","--convert-to pdf")
-                    .replace("*.html","*.docx");
-            cmd += " --outdir "
-                    + "\"" + dest + "\"" + ")";
-        } else {
-            cmd += " --outdir "
-                    + "\"" + dest + "\"" + ")";
+            if (format.equals("PDF")) {
+
+                String tmp_cmd = cmd + " --outdir "
+                        + "\"" + FileSystems.getDefault().getPath("").toAbsolutePath() + "\\" + TEMP_DIR + "\"" ;
+                runCMD(tmp_cmd);
+                cmd = cmd.replace("--convert-to docx","--convert-to pdf")
+                        .replace("*.html","*.docx");
+                cmd += " --outdir "
+                        + "\"" + dest + "\"" ;
+            } else {
+                cmd += " --outdir "
+                        + "\"" + dest + "\"";
+            }
         }
+
 
         return runCMD(cmd);
     }

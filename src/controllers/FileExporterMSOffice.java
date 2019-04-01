@@ -20,7 +20,7 @@ class FileExporterMSOffice implements IFileExporter{
 
     @Override
     public boolean checkForDependencies() {
-        return false;
+        return true;
     }
     public boolean exportExam(Exam exam, String dest, String format) {
         for (ExamModel examModel : exam.getExamModelList()) {

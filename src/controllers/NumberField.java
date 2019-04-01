@@ -44,11 +44,9 @@ public class NumberField extends TextField {
             }
             if (!getText().isEmpty()) {
                 if (Integer.parseInt(getText()) < min) {
-//                    clear();
                     setText(min + "");
                 }
                 if (Integer.parseInt(getText()) > max) {
-//                    clear();
                     setText(max + "");
                 }
                 if (null != parentController)
@@ -60,9 +58,15 @@ public class NumberField extends TextField {
 
     public void setMin(int val) {
         this.min = val;
+        if (Integer.parseInt(getText()) < min) {
+            setText(min + "");
+        }
     }
 
     public void setMax(int val) {
         this.max = val;
+        if (Integer.parseInt(getText()) > max) {
+            setText(max + "");
+        }
     }
 }

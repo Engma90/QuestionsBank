@@ -94,6 +94,7 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
         for (GenerateExamChapterRowController gecrc : generateExamChapterRowControllerList) {
             for (GenerateExamTopicRowController getrc : gecrc.generateExamTopicRowControllerList) {
                 getrc.topic_number_of_questions.setParentController(this);
+                getrc.diff_max_level.setParentController(this);
             }
         }
 
@@ -295,10 +296,16 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
 
     @Override
     public void update() {
-        //Todo: Check for avalable number of question below selected level on change
+        //Todo: Check for available number of question below selected level on change
         int sum = 0;
         for (GenerateExamChapterRowController gecrc : generateExamChapterRowControllerList) {
             for (GenerateExamTopicRowController getrc : gecrc.generateExamTopicRowControllerList) {
+                Topic topic= new Topic();
+                topic.id = getrc.topic_id;
+
+                getrc.topic_number_of_questions.setMax(
+                        QuestionsTableHandler.getInstance().getQuestionList(topic,getrc.diff_max_level.getText()).size()
+                );
                 sum += Integer.parseInt(getrc.topic_number_of_questions.getText());
             }
         }

@@ -3,6 +3,7 @@ package controllers;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import javafx.collections.FXCollections;
+import javafx.scene.control.Alert;
 import models.*;
 import org.apache.commons.io.FileUtils;
 
@@ -91,6 +92,7 @@ class QBBackup {
             zip(DestPath);
 
         } catch (IOException e) {
+            new Alert(Alert.AlertType.ERROR, "Import Error").show();
             e.printStackTrace();
         }
     }
@@ -172,6 +174,7 @@ class QBBackup {
             }
 
         } catch (IOException e) {
+            new Alert(Alert.AlertType.ERROR, "Import Error").show();
             e.printStackTrace();
         }
     }

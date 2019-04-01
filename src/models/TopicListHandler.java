@@ -30,14 +30,14 @@ public class TopicListHandler {
     private ObservableList<Topic> topicList;
     public int Add(Chapter chapter, Topic model) {
         //DBHandler db = new DBHandler();
-        String sql = "insert into topic (Name, Chapter_idChapter) values (?,?) ;";
+        String sql = "insert into Topic (Name, Chapter_idChapter) values (?,?) ;";
                 String[]params = new String[]{model.name, chapter.id};
         return DBSingletonHandler.getInstance().execute_PreparedStatement(sql, params);
     }
     public boolean Edit(Topic model) {
         //DBHandler db = new DBHandler();
         String sql = MessageFormat.format(
-                "UPDATE topic SET Name = \"{0}\"  WHERE idTopic = {1} ;"
+                "UPDATE Topic SET Name = \"{0}\"  WHERE idTopic = {1} ;"
                 , model.name,model.id);
         return DBSingletonHandler.getInstance().execute_sql(sql);
     }
@@ -45,7 +45,7 @@ public class TopicListHandler {
         //QuestionsTableController.questionsTableHandler.DeleteAllSelectedChapterQuestions();
         //DBHandler db = new DBHandler();
         String sql = MessageFormat.format(
-                "DELETE  FROM topic WHERE idTopic = {0} ;"
+                "DELETE  FROM Topic WHERE idTopic = {0} ;"
                 , model.id);
         return DBSingletonHandler.getInstance().execute_sql(sql);
     }
@@ -61,7 +61,7 @@ public class TopicListHandler {
         topicList = FXCollections.observableArrayList();
         //DBHandler db = new DBHandler();
         String sql = MessageFormat.format(
-                "SELECT * FROM topic WHERE Chapter_idChapter ={0};"
+                "SELECT * FROM Topic WHERE Chapter_idChapter ={0};"
                 ,  chapter.id);
         ResultSet rs =  DBSingletonHandler.getInstance().execute_query(sql);
         try {

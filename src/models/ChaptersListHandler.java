@@ -31,14 +31,14 @@ public class ChaptersListHandler {
     }
     public int Add(Course course, Chapter model) {
         //DBHandler db = new DBHandler();
-        String sql = "insert into chapter (ChapterName, Course_idCourse, ChapterNumber) values (?,?,?) ;";
+        String sql = "insert into Chapter (ChapterName, Course_idCourse, ChapterNumber) values (?,?,?) ;";
                String[] params = new String[]{ model.name, course.id,model.number};
         return DBSingletonHandler.getInstance().execute_PreparedStatement(sql, params);
     }
     public boolean Edit(Chapter model) {
         //DBHandler db = new DBHandler();
         String sql = MessageFormat.format(
-                "UPDATE chapter SET ChapterName = \"{0}\", ChapterNumber = {1} WHERE idChapter = {2} ;"
+                "UPDATE Chapter SET ChapterName = \"{0}\", ChapterNumber = {1} WHERE idChapter = {2} ;"
                 , model.name,model.number,model.id);
         return DBSingletonHandler.getInstance().execute_sql(sql);
     }
@@ -46,7 +46,7 @@ public class ChaptersListHandler {
         //QuestionsTableController.questionsTableHandler.DeleteAllSelectedChapterQuestions();
         //DBHandler db = new DBHandler();
         String sql = MessageFormat.format(
-                "DELETE  FROM chapter WHERE idChapter = {0} ;"
+                "DELETE  FROM Chapter WHERE idChapter = {0} ;"
                 , model.id);
         return DBSingletonHandler.getInstance().execute_sql(sql);
     }
@@ -62,7 +62,7 @@ public class ChaptersListHandler {
         chaptersList = FXCollections.observableArrayList();
         //DBHandler db = new DBHandler();
         String sql = MessageFormat.format(
-                "SELECT * FROM chapter WHERE Course_idCourse ={0};"
+                "SELECT * FROM Chapter WHERE Course_idCourse ={0};"
                 ,  course.id);
         ResultSet rs =  DBSingletonHandler.getInstance().execute_query(sql);
         try {

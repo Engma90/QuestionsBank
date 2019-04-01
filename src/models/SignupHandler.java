@@ -12,7 +12,7 @@ public class SignupHandler {
     public boolean Signup(String name, String email, String password, String college, String department) {
         //DBHandler db = new DBHandler();
         String sql = MessageFormat.format(
-                "insert into doctor (DoctorName, DoctorPassword, DoctorEmail, College_idCollege, DoctorDepartment) values (\"{0}\",\"{1}\",\"{2}\",{3},\"{4}\");"
+                "insert into Doctor (DoctorName, DoctorPassword, DoctorEmail, College_idCollege, DoctorDepartment) values (\"{0}\",\"{1}\",\"{2}\",{3},\"{4}\");"
                 , name, password, email, college, department);
         return DBSingletonHandler.getInstance().execute_sql(sql);
     }
@@ -20,7 +20,7 @@ public class SignupHandler {
     public ObservableList<String> getCollegesList(){
         ObservableList<String> collegesList = FXCollections.observableArrayList();
         String sql =
-                "SELECT * FROM college WHERE University_idUniversity = 1;"; //to be edited
+                "SELECT * FROM College WHERE University_idUniversity = 1;"; //Todo: hard code edit with Univ. SW version
 
         ResultSet rs =  DBSingletonHandler.getInstance().execute_query(sql);
         try {

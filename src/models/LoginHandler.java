@@ -11,7 +11,7 @@ public class LoginHandler {
     public boolean login(String email, String password) {
         //DBHandler db = new DBHandler();
         String sql = MessageFormat.format(
-                "SELECT * FROM doctor WHERE DoctorEmail =\"{0}\"  AND DoctorPassword = \"{1}\" ;"
+                "SELECT * FROM Doctor WHERE DoctorEmail =\"{0}\"  AND DoctorPassword = \"{1}\" ;"
                 ,  email, password);
         ResultSet rs =  DBSingletonHandler.getInstance().execute_query(sql);
         int dr_id = -1;

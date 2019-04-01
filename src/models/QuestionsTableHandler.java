@@ -32,14 +32,14 @@ public class QuestionsTableHandler {
 
     public int Add(Topic topic, Question model) {
         //DBHandler db = new DBHandler();
-        String sql = "insert into question (QuestionContent, QuestionType, QuestionDifficulty, " +
+        String sql = "insert into Question (QuestionContent, QuestionType, QuestionDifficulty, " +
                 "QuestionWeight, QuestionExpectedTime, Topic_idTopic) values (?,?,?,?,?,?);";
         int last_inserted_question_id = DBSingletonHandler.getInstance().execute_PreparedStatement(sql, new String[]
                 {model.getQuestion_text(), model.getQuestion_type(), model.getQuestion_diff(), model.getQuestion_weight(), model.getExpected_time(),
                         topic.id});
         for (int i = 0; i < model.getAnswers().size(); i++) {
             sql =
-                    "insert into questionanswer (AnswerLabel, AnswerContent, Question_idQuestion, IsRightAnswer" +
+                    "insert into QuestionAnswer (AnswerLabel, AnswerContent, Question_idQuestion, IsRightAnswer" +
                             ") values (?,?,?,?);";
             int success = DBSingletonHandler.getInstance().execute_PreparedStatement(sql, new String[]{
                     ((char) (65 + i) + ""), model.getAnswers().get(i).answer_text, last_inserted_question_id + "",
@@ -51,19 +51,19 @@ public class QuestionsTableHandler {
 
     public boolean Edit(Question model) {
         //DBHandler db = new DBHandler();
-        String sql = "UPDATE question SET QuestionContent = ?, QuestionType = ?, QuestionDifficulty = ?, " +
+        String sql = "UPDATE Question SET QuestionContent = ?, QuestionType = ?, QuestionDifficulty = ?, " +
                 "QuestionWeight =?, QuestionExpectedTime =? WHERE idQuestion =?;";
 
         int last_inserted_question_id = DBSingletonHandler.getInstance().execute_PreparedStatement(sql, new String[]
                 {model.getQuestion_text(), model.getQuestion_type(), model.getQuestion_diff(), model.getQuestion_weight(), model.getExpected_time(), model.getId()});
 
-        sql = MessageFormat.format("DELETE FROM questionanswer WHERE Question_idQuestion = {0};", model.getId());
+        sql = MessageFormat.format("DELETE FROM QuestionAnswer WHERE Question_idQuestion = {0};", model.getId());
         boolean success = DBSingletonHandler.getInstance().execute_sql(sql);
 
 
         for (int i = 0; i < model.getAnswers().size(); i++) {
             sql =
-                    "insert into questionanswer (AnswerLabel, AnswerContent, Question_idQuestion, IsRightAnswer" +
+                    "insert into QuestionAnswer (AnswerLabel, AnswerContent, Question_idQuestion, IsRightAnswer" +
                             ") values (?,?,?,?);";
             int success1 = DBSingletonHandler.getInstance().execute_PreparedStatement(sql, new String[]{
                     ((char) (65 + i) + ""), model.getAnswers().get(i).answer_text, model.getId() + "",
@@ -76,7 +76,7 @@ public class QuestionsTableHandler {
 //
 //        //DBHandler db = new DBHandler();
 //
-//        String sql = MessageFormat.format("DELETE FROM questionanswer WHERE Question_idQuestion = {0};", Q_id);
+//        String sql = MessageFormat.format("DELETE FROM QuestionAnswer WHERE Question_idQuestion = {0};", Q_id);
 //        boolean success = DBSingletonHandler.getInstance().execute_sql(sql);
 //        return success;
 //
@@ -85,7 +85,7 @@ public class QuestionsTableHandler {
     public boolean DeleteQuestion(Question model) {
         //DBHandler db = new DBHandler();
         //boolean success1 = DeleteQuestionAnswers(model.getId());
-        String sql = MessageFormat.format("DELETE FROM question  WHERE idQuestion = {0};", model.getId());
+        String sql = MessageFormat.format("DELETE FROM Question  WHERE idQuestion = {0};", model.getId());
         boolean success2 = DBSingletonHandler.getInstance().execute_sql(sql);
         return success2;
 
@@ -102,7 +102,7 @@ public class QuestionsTableHandler {
     public ObservableList<Question> getQuestionList(Topic topic) {
         questionList = FXCollections.observableArrayList();
         String sql = MessageFormat.format(
-                "SELECT idQuestion,QuestionContent,QuestionDifficulty,QuestionType,QuestionWeight,QuestionExpectedTime FROM  question WHERE Topic_idTopic = {0};"
+                "SELECT idQuestion,QuestionContent,QuestionDifficulty,QuestionType,QuestionWeight,QuestionExpectedTime FROM  Question WHERE Topic_idTopic = {0};"
                 , topic.id);
         ResultSet rs = DBSingletonHandler.getInstance().execute_query(sql);
         try {
@@ -131,7 +131,7 @@ public class QuestionsTableHandler {
     public ObservableList<Question> getQuestionList(Topic topic, String diff) {
         questionList = FXCollections.observableArrayList();
         String sql = MessageFormat.format(
-                "SELECT idQuestion,QuestionContent,QuestionDifficulty,QuestionType,QuestionWeight,QuestionExpectedTime FROM  question WHERE Topic_idTopic = {0} AND QuestionDifficulty <= {1};"
+                "SELECT idQuestion,QuestionContent,QuestionDifficulty,QuestionType,QuestionWeight,QuestionExpectedTime FROM  Question WHERE Topic_idTopic = {0} AND QuestionDifficulty <= {1};"
                 , topic.id, diff);
         ResultSet rs = DBSingletonHandler.getInstance().execute_query(sql);
         try {
@@ -160,9 +160,9 @@ public class QuestionsTableHandler {
         //DBHandler db = new DBHandler();
         System.out.println("------------------------------------------0");
         String sql = MessageFormat.format(
-                "SELECT * FROM ((question a " +
-                        "JOIN topic b ON a.Topic_idTopic = b.idTopic) " +
-                        "JOIN chapter c ON b.Chapter_idChapter = c.idChapter) " +
+                "SELECT * FROM ((Question a " +
+                        "JOIN Topic b ON a.Topic_idTopic = b.idTopic) " +
+                        "JOIN Chapter c ON b.Chapter_idChapter = c.idChapter) " +
                         "where idChapter = {0};"
                 , chapter.id);
         ResultSet rs = DBSingletonHandler.getInstance().execute_query(sql);
@@ -195,9 +195,9 @@ public class QuestionsTableHandler {
         //DBHandler db = new DBHandler();
         System.out.println("------------------------------------------0");
         String sql = MessageFormat.format(
-                "SELECT * FROM ((question a " +
-                        "JOIN topic b ON a.Topic_idTopic = b.idTopic) " +
-                        "JOIN chapter c ON b.Chapter_idChapter = c.idChapter) " +
+                "SELECT * FROM ((Question a " +
+                        "JOIN Topic b ON a.Topic_idTopic = b.idTopic) " +
+                        "JOIN Chapter c ON b.Chapter_idChapter = c.idChapter) " +
                         "where idChapter = {0} AND QuestionDifficulty <= \"{1}\";"
                 , ch_id, diff);
         ResultSet rs = DBSingletonHandler.getInstance().execute_query(sql);
@@ -230,7 +230,7 @@ public class QuestionsTableHandler {
     private void getQuestionAnswersList(Question model, DBSingletonHandler db) {
         try {
             String sql = MessageFormat.format(
-                    "SELECT * FROM questionanswer where Question_idQuestion = {0};"
+                    "SELECT * FROM QuestionAnswer where Question_idQuestion = {0};"
                     , model.getId());
             ResultSet rs_ans = db.execute_query(sql);
             List<Answer> temp_array;

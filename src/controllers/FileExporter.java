@@ -8,7 +8,7 @@ public class FileExporter {
     public static final String ENGLISH = "English";
     public static final String ARABIC = "Arabic";
 
-    IFileExporter iFileExporter = null;
+    private IFileExporter iFileExporter = null;
     public IFileExporter getExporter(String Type){
 
         if(Type.equals(LIBRE_OFFICE)){

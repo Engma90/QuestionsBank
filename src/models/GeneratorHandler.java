@@ -5,7 +5,7 @@ public class GeneratorHandler {
         //DBHandler db = new DBHandler();
 
         String sql =
-                "INSERT INTO exam (Date, ExamName, CourseName, College, " +
+                "INSERT INTO Exam (Date, ExamName, CourseName, College, " +
                         "Department, Note, ExamType, Duration, TotalMarks, ExamLanguage, CourseCode, CourseLevel, CourseYear, Doctor_idDoctor) " +
                         "VALUES (?,?,?,?,?,?,?,?,?,?,?, ?, ?, ?) ;";
         String[] params = new String[]{
@@ -20,7 +20,7 @@ public class GeneratorHandler {
         for(ExamModel examModel :model.getExamModelList()) {
             examModel.setExam_idExam(exam_id+"");
             sql =
-                    "INSERT INTO exammodel (Exam_idExam,ExamModelNumber) " +
+                    "INSERT INTO ExamModel (Exam_idExam,ExamModelNumber) " +
                             "VALUES (?,?);";
             params = new String[]{
                     examModel.getExam_idExam(), examModel.getExamModelNumber()};
@@ -29,7 +29,7 @@ public class GeneratorHandler {
             for (ExamQuestion q : examModel.getExamQuestionsList()) {
                 q.setExamModel_idExamModel(model_id+"");
                 sql =
-                        "INSERT INTO examquestion (QuestionContent,QuestionType,QuestionDifficulty, QuestionWeight, QuestionExpectedTime" +
+                        "INSERT INTO ExamQuestion (QuestionContent,QuestionType,QuestionDifficulty, QuestionWeight, QuestionExpectedTime" +
                                 ", ExamModel_idExamModel) " +
                                 "VALUES (?,?,?,?,?,?);";
                 params = new String[]{
@@ -40,7 +40,7 @@ public class GeneratorHandler {
                 for (Answer ans : q.getAnswers()) {
 
                     sql =
-                            "INSERT INTO examquestionanswer (AnswerLabel, AnswerContent, IsRightAnswer, ExamQuestion_idQuestion) " +
+                            "INSERT INTO ExamQuestionAnswer (AnswerLabel, AnswerContent, IsRightAnswer, ExamQuestion_idQuestion) " +
                                     "VALUES (?,?,?,?);";
                     params = new String[]{"-", ans.answer_text, ans.is_right_answer+"", q.getId()};
                     DBSingletonHandler.getInstance().execute_PreparedStatement(sql,params);
