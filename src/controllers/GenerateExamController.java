@@ -197,19 +197,13 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
                             examQuestion.setQuestionDifficulty(qmodel.getQuestion_diff());
                             examQuestion.setQuestionWeight(qmodel.getQuestion_weight());
                             examQuestion.setQuestionExpectedTime(qmodel.getExpected_time());
-
-                            examQuestion.setAnswers(qmodel.getAnswers());
-//                            examQuestion.setCourseName(course.name);
-//                            examQuestion.setCourseCode(course.code);
-//                            examQuestion.setCourseLevel(course.level);
-//                            examQuestion.setChapterName(cRow.chapter_name);
-//                            examQuestion.setChapterNumber(cRow.chapter_number);
-//                            examQuestion.setTopicName(tRow.topic_name);
                             if (shuffle_answers.isSelected()) {
                                 List<Answer> temp = new ArrayList<>(qmodel.getAnswers());
                                 Collections.shuffle(temp);
                                 qmodel.setAnswers(temp);
                             }
+                            examQuestion.setAnswers(qmodel.getAnswers());
+
                             examQuestionList.add(examQuestion);
                         }
                     }

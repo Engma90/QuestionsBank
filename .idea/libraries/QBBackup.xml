@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="QBBackup">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/lib/QBBackup" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/lib/QBBackup" recursive="false" />
+  </library>
+</component>

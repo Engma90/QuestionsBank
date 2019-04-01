@@ -11,6 +11,7 @@ import models.Answer;
 import models.Exam;
 import models.ExamModel;
 import models.ExamQuestion;
+import org.apache.commons.io.FileUtils;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -18,6 +19,8 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 //Todo: check converter race condition on deleting and using large files with images
 //Todo: cleanup after finish
@@ -78,10 +81,16 @@ class FileExporterLibreOffice implements IFileExporter {
     }
 
     public boolean exportExam(Exam exam, String dest, String format) {
+        try {
+            FileUtils.deleteDirectory(new File(TEMP_DIR));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (!new File(TEMP_DIR).exists()) {
+            boolean done = new File(TEMP_DIR).mkdirs();
+        }
+
         for (ExamModel examModel : exam.getExamModelList()) {
-            if (!new File(TEMP_DIR).exists()) {
-                boolean done = new File(TEMP_DIR).mkdirs();
-            }
             htmlExamWriter(exam, examModel);
 
 //            try {
@@ -206,27 +215,27 @@ class FileExporterLibreOffice implements IFileExporter {
                 (model.getExamLanguage().equals(FileExporter.ENGLISH) ? "ltr" : "rtl") + "\">" +
                 "<head>" +
                 "<style>td{ font-size: 0.9em; margin:0;} body{ margin:0 0 0 0;}" +
-                ".avoid-page-break{page-break-inside: avoid !important; margin: 4px 0 4px 0 !important; display:inline-block !important; position:relative;}" +
+                ".avoid-page-break{}" +
                 "</style>" +
                 "<meta charset=\"utf-8\"/>" +
                 "</head>\n" +
                 "<body>\n" +
                 "<table width=\"100%\">\n" +
                 "    <tr>\n" +
-                "        <td width=\"25%\">\n" +
-                "            " + DashboardController.doctor.getUniversity() + "<br/>\n" +
-                "            " + model.getCollege() + "<br/>\n" +
+                "        <td width=\"35%\">\n" +
+                "            " + DashboardController.doctor.getUniversity().toUpperCase() + " UNIVERSITY<br/>\n" +
+                "            " + "Faculty of "+ model.getCollege() + "<br/>\n" +
                 "            " + model.getDepartment() + "<br/>\n" +
                 "            " + model.getYear() + "\n" +
                 "        </td>\n" +
                 "\n" +
-                "        <td align=\"center\" width=\"50%\">\n" +
-                "            <img align=\"center\" src=\"../logo.png\" height=\"64\" width=\"64\"/>\n" +
-                "            <br/>\n" +
-                "            <img align=\"center\" src=\"QR_" + examModel.getExamModelNumber() + ".png\" height=\"32\" width=\"32\"/>\n" +
+                "        <td align=\"center\" width=\"30%\">\n" +
+                "            <img align=\"center\" src=\""+ getImageBase64("logo.png")+"\" height=\"64\" width=\"64\"/>\n" +
+                "            <br />\n" +
+                "            <img align=\"center\" src=\""+ getImageBase64("./"+TEMP_DIR+"/QR_" + examModel.getExamModelNumber() + ".png")+"\" height=\"32\" width=\"32\"/>\n" +
                 "        </td>\n" +
                 "\n" +
-                "        <td width=\"25%\">\n" +
+                "        <td width=\"35%\">\n" +
                 "            " + model.getExamType() + "<br/>\n" +
                 "            " + model.getExamName() + "<br/>\n" +
                 "            " + model.getDate() + "<br/>\n" +
@@ -243,9 +252,11 @@ class FileExporterLibreOffice implements IFileExporter {
 
             body.append("<div class=\"avoid-page-break\">");
             body.append("<b><font size=\"4\">Question ");
-            body.append(q_counter++);
-            body.append(":</font></b>");
+            body.append((q_counter++));
+            body.append(": </font></b>");
+            body.append("<div class=\"avoid-page-break\">");
             body.append(qm.getQuestionContent().replace(htmlHeaderToRemove, "").replace(htmlFooterToRemove, ""));
+            body.append("</div>");
             int i = 0;
             body.append("<div class=\"avoid-page-break\">");
             for (Answer answer : qm.getAnswers()) {
@@ -265,9 +276,31 @@ class FileExporterLibreOffice implements IFileExporter {
 
         String html = examHeader2 + body.toString() + footer;
         try {
-            Save_to_file(html, "./" + TEMP_DIR + "/" + model.getExamName() + examModel.getExamModelNumber() + ".html");
+            Save_to_file(html, "./" + TEMP_DIR + "/" + model.getExamName() + "_"
+                    +examModel.getExamModelNumber() + ".html");
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private String getImageBase64(String imgPath) {
+        try {
+            File file = new File(imgPath);
+            //check if file is too big
+            if (file.length() > 1024 * 1024) {
+                throw new VerifyError("File is too big.");
+            }
+            //get mime type of the file
+            String type = java.nio.file.Files.probeContentType(file.toPath());
+            //get html exam_content
+            byte[] data = org.apache.commons.io.FileUtils.readFileToByteArray(file);
+            String base64data = java.util.Base64.getEncoder().encodeToString(data);
+            return String.format(
+                    "data:%s;base64,%s",
+                    type, base64data);
+        } catch (IOException ex) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
     }
 

@@ -24,15 +24,13 @@
         </element>
       </element>
       <element id="directory" name="lib">
-        <element id="library" level="project" name="aopalliance-repackaged-2.2.0" />
-        <element id="library" level="project" name="commons-lang3-3.8.1" />
-        <element id="library" level="project" name="core-3.3.0" />
-        <element id="library" level="project" name="curvesapi-1.05" />
-        <element id="library" level="project" name="javase-3.3.0" />
         <element id="library" level="project" name="jsoup-1.11.3" />
         <element id="library" level="project" name="mysql-connector-java-5.1.47-bin" />
-        <element id="library" level="project" name="opencsv-4.5" />
+        <element id="library" level="project" name="zxing-qr-code" />
+        <element id="library" level="project" name="import-image" />
+        <element id="library" level="project" name="QBBackup" />
       </element>
+      <element id="file-copy" path="$PROJECT_DIR$/logo.png" />
     </root>
   </artifact>
 </component>

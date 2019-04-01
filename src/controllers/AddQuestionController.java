@@ -268,7 +268,8 @@ public class AddQuestionController implements Initializable, IWindow {
         if (Jsoup.parse(model.getQuestion_text()).text().isEmpty())
             return false;
         for (Answer answer : model.getAnswers()) {
-            if (Jsoup.parse(answer.answer_text).text().isEmpty())
+            if (Jsoup.parse(answer.answer_text).text().isEmpty() &&
+                    Jsoup.parse(answer.answer_text).getElementsByTag("img").size() == 0)
                 return false;
             if (answer.is_right_answer == 1)
                 isThereRightAnswer = true;

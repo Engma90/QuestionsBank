@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="zxing-qr-code">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/lib/zxing-qr-code" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/lib/zxing-qr-code" recursive="false" />
+  </library>
+</component>
