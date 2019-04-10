@@ -6,7 +6,8 @@
 <?import controllers.NumberField?>
 <?import javafx.geometry.Insets?>
 <?import controllers.MyHtmlEditor?>
-    <VBox xmlns:fx="http://javafx.com/fxml"  spacing="10" stylesheets="@css/AddQuestion.css" fx:id="container" prefHeight="600" prefWidth="900">
+    <VBox xmlns:fx="http://javafx.com/fxml"  spacing="10" stylesheets="@css/AddQuestion.css" fx:id="container"
+          prefHeight="700" prefWidth="1000">
     <padding>
         <Insets top="10" right="10" bottom="10" left="10"/>
     </padding>
@@ -18,7 +19,7 @@
             <RadioButton text="Extended match" fx:id="radio_ext_match"/>
 
         </HBox>
-        <HBox spacing="10">
+        <HBox spacing="10" alignment="CENTER_LEFT">
             <!--<ComboBox value="Difficulty" fx:id="combo_q_diff">-->
             <!--<items>-->
             <!--<FXCollections fx:factory="observableArrayList">-->

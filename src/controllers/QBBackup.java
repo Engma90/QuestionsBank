@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
-//Todo: cleanup after finish
 class QBBackup {
     private List<String[]> CourseCSVList, ChapterCSVList, TopicCSVList, QuestionCSVList, AnswerCSVList;
     public QBBackup(){
@@ -28,6 +27,7 @@ class QBBackup {
     }
     void qbExport(Course _course,String DestPath) {
 
+        cleanup();
 
         add_row(CourseCSVList, new String[]{"Id", "Name", "Code", "Level", "Year"});
         add_row(ChapterCSVList, new String[]{"Id", "Course_ID", "Name", "Number"});
@@ -92,12 +92,28 @@ class QBBackup {
             zip(DestPath);
 
         } catch (IOException e) {
-            new Alert(Alert.AlertType.ERROR, "Import Error").show();
+            new Alert(Alert.AlertType.ERROR, "Export Error").show();
+            e.printStackTrace();
+        }
+        finally {
+            cleanup();
+        }
+    }
+
+    private void cleanup() {
+
+        try {
+            new File("tmp.zip").delete();
+            FileUtils.deleteDirectory(new File("tmp"));
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     void qbImport(String SourcePath) {
+
+        cleanup();
+
         try {
             File copied = new File(
                     "tmp.zip");
@@ -176,16 +192,19 @@ class QBBackup {
         } catch (IOException e) {
             new Alert(Alert.AlertType.ERROR, "Import Error").show();
             e.printStackTrace();
+        }finally {
+            cleanup();
         }
     }
 
     private List<String[]> readData(String csvFile) throws IOException {
         CSVReader reader = new CSVReader(new FileReader(csvFile));
-        return reader.readAll();
+        List<String[]> temp_list = reader.readAll();
+        reader.close();
+        return temp_list;
     }
 
     private void add_row(List<String[]> sheet, String[] row_cells) {
-
         sheet.add(row_cells);
     }
 
@@ -209,7 +228,7 @@ class QBBackup {
 
     private static Path createFileWithDir(String filename) {
         File dir = new File("tmp");
-        if (!dir.exists()) {boolean done = dir.mkdirs();}
+        if (!dir.exists()) {boolean done = dir.mkdir();}
         return Paths.get("tmp" + File.separatorChar + filename);
     }
 

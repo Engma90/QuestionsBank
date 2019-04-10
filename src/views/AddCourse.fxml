@@ -45,8 +45,11 @@
             </items>
         </ComboBox>
         <!--</HBox>-->
-        <Button text="Add" fx:id="add_course" onAction="#onAddCourseClicked" styleClass="add-button"/>
-        <Button text="Edit" fx:id="edit_course" onAction="#onEditCourseClicked" styleClass="edit-button"/>
-    </VBox>
 
+    </VBox>
+    <HBox alignment="CENTER" AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.leftAnchor="0" minHeight="40"
+          style="-fx-background-color:#221936;">
+    <Button  text="Add" fx:id="add_course" onAction="#onAddCourseClicked" styleClass="add-button"/>
+    <Button  text="Edit" fx:id="edit_course" onAction="#onEditCourseClicked" styleClass="edit-button"/>
+    </HBox>
 </AnchorPane>

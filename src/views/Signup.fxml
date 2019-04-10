@@ -15,15 +15,15 @@
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="controllers.SignupController"
             prefHeight="500" prefWidth="600.0"
-            stylesheets="@css/Signup.css" fx:id="container">
+            stylesheets="@css/Signup.css" fx:id="container" VBox.Vgrow="ALWAYS">
     <!--<padding>-->
     <!--<Insets top="50" right="10" bottom="10" left="50"/>-->
     <!--</padding>-->
     <ImageView AnchorPane.leftAnchor="30" AnchorPane.topAnchor="30">
         <Image url="/views/images/create_account.png"/>
     </ImageView>
-    <VBox spacing="20" AnchorPane.topAnchor="100" AnchorPane.rightAnchor="50"
-          AnchorPane.leftAnchor="50" alignment="CENTER">
+    <VBox spacing="30" AnchorPane.topAnchor="100" AnchorPane.rightAnchor="50"
+          AnchorPane.leftAnchor="50" alignment="CENTER" VBox.Vgrow="ALWAYS">
         <padding>
             <Insets right="50" left="50"/>
         </padding>
@@ -40,9 +40,18 @@
         <PasswordField fx:id="password" promptText="Password"/>
         <PasswordField fx:id="re_password" promptText="Confirm Password"/>
 
+        <HBox alignment="CENTER_LEFT">
+        <MyButton prefWidth="131" prefHeight="49"
+                  fx:id="signup" onMouseClicked="#onSignupClicked" imageUrl="/views/images/btnReg.png"/>
+        </HBox>
 
     </VBox>
-    <MyButton AnchorPane.bottomAnchor="50" AnchorPane.leftAnchor="50" prefWidth="131" prefHeight="49"
-              fx:id="signup" onMouseClicked="#onSignupClicked" imageUrl="/views/images/btnReg.png"/>
+
+    <MyButton prefWidth="27" prefHeight="24" AnchorPane.leftAnchor="20" AnchorPane.bottomAnchor="40"
+              fx:id="back" onMouseClicked="#onBackClicked" imageUrl="/views/images/back_icon.png"/>
+
+    <ImageView AnchorPane.rightAnchor="20" AnchorPane.bottomAnchor="40">
+        <Image url="/views/images/signup_logo.png"/>
+    </ImageView>
     <HBox prefHeight="24" maxHeight="24" fx:id="footer" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"/>
 </AnchorPane>

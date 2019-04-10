@@ -8,24 +8,25 @@
 <?import javafx.scene.control.Label?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="controllers.DashboardController" stylesheets="@css/Dashboard.css" fx:id="container" spacing="10">
-    <HBox style="-fx-background-color:rgba(28,23,99,0.85);">
+      fx:controller="controllers.DashboardController" stylesheets="@css/Dashboard.css" fx:id="container" spacing="10"
+      prefHeight="700" prefWidth="1000">
+    <HBox style="-fx-background-color:rgba(24,17,39,0.9);">
         <padding>
             <Insets top="20" right="1" bottom="1" left="20"/>
         </padding>
         <HBox maxWidth="Infinity" HBox.hgrow="ALWAYS">
-        <ImageView fitWidth="80">
-            <Image url="/views/images/Dashboard_logo4.png"/>
-        </ImageView>
+            <ImageView fitWidth="80" fitHeight="120">
+                <Image url="/views/images/Dashboard_logo4.png"/>
+            </ImageView>
         </HBox>
 
         <HBox fx:id="logout_form" HBox.hgrow="NEVER" spacing="10" alignment="CENTER_RIGHT">
             <padding>
-                <Insets right="20" />
+                <Insets right="20"/>
             </padding>
             <VBox alignment="CENTER_RIGHT">
                 <Label text="Dr.Shady EL Mashad" fx:id="doctor_name"/>
-                <Label text="Logout" fx:id="logout" onMouseClicked="#onLogoutClicked"/>
+                <Label text="Logout" fx:id="logout" onMouseClicked="#onLogoutClicked" style="-fx-cursor: hand;"/>
             </VBox>
             <ImageView>
                 <Image url="/views/images/user_icon.png"/>
@@ -47,8 +48,9 @@
         </HBox>
     </VBox>
     <VBox>
-        <HBox spacing="20" minHeight="40" alignment="CENTER" style="-fx-background-color:rgba(28,23,99,0.5);">
-            <Button fx:id="generate_exam" text="Generate exam" onAction="#onGenerateExamClicked" styleClass="generate-button"/>
+        <HBox spacing="20" minHeight="40" alignment="CENTER" style="-fx-background-color:rgba(24,17,39,0.9);">
+            <Button fx:id="generate_exam" text="Generate exam" onAction="#onGenerateExamClicked"
+                    styleClass="generate-button"/>
             <Button fx:id="import_csv" text="Import" onAction="#onImportClicked" styleClass="import-button"/>
             <Button fx:id="export_csv" text="Export" onAction="#onExportClicked" styleClass="export-button"/>
         </HBox>

@@ -19,8 +19,14 @@
             <!--<Label text="Chapter name"/>-->
             <TextField fx:id="chapter_name" promptText="Chapter name" maxWidth="Infinity"/>
         <!--</HBox>-->
+        <!--<Button text="Add" fx:id="add_chapter" onAction="#onAddChapterClicked" styleClass="add-button"/>-->
+        <!--<Button text="Edit" fx:id="edit_chapter" onAction="#onEditChapterClicked" styleClass="edit-button"/>-->
+    </VBox>
+
+    <HBox alignment="CENTER" AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.leftAnchor="0" minHeight="40"
+          style="-fx-background-color:#221936;">
         <Button text="Add" fx:id="add_chapter" onAction="#onAddChapterClicked" styleClass="add-button"/>
         <Button text="Edit" fx:id="edit_chapter" onAction="#onEditChapterClicked" styleClass="edit-button"/>
-    </VBox>
+    </HBox>
 
 </AnchorPane>

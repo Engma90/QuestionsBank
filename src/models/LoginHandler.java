@@ -7,6 +7,27 @@ import java.sql.SQLException;
 import java.text.MessageFormat;
 
 public class LoginHandler {
+
+
+    private static volatile LoginHandler instance = null;
+
+    private LoginHandler() {
+
+    }
+
+    public static LoginHandler getInstance() {
+        if (instance == null) {
+            // To provide thread-safe implementation.
+            synchronized (LoginHandler.class) {
+                if (instance == null) {
+                    instance = new LoginHandler();
+                }
+            }
+        }
+        return instance;
+    }
+
+
     private Doctor doctor = new Doctor();
     public boolean login(String email, String password) {
         //DBHandler db = new DBHandler();

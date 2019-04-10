@@ -516,7 +516,7 @@ public class DBSingletonHandler {
             return false;
         } catch (SQLException e) {
             if (e.getMessage().contains("Duplicate entry '1' for key 'PRIMARY'")
-            || e.getErrorCode()== 121) // means db already there
+            || e.getErrorCode()== 121) // means db already there (Successfully Connected)
                 return true;
             e.printStackTrace();
             return false;

@@ -7,6 +7,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import models.DBSingletonHandler;
 import models.LoginHandler;
 
 import java.io.IOException;
@@ -19,12 +20,12 @@ public class HomeController implements Initializable, IWindow  {
     public TextField login_email;
     public PasswordField login_password;
     public static boolean isLogged_in = false;
-    static LoginHandler loginHandler;
+    //static LoginHandler loginHandler;
     public MyButton login, signup;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-
+        DBSingletonHandler.getInstance();
 
         login_form.setVisible(false);
         login_form.setManaged(false);
@@ -60,8 +61,8 @@ public class HomeController implements Initializable, IWindow  {
     }
     public void onLoginClicked(MouseEvent e) throws IOException{
 
-        loginHandler = new LoginHandler();
-        if(loginHandler.login(login_email.getText(), login_password.getText())){
+        //loginHandler = new LoginHandler();
+        if(LoginHandler.getInstance().login(login_email.getText(), login_password.getText())){
             isLogged_in = true;
 
 //            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Dashboard.fxml"));
@@ -84,7 +85,7 @@ public class HomeController implements Initializable, IWindow  {
 
     }
     public void onSignupClicked(MouseEvent e){
-        new WindowLoader().load(e,"/views/Signup.fxml",null,null,true,false,null);
+        new WindowLoader().load(e,"/views/Signup.fxml",null,null,false,true,null);
 //        Parent root;
 //        try {
 //            root = FXMLLoader.load(getClass().getResource("/views/Signup.fxml"));

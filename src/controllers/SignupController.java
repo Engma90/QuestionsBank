@@ -7,6 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import models.LoginHandler;
 import models.SignupHandler;
 
 import java.net.URL;
@@ -42,10 +43,13 @@ public class SignupController implements Initializable, IWindow {
 
     @Override
     public Object setWindowData(Stage stage, Object initObject) {
-        stage.setMinWidth(600);
-        stage.setMaxWidth(600);
-        stage.setMinHeight(500);
-        stage.setMaxHeight(500);
+//        stage.setMinWidth(600);
+//        stage.setMaxWidth(600);
+//        stage.setMinHeight(500);
+//        stage.setMaxHeight(500);
+        stage.setMinHeight(600);
+        stage.setMinWidth(800);
+        stage.setMaximized(true);
         stage.setTitle("Sign up");
         return this;
     }
@@ -54,7 +58,12 @@ public class SignupController implements Initializable, IWindow {
         if(validate()){
 
             if(signupHandler.Signup(full_name.getText(), email.getText(), password.getText(),(combo_college.getSelectionModel().getSelectedIndex()+1)+"",department.getText())){
-                close(e);
+
+                if(LoginHandler.getInstance().login(email.getText(), password.getText())){
+                    new WindowLoader().load(e,"/views/Dashboard.fxml",null,null,false,true,null);
+                }
+
+                //close(e);
             }
             else {
                 new Alert(Alert.AlertType.ERROR, "Operation failed").show();
@@ -65,6 +74,10 @@ public class SignupController implements Initializable, IWindow {
             System.out.println("NotValid");
             new Alert(Alert.AlertType.ERROR, "Inputs are not valid").show();
         }
+    }
+
+    public void onBackClicked(MouseEvent e){
+        new WindowLoader().load(e,"/views/Home.fxml",null,null,false,true,null);
     }
     boolean validate(){
         if(!isValidEmail(email.getText())){

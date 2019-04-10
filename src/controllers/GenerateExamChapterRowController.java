@@ -27,6 +27,7 @@ public class GenerateExamChapterRowController implements Initializable,IUpdatabl
     String chapter_name;
     String chapter_number;
     List<String> diff;
+    public IUpdatable parent;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -53,6 +54,7 @@ public class GenerateExamChapterRowController implements Initializable,IUpdatabl
                     t.isSelected.setSelected(false);
                 }
             }
+            parent.update();
         });
 
         generateExamTopicRowControllerList = new ArrayList<>();
@@ -112,5 +114,6 @@ public class GenerateExamChapterRowController implements Initializable,IUpdatabl
             isSelected.setSelected(false);
         else
             isSelected.setSelected(true);
+        parent.update();
     }
 }

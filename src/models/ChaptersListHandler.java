@@ -1,7 +1,6 @@
 package models;
 
 
-import controllers.QuestionsTableController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import java.sql.ResultSet;

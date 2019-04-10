@@ -9,13 +9,21 @@
 ComboBox, TextField, PasswordField{
     -fx-background-color:#1B173D;
     -fx-text-inner-color:#FFFFFF;
-    -fx-prompt-text-fill: #FFFFFF;
+    -fx-prompt-text-fill: #abad9d;
     -fx-pref-width:500;
     -fx-border-color: grey;
     -fx-border-width: 1;
 }
 
 ComboBox.item{
+    -fx-prompt-text-fill: #abad9d;
     -fx-background-color:#1B173D;
     -fx-text-inner-color:#FFFFFF;
+}
+
+.combo-box .cell{
+    -fx-text-fill: #FFFFFF;
+    -fx-font: 16px "Arial";
+    -fx-background-color:#1B173D;
+    -fx-pref-width:200;
 }

@@ -17,8 +17,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,16 +25,13 @@ import java.util.logging.Logger;
 //Todo: cleanup after finish
 class FileExporterLibreOffice implements IFileExporter {
     private static final String TEMP_DIR = "exportTMP";
-    private List<String> possibleBinaryPath;
     private String selectedBinaryPath = "";
 
-    public FileExporterLibreOffice() {
-    }
 
     @Override
     public boolean checkForDependencies() {
         //Todo: Enable configurable (custom) path from ini file and remove temp D:\\
-        possibleBinaryPath = new ArrayList<>();
+        List<String> possibleBinaryPath = new ArrayList<>();
         if (PlatformUtil.isWindows()) {
             possibleBinaryPath.add("C:\\Program Files\\LibreOffice\\program\\soffice.exe");
             possibleBinaryPath.add("C:\\Program Files (x86)\\LibreOffice\\program\\soffice.exe");
@@ -83,11 +79,12 @@ class FileExporterLibreOffice implements IFileExporter {
     public boolean exportExam(Exam exam, String dest, String format) {
         try {
             FileUtils.deleteDirectory(new File(TEMP_DIR));
+
         } catch (IOException e) {
             e.printStackTrace();
         }
         if (!new File(TEMP_DIR).exists()) {
-            boolean done = new File(TEMP_DIR).mkdirs();
+            boolean done = new File(TEMP_DIR).mkdir();
         }
 
         for (ExamModel examModel : exam.getExamModelList()) {
@@ -134,8 +131,8 @@ class FileExporterLibreOffice implements IFileExporter {
 
         String cmd = "";
         if (PlatformUtil.isWindows()) {
-            cmd = "cmd.exe /c "
-                    + "For %f in " +
+            cmd = //"C:\\Windows\\System32\\cmd.exe /c "
+                    "For %f in " +
                     "(" + FileSystems.getDefault().getPath("").toAbsolutePath() + "\\" + TEMP_DIR + "\\" + "*.html) " +
                     "do (" +
                     "\"" + selectedBinaryPath + "\"" + " --headless --norestore --writer --convert-to docx " +
@@ -155,19 +152,21 @@ class FileExporterLibreOffice implements IFileExporter {
             }
 
         } else if (PlatformUtil.isLinux()) {
-            //cmd = //"/bin/bash -c " +
-                    cmd = selectedBinaryPath + " --headless --norestore --writer --convert-to docx "+
-                            FileSystems.getDefault().getPath("").toAbsolutePath() + "\\" + TEMP_DIR + "\\" + "*.html";
+            //cmd = "/bin/bash -c ";
+            //cmd += "cd " + "\"" +FileSystems.getDefault().getPath("").toAbsolutePath() + "/" + TEMP_DIR + "/" + "\"";
+            //cmd += "cd \"/home/mohammad/Desktop/exams\"";
+            //cmd +=" ; ";
+            cmd = selectedBinaryPath + " --headless --norestore --writer --convert-to docx *.html";
 
             if (format.equals("PDF")) {
 
                 String tmp_cmd = cmd + " --outdir "
-                        + "\"" + FileSystems.getDefault().getPath("").toAbsolutePath() + "\\" + TEMP_DIR + "\"" ;
+                        + "\"" + FileSystems.getDefault().getPath("").toAbsolutePath() + "/" + TEMP_DIR + "\"";
                 runCMD(tmp_cmd);
-                cmd = cmd.replace("--convert-to docx","--convert-to pdf")
-                        .replace("*.html","*.docx");
+                cmd = cmd.replace("--convert-to docx", "--convert-to pdf")
+                        .replace("*.html", "*.docx");
                 cmd += " --outdir "
-                        + "\"" + dest + "\"" ;
+                        + "\"" + dest + "\"";
             } else {
                 cmd += " --outdir "
                         + "\"" + dest + "\"";
@@ -175,21 +174,62 @@ class FileExporterLibreOffice implements IFileExporter {
         }
 
 
-        return runCMD(cmd);
+        boolean success = runCMD(cmd);
+        try {
+            FileUtils.deleteDirectory(new File(TEMP_DIR));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return success;
     }
 
     private boolean runCMD(String cmd) {
         try {
-            Process p = Runtime.getRuntime().exec
-                    (cmd);
-            BufferedReader input =
-                    new BufferedReader
-                            (new InputStreamReader(p.getInputStream()));
-            String outputLine;
-            while ((outputLine = input.readLine()) != null) {
-                System.out.println(outputLine);
+//            Process p = Runtime.getRuntime().exec
+//                    (cmd);
+//            BufferedReader input =
+//                    new BufferedReader
+//                            (new InputStreamReader(p.getInputStream()));
+//            String outputLine;
+//            while ((outputLine = input.readLine()) != null) {
+//                System.out.println(outputLine);
+//            }
+//            input.close();
+            System.out.println(cmd);
+            List<String> commands = new ArrayList<>();
+            ProcessBuilder builder = new ProcessBuilder();
+            if (PlatformUtil.isWindows()) {
+                commands.add("C:\\Windows\\System32\\cmd.exe");
+                commands.add("/c");
+                commands.add(cmd);
+                builder.command(commands);
+                //builder = new ProcessBuilder(commands);
+            }else if (PlatformUtil.isLinux()) {
+                //commands.add("/bin/bash -c " + cmd);
+                //commands.add(selectedBinaryPath);
+                //commands.add(cmd);
+                //builder = new ProcessBuilder(commands);
+                builder.command("/bin/bash","-c", cmd);
             }
-            input.close();
+
+
+            builder.directory(new File( TEMP_DIR ).getAbsoluteFile());
+            builder.redirectErrorStream(true);
+            System.out.println(Arrays.toString(builder.command().toArray()));
+            Process process =  builder.start();
+
+            Scanner s = new Scanner(process.getInputStream());
+            StringBuilder text = new StringBuilder();
+            while (s.hasNextLine()) {
+                text.append(s.nextLine());
+                text.append("\n");
+            }
+            s.close();
+            int result = process.waitFor();
+            System.out.printf( "Process exited with result %d and output %s%n", result, text );
+
+
+
             return true;
         } catch (Exception err) {
             err.printStackTrace();

@@ -1,19 +1,19 @@
 #container{
-   -fx-background-color:#454580;
+   -fx-background-color:#221e3e;
 }
 ScrollPane{
-    -fx-background:#52528f;
+    -fx-background:#221936;
 
 }
 .bottom-toolbar, .top-toolbar{
-    -fx-background-color: linear-gradient(to bottom, #a4a4be, #7373b8) !important;
+    -fx-background-color: linear-gradient(to bottom, #a4a4be, #221e3e) !important;
 }
 .transparent{
-    -fx-background-color:#52528f;
+    -fx-background-color:#221936;
 }
 TextField, PasswordField, RadioButton, NumberField, .date-picker .text-field, .context-menu{
     -fx-font: 16px "Arial";
-    -fx-background-color:#52528f;
+    -fx-background-color:#1B173D;
     -fx-text-fill:#ffffff;
     -fx-prompt-text-fill: #74737d;
     -fx-border-color: grey;
@@ -45,7 +45,7 @@ RadioButton{
 }
 
 .button {
-    -fx-background-color:#231C58;
+    -fx-background-color:#160e27;
     -fx-border-radius: 20;
     -fx-background-radius:20;
     -fx-text-fill:#ffffff;

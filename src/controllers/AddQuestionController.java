@@ -204,7 +204,10 @@ public class AddQuestionController implements Initializable, IWindow {
             QuestionsTableHandler.getInstance().Add(topic, model);
             close(e);
         } else {
-            new Alert(Alert.AlertType.ERROR, "Please fill all fields").show();
+            new Alert(Alert.AlertType.ERROR, "Please fill all fields:\n" +
+                    "Question\n" +
+                    "At least 1 answer\n" +
+                    "Mark At least 1 answer as a right answer").show();
         }
     }
 
@@ -216,7 +219,10 @@ public class AddQuestionController implements Initializable, IWindow {
             QuestionsTableHandler.getInstance().Edit(model);
             close(e);
         } else {
-            new Alert(Alert.AlertType.ERROR, "Please fill all fields").show();
+            new Alert(Alert.AlertType.ERROR, "Please fill all fields:\n" +
+                    "Question\n" +
+                    "At least 1 answer\n" +
+                    "Mark At least 1 answer as a right answer").show();
         }
     }
 
@@ -300,6 +306,8 @@ public class AddQuestionController implements Initializable, IWindow {
         stage.setTitle(operation_type + " Question");
         stage.setMinHeight(700);
         stage.setMinWidth(1000);
+        stage.setWidth(stage.getMinWidth());
+        stage.setHeight(stage.getMinHeight());
         return this;
     }
 
