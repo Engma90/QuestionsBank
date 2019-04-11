@@ -1,5 +1,6 @@
 package controllers;
 
+import javafx.application.Platform;
 import javafx.fxml.Initializable;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -25,7 +26,8 @@ public class HomeController implements Initializable, IWindow  {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        DBSingletonHandler.getInstance();
+
+
 
         login_form.setVisible(false);
         login_form.setManaged(false);

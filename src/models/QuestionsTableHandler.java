@@ -158,7 +158,7 @@ public class QuestionsTableHandler {
     public ObservableList<Question> getQuestionList(Chapter chapter) {
         questionList = FXCollections.observableArrayList();
         //DBHandler db = new DBHandler();
-        System.out.println("------------------------------------------0");
+        //System.out.println("------------------------------------------0");
         String sql = MessageFormat.format(
                 "SELECT * FROM ((Question a " +
                         "JOIN Topic b ON a.Topic_idTopic = b.idTopic) " +
@@ -166,7 +166,7 @@ public class QuestionsTableHandler {
                         "where idChapter = {0};"
                 , chapter.id);
         ResultSet rs = DBSingletonHandler.getInstance().execute_query(sql);
-        System.out.println("------------------------------------------1");
+        //System.out.println("------------------------------------------1");
         try {
             while (rs.next()) {
 
@@ -174,7 +174,7 @@ public class QuestionsTableHandler {
                         rs.getString("QuestionType"), rs.getString("QuestionWeight"), "");
                 model.setExpected_time(rs.getString("QuestionExpectedTime"));
                 questionList.add(model);
-                System.out.println("------------------------------------------2");
+                //System.out.println("------------------------------------------2");
 
                 getQuestionAnswersList(model, DBSingletonHandler.getInstance());
 
@@ -193,7 +193,7 @@ public class QuestionsTableHandler {
     public ObservableList<Question> getQuestionList(String ch_id, String diff) {
         questionList = FXCollections.observableArrayList();
         //DBHandler db = new DBHandler();
-        System.out.println("------------------------------------------0");
+        //System.out.println("------------------------------------------0");
         String sql = MessageFormat.format(
                 "SELECT * FROM ((Question a " +
                         "JOIN Topic b ON a.Topic_idTopic = b.idTopic) " +
@@ -208,7 +208,7 @@ public class QuestionsTableHandler {
                         rs.getString("QuestionType"), rs.getString("QuestionWeight"), "");
                 model.setExpected_time(rs.getString("QuestionExpectedTime"));
                 questionList.add(model);
-                System.out.println("------------------------------------------2");
+                //System.out.println("------------------------------------------2");
                 getQuestionAnswersList(model, DBSingletonHandler.getInstance());
 
             }

@@ -15,6 +15,10 @@ import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/* Todo: - Add fields translation, preferred exam layout language
+         - Email already registered
+         - Passwords match
+ */
 public class SignupController implements Initializable, IWindow {
 
     public TextField full_name,email,department;
@@ -47,7 +51,7 @@ public class SignupController implements Initializable, IWindow {
 //        stage.setMaxWidth(600);
 //        stage.setMinHeight(500);
 //        stage.setMaxHeight(500);
-        stage.setMinHeight(600);
+        stage.setMinHeight(700);
         stage.setMinWidth(800);
         stage.setMaximized(true);
         stage.setTitle("Sign up");
@@ -103,7 +107,6 @@ public class SignupController implements Initializable, IWindow {
     {
         if (email != null)
         {
-            //Todo: email 4 parts regex check
             Pattern p = Pattern.compile("^([A-Za-z_01-9].*)([@])([A-Za-z_01-9].*).([a-z]+)$");
             Matcher m = p.matcher(email);
             return m.find();

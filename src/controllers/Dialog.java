@@ -8,8 +8,8 @@ import javafx.stage.Modality;
 import java.util.Optional;
 
 public class Dialog {
-    public static boolean CreateDialog(String title, String Message, String button1, String button2){
-        ButtonType b1 = new ButtonType(button1, ButtonBar.ButtonData.OK_DONE);
+    public static boolean CreateDialog(String title, String Message, String acceptBtn, String button2){
+        ButtonType b1 = new ButtonType(acceptBtn, ButtonBar.ButtonData.OK_DONE);
         ButtonType b2 = new ButtonType(button2, ButtonBar.ButtonData.CANCEL_CLOSE);
         Alert alert = new Alert(Alert.AlertType.WARNING,
                 Message,

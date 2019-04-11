@@ -108,8 +108,11 @@ public class DashboardController implements Initializable, IWindow {
             File selectedFile = fileChooser.showSaveDialog(((Node) e.getSource()).getScene().getWindow());
             if (selectedFile != null) {
                 QBBackup qbBackup = new QBBackup();
+                String path = selectedFile.getAbsolutePath();
+                if(!path.endsWith(".qb"))
+                    path += ".qb";
                 qbBackup.qbExport(coursesTableController.courses_table_view.getSelectionModel().getSelectedItem(),
-                        selectedFile.getAbsolutePath());
+                        path);
             }
         }
     }

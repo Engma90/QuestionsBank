@@ -123,7 +123,7 @@ class QBBackup {
 
             //CSVReader reader = new CSVReader(new FileReader("data.csv"));
             String path = FileSystems.getDefault().getPath("tmp").toString();
-            System.out.println(path);
+            //System.out.println(path);
             CourseCSVList = readData(path + "/Course.csv");
             ChapterCSVList = readData(path + "/Chapter.csv");
             TopicCSVList = readData(path + "/Topic.csv");

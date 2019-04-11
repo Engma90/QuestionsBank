@@ -1,5 +1,7 @@
 package models;
 
+import controllers.Dialog;
+import javafx.application.Platform;
 import javafx.scene.control.Alert;
 
 import java.sql.*;
@@ -9,17 +11,33 @@ public class DBSingletonHandler {
 
     private static volatile DBSingletonHandler instance = null;
 
-    private static final String SERVER = "localhost";
+//    private static final String SERVER = "localhost";
+//    private static final String PORT = "3306";
+//    private static final String DB_NAME = "questionbank";
+//    private static final String USER = "root";
+//    private static final String PASS = "Root@1234";
+
+    private static final String SERVER = "remotemysql.com";
     private static final String PORT = "3306";
-    private static final String DB_NAME = "questionbank";
-    private static final String USER = "root";
-    private static final String PASS = "Root@1234";
+    private static final String DB_NAME = "9OIidHK4UF";
+    private static final String USER = "9OIidHK4UF";
+    private static final String PASS = "NGr5dSWL9z";
+
 
     private Connection connection;
 
     private DBSingletonHandler() {
         if (!createSchema()) {
-            new Alert(Alert.AlertType.ERROR, "Couldn't connect to database").show();
+            //new Alert(Alert.AlertType.ERROR, "Couldn't connect to database").show();
+            Platform.runLater(() -> {
+                if (Dialog.CreateDialog("Connection error", "Couldn't connect to database, retry?",
+                        "Yes", "No")) {
+                    instance = null;
+                    getInstance();
+                } else {
+                    //
+                }
+            });
         } else {
             connection = getConnection();
         }
@@ -35,6 +53,16 @@ public class DBSingletonHandler {
             }
         }
         return instance;
+    }
+
+    // For close connection
+    public static DBSingletonHandler tryGetInstance() {
+        if (instance != null) {
+            return instance;
+        }else {
+            return null;
+        }
+
     }
 
 
@@ -54,6 +82,7 @@ public class DBSingletonHandler {
     private Connection getConnection() {
         try {
             Connection _connection;
+
             Class.forName("com.mysql.jdbc.Driver");
             _connection = DriverManager.getConnection(
                     "jdbc:mysql://" + SERVER + ":" + PORT + "/" + DB_NAME, USER, PASS);
@@ -64,12 +93,14 @@ public class DBSingletonHandler {
         }
     }
 
-    //Todo: call on program exit
+    //Todo: call closeConnection on program exit
     public void closeConnection() {
         try {
             connection.close();
+            connection = null;
+            instance = null;
         } catch (SQLException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 
@@ -78,9 +109,14 @@ public class DBSingletonHandler {
             if (connection == null || connection.isClosed()) {
                 System.out.println("Connection is closed, reconnecting...");
                 connection = getConnection();
-
+                if (connection == null || connection.isClosed()) {
+                    instance = null;
+                    getInstance();
+                }
             }
         } catch (SQLException e) {
+            instance = null;
+            getInstance();
             e.printStackTrace();
         }
     }
@@ -121,9 +157,9 @@ public class DBSingletonHandler {
             for (int i = 0; i < params.length; i++)
                 pstmt.setString(i + 1, params[i]);
             System.out.println(sql);
-            for (String s : params)
-                System.out.print(s + "   ");
-            System.out.println();
+//            for (String s : params)
+//                System.out.print(s + "   ");
+//            System.out.println();
             pstmt.executeUpdate();
             ResultSet rs = pstmt.getGeneratedKeys();
             int last_inserted_id = -1;
@@ -501,7 +537,7 @@ public class DBSingletonHandler {
 //                .replace("ExamQuestion","ExamQuestion".toLowerCase())
 //                .replace("ExamQuestionAnswer","ExamQuestionAnswer".toLowerCase());
 
-        System.out.println(sql);
+        //System.out.println(sql);
         try {
             Connection _connection = getCreationConnection();
             if (_connection != null) {
@@ -516,7 +552,7 @@ public class DBSingletonHandler {
             return false;
         } catch (SQLException e) {
             if (e.getMessage().contains("Duplicate entry '1' for key 'PRIMARY'")
-            || e.getErrorCode()== 121) // means db already there (Successfully Connected)
+                    || e.getErrorCode() == 121) // means db already there (Successfully Connected)
                 return true;
             e.printStackTrace();
             return false;

@@ -53,7 +53,7 @@ public class QuestionsTableController implements Initializable {
         questions_table.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Question>() {
             @Override
             public void changed(ObservableValue<? extends Question> observable, Question oldValue, Question newValue) {
-                System.out.println("Question:");
+                //System.out.println("Question:");
                 int current_selected_index = questions_table.getSelectionModel().getSelectedIndex();
                 if (current_selected_index >= 0) {
 //                current_selected_question_id = questions_table.getSelectionModel().getSelectedItem().getId();

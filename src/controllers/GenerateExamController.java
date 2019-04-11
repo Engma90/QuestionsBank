@@ -81,9 +81,9 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
 
         chapterList = ChaptersListHandler.getInstance().getList(course);
         for (Chapter c : chapterList) {
-            System.out.println("----------------------1");
+            //System.out.println("----------------------1");
             //List<Question> questionList = QuestionsTableHandler.getInstance().getQuestionList(c.id);
-            System.out.println("----------------------2");
+            //System.out.println("----------------------2");
             //List<String> l = new ArrayList<String>();
 //            for (Question q : questionList) {
 //                if (!l.contains(q.getQuestion_diff())) {
@@ -133,16 +133,22 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
 
     }
 
-    //Todo: Separate import exam to db from exporting to avoid db redundancy (word and pdf)
+    /* Todo: - Separate import exam to db from exporting to avoid db redundancy (word and pdf)
+             - Add Progressbar
+     */
     public void onGenerateClicked(ActionEvent e) {
+        try {
+
+
         if (validate()) {
+            generate.setDisable(true);
             DirectoryChooser directoryChooser = new DirectoryChooser();
             Node source = (Node) e.getSource();
             Window stage = source.getScene().getWindow();
             File selectedDirectory = directoryChooser.showDialog(stage);
 
             if (selectedDirectory != null) {
-                System.out.println(selectedDirectory.getAbsolutePath());
+                //System.out.println(selectedDirectory.getAbsolutePath());
                 List<ExamQuestion> exam_questions = getExamQuestionsList();
                 Exam exam = new Exam();
                 exam.setExamModelList(new ArrayList<>());
@@ -155,8 +161,8 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
                             Collections.shuffle(temp);
                             examModel.setExamQuestionsList(temp);
                             //Collections.shuffle(examModel.getExamQuestionsList());
-                            System.out.println("---------------------------------------------------------------------");
-                            System.out.println(examModel.getExamQuestionsList().get(0).getQuestionContent());
+                            //System.out.println("---------------------------------------------------------------------");
+                            //System.out.println(examModel.getExamQuestionsList().get(0).getQuestionContent());
                             exam.getExamModelList().add(examModel);
                         }
 
@@ -176,9 +182,15 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
                     addExamToDatabase(exam);
                     new FileExporter().getExporter(FileExporter.LIBRE_OFFICE)
                             .exportExam(exam, selectedDirectory.getAbsolutePath(), format.getValue());
-                    new Alert(Alert.AlertType.INFORMATION, "Operation Compleated").show();
+                    new Alert(Alert.AlertType.INFORMATION, "Operation Completed").show();
                 }
             }
+
+        }
+        }catch (Exception ex){
+            new Alert(Alert.AlertType.ERROR, "Operation Failed, " + ex.getCause()).show();
+        }finally {
+            generate.setDisable(false);
         }
     }
 
@@ -188,7 +200,7 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
             if (cRow.isSelected.isSelected()) {
                 for (GenerateExamTopicRowController tRow : cRow.generateExamTopicRowControllerList) {
                     if (tRow.isSelected.isSelected()) {
-                        List<Question> temp_list = QuestionsTableHandler.getInstance().getQuestionList(new Topic(tRow.topic_id, ""), tRow.diff_max_level.getText());
+                        List<Question> temp_list = QuestionsTableHandler.getInstance().getQuestionList(new Topic(tRow.topic.id, ""), tRow.diff_max_level.getText());
 
                         Collections.shuffle(temp_list);
                         //get only desired number & convert to examQuestion
@@ -301,10 +313,17 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
             if (gecrc.isSelected.isSelected()) {
                 for (GenerateExamTopicRowController getrc : gecrc.generateExamTopicRowControllerList) {
                     if (getrc.isSelected.isSelected()) {
-                        Topic topic = new Topic();
-                        topic.id = getrc.topic_id;
+//                        Topic topic = new Topic();
+//                        topic.id = getrc.topic.id;
+                        int questions_less_than_level = 0;
+                        for(Question q: getrc.topic.AllQuestionsList){
+                            if (Integer.parseInt(q.getQuestion_diff()) <= Integer.parseInt(getrc.diff_max_level.getText())){
+                                questions_less_than_level++;
+                            }
+                        }
                         getrc.topic_number_of_questions.setMax(
-                                QuestionsTableHandler.getInstance().getQuestionList(topic, getrc.diff_max_level.getText()).size()
+                                //QuestionsTableHandler.getInstance().getQuestionList(topic, getrc.diff_max_level.getText()).size()
+                                questions_less_than_level
                         );
                         sum += Integer.parseInt(getrc.topic_number_of_questions.getText());
                     }
@@ -333,7 +352,7 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
     public Object setWindowData(Stage stage, Object initObject) {
         course = (Course) initObject;
         stage.setTitle("Generate Exam");
-        stage.setMinHeight(700);
+        stage.setMinHeight(600);
         stage.setMinWidth(1000);
         stage.setWidth(stage.getMinWidth());
         stage.setHeight(stage.getMinHeight());

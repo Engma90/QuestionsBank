@@ -12,7 +12,7 @@
     <VBox spacing="10" xmlns="http://javafx.com/javafx"
           xmlns:fx="http://javafx.com/fxml"
           fx:controller="controllers.GenerateExamController" stylesheets="@css/SimpleForm.css" fx:id="container"
-          prefWidth="1000" prefHeight="700">
+          prefWidth="1000" prefHeight="600">
     <VBox spacing="10" VBox.vgrow="ALWAYS" >
     <padding>
         <Insets top="10" right="10" bottom="10" left="10"/>
@@ -122,7 +122,7 @@
         </HBox>
     </VBox>
     </VBox>
-        <HBox spacing="20" alignment="CENTER" style="-fx-background-color:rgba(28,23,99,0.5);">
+        <HBox spacing="20" alignment="CENTER" style="-fx-background-color:#221936;">
             <padding>
                 <Insets top="10" bottom="10"/>
             </padding>
