@@ -18,7 +18,7 @@ public class WindowLoader {
     public  Object load(Event e, String fxml_path, Object custom_controller, EventHandler<WindowEvent> onCloseEvent, boolean init_modality, boolean close_parent, Object initObject){
         try {
             Stage stage = new Stage();
-            Image icon = new Image(getClass().getResourceAsStream("/views/images/logo.png"));
+            Image icon = new Image(getClass().getResourceAsStream("/views/images/icon.png"));
             stage.getIcons().add(icon);
             Parent root;
             FXMLLoader loader = new

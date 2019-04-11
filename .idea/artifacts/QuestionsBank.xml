@@ -30,7 +30,7 @@
         <element id="library" level="project" name="import-image" />
         <element id="library" level="project" name="QBBackup" />
       </element>
-      <element id="file-copy" path="$PROJECT_DIR$/logo.png" />
+      <element id="file-copy" path="$PROJECT_DIR$/res/logo.png" />
     </root>
   </artifact>
 </component>
