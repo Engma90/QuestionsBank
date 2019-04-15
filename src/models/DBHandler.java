@@ -1,128 +1,106 @@
 package models;
 
-import controllers.Dialog;
-import javafx.application.Platform;
-import javafx.scene.control.Alert;
-
 import java.sql.*;
 
-// Double Check Locking Principle
-public class DBSingletonHandler {
+public class DBHandler {
 
-    private static volatile DBSingletonHandler instance = null;
+    private static volatile DBHandler instance = null;
+    private static volatile Connection connection;
 
-//    private static final String SERVER = "localhost";
-//    private static final String PORT = "3306";
-//    private static final String DB_NAME = "questionbank";
-//    private static final String USER = "root";
-//    private static final String PASS = "Root@1234";
-
-    private static final String SERVER = "remotemysql.com";
+    private static final String SERVER = "localhost";
     private static final String PORT = "3306";
-    private static final String DB_NAME = "9OIidHK4UF";
-    private static final String USER = "9OIidHK4UF";
-    private static final String PASS = "NGr5dSWL9z";
+    private static final String DB_NAME = "questionbank";
+    private static final String USER = "root";
+    private static final String PASS = "Root@1234";
+
+//    private static final String SERVER = "remotemysql.com";
+//    private static final String PORT = "3306";
+//    private static final String DB_NAME = "9OIidHK4UF";
+//    private static final String USER = "9OIidHK4UF";
+//    private static final String PASS = "NGr5dSWL9z";
 
 
-    private Connection connection;
-
-    private DBSingletonHandler() {
-        if (!createSchema()) {
-            //new Alert(Alert.AlertType.ERROR, "Couldn't connect to database").show();
-            Platform.runLater(() -> {
-                if (Dialog.CreateDialog("Connection error", "Couldn't connect to database, retry?",
-                        "Yes", "No")) {
-                    instance = null;
-                    getInstance();
-                } else {
-                    //
-                }
-            });
-        } else {
-            connection = getConnection();
-        }
+    private DBHandler() {
+        //connect();
     }
 
-    public static DBSingletonHandler getInstance() {
+    public static DBHandler getInstance() {
         if (instance == null) {
             // To provide thread-safe implementation.
-            synchronized (DBSingletonHandler.class) {
+            synchronized (DBHandler.class) {
                 if (instance == null) {
-                    instance = new DBSingletonHandler();
+                    instance = new DBHandler();
                 }
             }
         }
         return instance;
     }
 
-    // For close connection
-    public static DBSingletonHandler tryGetInstance() {
+    // For close connection onAppExit
+    public static DBHandler tryGetInstance() {
         if (instance != null) {
             return instance;
-        }else {
+        } else {
             return null;
         }
-
     }
 
 
-    private Connection getCreationConnection() {
+    private void connect(boolean isFirstConnection) {
         try {
-            Connection _connection;
             Class.forName("com.mysql.jdbc.Driver");
-            _connection = DriverManager.getConnection(
-                    "jdbc:mysql://" + SERVER + ":" + PORT + "?allowMultiQueries=true", USER, PASS);
-            return _connection;
+            if (isFirstConnection) {
+                connection = DriverManager.getConnection(
+                        "jdbc:mysql://" + SERVER + ":" + PORT + "?allowMultiQueries=true", USER, PASS);
+            } else {
+                connection = DriverManager.getConnection(
+                        "jdbc:mysql://" + SERVER + ":" + PORT + "/" + DB_NAME, USER, PASS);
+            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return null;
         }
     }
 
-    private Connection getConnection() {
-        try {
-            Connection _connection;
+//    private void connect() {
+//        try {
+//            Class.forName("com.mysql.jdbc.Driver");
+//            connection = DriverManager.getConnection(
+//                    "jdbc:mysql://" + SERVER + ":" + PORT + "/" + DB_NAME, USER, PASS);
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//        }
+//    }
 
-            Class.forName("com.mysql.jdbc.Driver");
-            _connection = DriverManager.getConnection(
-                    "jdbc:mysql://" + SERVER + ":" + PORT + "/" + DB_NAME, USER, PASS);
-            return _connection;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return null;
-        }
-    }
-
-    //Todo: call closeConnection on program exit
-    public void closeConnection() {
+    public void disconnect() {
         try {
-            connection.close();
-            connection = null;
+            if (isConnected()) {
+                connection.close();
+                connection = null;
+            }
             instance = null;
-        } catch (SQLException e) {
-            //e.printStackTrace();
+        } catch (SQLException ignored) {
+
         }
     }
 
-    private void checkConnection() {
+
+    private boolean isConnected() {
         try {
             if (connection == null || connection.isClosed()) {
-                System.out.println("Connection is closed, reconnecting...");
-                connection = getConnection();
-                if (connection == null || connection.isClosed()) {
-                    instance = null;
-                    getInstance();
-                }
+                System.out.println("Connection is closed");
+                return false;
             }
+            return true;
         } catch (SQLException e) {
-            instance = null;
-            getInstance();
-            e.printStackTrace();
+            return false;
         }
     }
 
     boolean execute_sql(String sql) {
-        checkConnection();
+
+        if (!isConnected()) {
+            connect(false);
+        }
         try {
             Statement stmt = connection.createStatement();
             System.out.println(sql);
@@ -137,12 +115,13 @@ public class DBSingletonHandler {
     }
 
     ResultSet execute_query(String sql) {
-        checkConnection();
+        if (!isConnected()) {
+            connect(false);
+        }
         try {
             Statement stmt = connection.createStatement();
             System.out.println(sql);
-            ResultSet rs = stmt.executeQuery(sql);
-            return rs;
+            return stmt.executeQuery(sql);
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
             return null;
@@ -150,23 +129,21 @@ public class DBSingletonHandler {
     }
 
     int execute_PreparedStatement(String sql, String[] params) {
-        checkConnection();
+        if (!isConnected()) {
+            connect(false);
+        }
         try {
             PreparedStatement pstmt =
                     connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             for (int i = 0; i < params.length; i++)
                 pstmt.setString(i + 1, params[i]);
             System.out.println(sql);
-//            for (String s : params)
-//                System.out.print(s + "   ");
-//            System.out.println();
             pstmt.executeUpdate();
             ResultSet rs = pstmt.getGeneratedKeys();
             int last_inserted_id = -1;
             if (rs.next()) {
                 last_inserted_id = rs.getInt(1);
             }
-            //System.out.println(rs);
             pstmt.close();
             return last_inserted_id;
         } catch (Exception ex) {
@@ -175,7 +152,7 @@ public class DBSingletonHandler {
         }
     }
 
-    private boolean createSchema() {
+    public boolean createSchema() {
         String sql = "-- MySQL Workbench Forward Engineering\n" +
                 "\n" +
                 "SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;\n" +
@@ -197,7 +174,8 @@ public class DBSingletonHandler {
                 "-- -----------------------------------------------------\n" +
                 "CREATE TABLE IF NOT EXISTS `model_db`.`University` (\n" +
                 "  `idUniversity` INT NOT NULL AUTO_INCREMENT,\n" +
-                "  `Name` VARCHAR(45) NOT NULL,\n" +
+                "  `Name` VARCHAR(100) NOT NULL,\n" +
+                "  `AltName` VARCHAR(100) NOT NULL,\n" +
                 "  PRIMARY KEY (`idUniversity`),\n" +
                 "  UNIQUE INDEX `idUniversity_UNIQUE` (`idUniversity` ASC))\n" +
                 "ENGINE = InnoDB;\n" +
@@ -208,7 +186,7 @@ public class DBSingletonHandler {
                 "-- -----------------------------------------------------\n" +
                 "CREATE TABLE IF NOT EXISTS `model_db`.`College` (\n" +
                 "  `idCollege` INT NOT NULL AUTO_INCREMENT,\n" +
-                "  `Name` VARCHAR(45) NOT NULL,\n" +
+                "  `Name` VARCHAR(100) NOT NULL,\n" +
                 "  `University_idUniversity` INT NOT NULL,\n" +
                 "  PRIMARY KEY (`idCollege`),\n" +
                 "  UNIQUE INDEX `idCollege_UNIQUE` (`idCollege` ASC),\n" +
@@ -226,11 +204,12 @@ public class DBSingletonHandler {
                 "-- -----------------------------------------------------\n" +
                 "CREATE TABLE IF NOT EXISTS `model_db`.`Doctor` (\n" +
                 "  `idDoctor` INT NOT NULL AUTO_INCREMENT,\n" +
-                "  `DoctorName` VARCHAR(45) NOT NULL,\n" +
+                "  `DoctorName` VARCHAR(100) NOT NULL,\n" +
                 "  `DoctorPassword` VARCHAR(45) NOT NULL,\n" +
-                "  `DoctorEmail` VARCHAR(45) NOT NULL,\n" +
+                "  `DoctorEmail` VARCHAR(100) NOT NULL,\n" +
                 "  `College_idCollege` INT NOT NULL,\n" +
-                "  `DoctorDepartment` VARCHAR(45) NOT NULL,\n" +
+                "  `DoctorDepartment` VARCHAR(100) NOT NULL,\n" +
+                "  `PreferredExamLayout` VARCHAR(45) NOT NULL,\n" +
                 "  PRIMARY KEY (`idDoctor`),\n" +
                 "  UNIQUE INDEX `idDoctor_UNIQUE` (`idDoctor` ASC),\n" +
                 "  UNIQUE INDEX `DoctorEmail_UNIQUE` (`DoctorEmail` ASC),\n" +
@@ -250,7 +229,7 @@ public class DBSingletonHandler {
                 "  `idCourse` INT NOT NULL AUTO_INCREMENT,\n" +
                 "  `Doctor_idDoctor` INT NOT NULL,\n" +
                 "  `CourseLevel` VARCHAR(45) NOT NULL,\n" +
-                "  `CourseName` VARCHAR(45) NOT NULL,\n" +
+                "  `CourseName` VARCHAR(100) NOT NULL,\n" +
                 "  `CourseCode` VARCHAR(45) NOT NULL,\n" +
                 "  `CourseYear` VARCHAR(45) NOT NULL,\n" +
                 "  PRIMARY KEY (`idCourse`),\n" +
@@ -270,7 +249,7 @@ public class DBSingletonHandler {
                 "CREATE TABLE IF NOT EXISTS `model_db`.`Chapter` (\n" +
                 "  `idChapter` INT NOT NULL AUTO_INCREMENT,\n" +
                 "  `Course_idCourse` INT NOT NULL,\n" +
-                "  `ChapterName` VARCHAR(45) NOT NULL,\n" +
+                "  `ChapterName` VARCHAR(100) NOT NULL,\n" +
                 "  `ChapterNumber` INT NOT NULL,\n" +
                 "  PRIMARY KEY (`idChapter`),\n" +
                 "  UNIQUE INDEX `idChapter_UNIQUE` (`idChapter` ASC),\n" +
@@ -288,8 +267,8 @@ public class DBSingletonHandler {
                 "-- -----------------------------------------------------\n" +
                 "CREATE TABLE IF NOT EXISTS `model_db`.`Topic` (\n" +
                 "  `idTopic` INT NOT NULL AUTO_INCREMENT,\n" +
-                "  `Name` VARCHAR(45) NOT NULL,\n" +
                 "  `Chapter_idChapter` INT NOT NULL,\n" +
+                "  `Name` VARCHAR(200) NOT NULL,\n" +
                 "  PRIMARY KEY (`idTopic`),\n" +
                 "  UNIQUE INDEX `idTopic_UNIQUE` (`idTopic` ASC),\n" +
                 "  INDEX `fk_Topic_Chapter1_idx` (`Chapter_idChapter` ASC),\n" +
@@ -307,8 +286,7 @@ public class DBSingletonHandler {
                 "CREATE TABLE IF NOT EXISTS `model_db`.`Question` (\n" +
                 "  `idQuestion` INT NOT NULL AUTO_INCREMENT,\n" +
                 "  `Topic_idTopic` INT NOT NULL,\n" +
-                "  `QuestionContent` TEXT NOT NULL,\n" +
-                "  `QuestionType` VARCHAR(10) NOT NULL,\n" +
+                "  `QuestionType` VARCHAR(45) NOT NULL,\n" +
                 "  `QuestionDifficulty` INT NOT NULL,\n" +
                 "  `QuestionWeight` INT NOT NULL,\n" +
                 "  `QuestionExpectedTime` INT NOT NULL,\n" +
@@ -324,20 +302,37 @@ public class DBSingletonHandler {
                 "\n" +
                 "\n" +
                 "-- -----------------------------------------------------\n" +
+                "-- Table `model_db`.`QuestionContent`\n" +
+                "-- -----------------------------------------------------\n" +
+                "CREATE TABLE IF NOT EXISTS `model_db`.`QuestionContent` (\n" +
+                "  `idQuestionContent` INT NOT NULL AUTO_INCREMENT,\n" +
+                "  `Question_idQuestion` INT NOT NULL,\n" +
+                "  `QuestionContent` TEXT NOT NULL,\n" +
+                "  PRIMARY KEY (`idQuestionContent`),\n" +
+                "  INDEX `fk_QuestionContent_Question1_idx` (`Question_idQuestion` ASC),\n" +
+                "  UNIQUE INDEX `idQuestionContent_UNIQUE` (`idQuestionContent` ASC),\n" +
+                "  CONSTRAINT `fk_QuestionContent_Question1`\n" +
+                "    FOREIGN KEY (`Question_idQuestion`)\n" +
+                "    REFERENCES `model_db`.`Question` (`idQuestion`)\n" +
+                "    ON DELETE CASCADE\n" +
+                "    ON UPDATE NO ACTION)\n" +
+                "ENGINE = InnoDB;\n" +
+                "\n" +
+                "\n" +
+                "-- -----------------------------------------------------\n" +
                 "-- Table `model_db`.`QuestionAnswer`\n" +
                 "-- -----------------------------------------------------\n" +
                 "CREATE TABLE IF NOT EXISTS `model_db`.`QuestionAnswer` (\n" +
                 "  `idAnswer` INT NOT NULL AUTO_INCREMENT,\n" +
-                "  `Question_idQuestion` INT NOT NULL,\n" +
-                "  `AnswerLabel` VARCHAR(1) NOT NULL,\n" +
+                "  `QuestionContent_idQuestionContent` INT NOT NULL,\n" +
                 "  `AnswerContent` TEXT NOT NULL,\n" +
                 "  `IsRightAnswer` INT NOT NULL,\n" +
                 "  PRIMARY KEY (`idAnswer`),\n" +
                 "  UNIQUE INDEX `idAnswer_UNIQUE` (`idAnswer` ASC),\n" +
-                "  INDEX `fk_Answer_Question1_idx` (`Question_idQuestion` ASC),\n" +
-                "  CONSTRAINT `fk_Answer_Question1`\n" +
-                "    FOREIGN KEY (`Question_idQuestion`)\n" +
-                "    REFERENCES `model_db`.`Question` (`idQuestion`)\n" +
+                "  INDEX `fk_QuestionAnswer_QuestionContent1_idx` (`QuestionContent_idQuestionContent` ASC),\n" +
+                "  CONSTRAINT `fk_QuestionAnswer_QuestionContent1`\n" +
+                "    FOREIGN KEY (`QuestionContent_idQuestionContent`)\n" +
+                "    REFERENCES `model_db`.`QuestionContent` (`idQuestionContent`)\n" +
                 "    ON DELETE CASCADE\n" +
                 "    ON UPDATE NO ACTION)\n" +
                 "ENGINE = InnoDB;\n" +
@@ -350,15 +345,15 @@ public class DBSingletonHandler {
                 "  `idExam` INT NOT NULL AUTO_INCREMENT,\n" +
                 "  `Doctor_idDoctor` INT NOT NULL,\n" +
                 "  `Date` VARCHAR(45) NOT NULL,\n" +
-                "  `ExamName` VARCHAR(45) NOT NULL,\n" +
-                "  `College` VARCHAR(45) NOT NULL,\n" +
-                "  `Department` VARCHAR(45) NOT NULL,\n" +
-                "  `Note` TEXT NOT NULL,\n" +
+                "  `ExamName` VARCHAR(100) NOT NULL,\n" +
+                "  `College` VARCHAR(100) NOT NULL,\n" +
+                "  `Department` VARCHAR(100) NOT NULL,\n" +
+                "  `Note` TEXT NULL,\n" +
                 "  `ExamType` VARCHAR(45) NOT NULL,\n" +
                 "  `Duration` VARCHAR(45) NOT NULL,\n" +
                 "  `TotalMarks` VARCHAR(45) NOT NULL,\n" +
                 "  `ExamLanguage` VARCHAR(45) NOT NULL,\n" +
-                "  `CourseName` VARCHAR(45) NOT NULL,\n" +
+                "  `CourseName` VARCHAR(100) NOT NULL,\n" +
                 "  `CourseCode` VARCHAR(45) NOT NULL,\n" +
                 "  `CourseLevel` VARCHAR(45) NOT NULL,\n" +
                 "  `CourseYear` VARCHAR(45) NOT NULL,\n" +
@@ -396,12 +391,11 @@ public class DBSingletonHandler {
                 "-- -----------------------------------------------------\n" +
                 "CREATE TABLE IF NOT EXISTS `model_db`.`ExamQuestion` (\n" +
                 "  `idQuestion` INT NOT NULL AUTO_INCREMENT,\n" +
-                "  `QuestionContent` TEXT NOT NULL,\n" +
-                "  `QuestionType` VARCHAR(10) NOT NULL,\n" +
+                "  `ExamModel_idExamModel` INT NOT NULL,\n" +
+                "  `QuestionType` VARCHAR(45) NOT NULL,\n" +
                 "  `QuestionDifficulty` INT NOT NULL,\n" +
                 "  `QuestionWeight` INT NOT NULL,\n" +
                 "  `QuestionExpectedTime` INT NOT NULL,\n" +
-                "  `ExamModel_idExamModel` INT NOT NULL,\n" +
                 "  PRIMARY KEY (`idQuestion`),\n" +
                 "  UNIQUE INDEX `idQuestion_UNIQUE` (`idQuestion` ASC),\n" +
                 "  INDEX `fk_ExamQuestion_ExamModel1_idx` (`ExamModel_idExamModel` ASC),\n" +
@@ -414,20 +408,37 @@ public class DBSingletonHandler {
                 "\n" +
                 "\n" +
                 "-- -----------------------------------------------------\n" +
+                "-- Table `model_db`.`ExamQuestionContent`\n" +
+                "-- -----------------------------------------------------\n" +
+                "CREATE TABLE IF NOT EXISTS `model_db`.`ExamQuestionContent` (\n" +
+                "  `idQuestionContent` INT NOT NULL AUTO_INCREMENT,\n" +
+                "  `ExamQuestion_idQuestion` INT NOT NULL,\n" +
+                "  `QuestionContent` TEXT NOT NULL,\n" +
+                "  PRIMARY KEY (`idQuestionContent`),\n" +
+                "  INDEX `fk_ExamQuestionContent_ExamQuestion1_idx` (`ExamQuestion_idQuestion` ASC),\n" +
+                "  UNIQUE INDEX `idQuestionContent_UNIQUE` (`idQuestionContent` ASC),\n" +
+                "  CONSTRAINT `fk_ExamQuestionContent_ExamQuestion1`\n" +
+                "    FOREIGN KEY (`ExamQuestion_idQuestion`)\n" +
+                "    REFERENCES `model_db`.`ExamQuestion` (`idQuestion`)\n" +
+                "    ON DELETE CASCADE\n" +
+                "    ON UPDATE NO ACTION)\n" +
+                "ENGINE = InnoDB;\n" +
+                "\n" +
+                "\n" +
+                "-- -----------------------------------------------------\n" +
                 "-- Table `model_db`.`ExamQuestionAnswer`\n" +
                 "-- -----------------------------------------------------\n" +
                 "CREATE TABLE IF NOT EXISTS `model_db`.`ExamQuestionAnswer` (\n" +
                 "  `idAnswer` INT NOT NULL AUTO_INCREMENT,\n" +
-                "  `AnswerLabel` VARCHAR(1) NOT NULL,\n" +
+                "  `ExamQuestionContent_idQuestionContent` INT NOT NULL,\n" +
                 "  `AnswerContent` TEXT NOT NULL,\n" +
                 "  `IsRightAnswer` INT NOT NULL,\n" +
-                "  `ExamQuestion_idQuestion` INT NOT NULL,\n" +
                 "  PRIMARY KEY (`idAnswer`),\n" +
                 "  UNIQUE INDEX `idAnswer_UNIQUE` (`idAnswer` ASC),\n" +
-                "  INDEX `fk_QuestionAnswer_copy1_ExamQuestion1_idx` (`ExamQuestion_idQuestion` ASC),\n" +
-                "  CONSTRAINT `fk_QuestionAnswer_copy1_ExamQuestion1`\n" +
-                "    FOREIGN KEY (`ExamQuestion_idQuestion`)\n" +
-                "    REFERENCES `model_db`.`ExamQuestion` (`idQuestion`)\n" +
+                "  INDEX `fk_ExamQuestionAnswer_ExamQuestionContent1_idx` (`ExamQuestionContent_idQuestionContent` ASC),\n" +
+                "  CONSTRAINT `fk_ExamQuestionAnswer_ExamQuestionContent1`\n" +
+                "    FOREIGN KEY (`ExamQuestionContent_idQuestionContent`)\n" +
+                "    REFERENCES `model_db`.`ExamQuestionContent` (`idQuestionContent`)\n" +
                 "    ON DELETE CASCADE\n" +
                 "    ON UPDATE NO ACTION)\n" +
                 "ENGINE = InnoDB;\n" +
@@ -442,7 +453,7 @@ public class DBSingletonHandler {
                 "-- -----------------------------------------------------\n" +
                 "START TRANSACTION;\n" +
                 "USE `model_db`;\n" +
-                "INSERT INTO `model_db`.`University` (`idUniversity`, `Name`) VALUES (1, 'Benha');\n" +
+                "INSERT INTO `model_db`.`University` (`idUniversity`, `Name`, `AltName`) VALUES (1, 'Benha university', 'جامعة بنها');\n" +
                 "\n" +
                 "COMMIT;\n" +
                 "\n" +
@@ -452,21 +463,21 @@ public class DBSingletonHandler {
                 "-- -----------------------------------------------------\n" +
                 "START TRANSACTION;\n" +
                 "USE `model_db`;\n" +
-                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (1, 'Agriculture', 1);\n" +
-                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (2, 'Applied Arts', 1);\n" +
-                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (3, 'Arts', 1);\n" +
-                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (4, 'Commerce', 1);\n" +
-                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (5, 'Computers and Informatics', 1);\n" +
-                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (6, 'Education', 1);\n" +
-                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (7, 'Engineering, Benha', 1);\n" +
-                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (8, 'Engineering, Shoubra', 1);\n" +
-                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (9, 'Law', 1);\n" +
-                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (10, 'Medicine', 1);\n" +
-                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (11, 'Nursing', 1);\n" +
-                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (12, 'Physical Education', 1);\n" +
-                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (13, 'Science', 1);\n" +
-                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (14, 'Specific Education', 1);\n" +
-                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (15, 'Veterinary Medicine', 1);\n" +
+                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (1, 'Faculty of Agriculture', 1);\n" +
+                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (2, 'Faculty of Applied Arts', 1);\n" +
+                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (3, 'Faculty of Arts', 1);\n" +
+                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (4, 'Faculty of Commerce', 1);\n" +
+                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (5, 'Faculty of Computers and Informatics', 1);\n" +
+                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (6, 'Faculty of Education', 1);\n" +
+                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (7, 'Faculty of Engineering, Benha', 1);\n" +
+                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (8, 'Faculty of Engineering, Shoubra', 1);\n" +
+                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (9, 'Faculty of Law', 1);\n" +
+                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (10, 'Faculty of Medicine', 1);\n" +
+                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (11, 'Faculty of Nursing', 1);\n" +
+                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (12, 'Faculty of Physical Education', 1);\n" +
+                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (13, 'Faculty of Science', 1);\n" +
+                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (14, 'Faculty of Specific Education', 1);\n" +
+                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (15, 'Faculty of Veterinary Medicine', 1);\n" +
                 "\n" +
                 "COMMIT;\n" +
                 "\n" +
@@ -476,7 +487,7 @@ public class DBSingletonHandler {
                 "-- -----------------------------------------------------\n" +
                 "START TRANSACTION;\n" +
                 "USE `model_db`;\n" +
-                "INSERT INTO `model_db`.`Doctor` (`idDoctor`, `DoctorName`, `DoctorPassword`, `DoctorEmail`, `College_idCollege`, `DoctorDepartment`) VALUES (1, 'TestAccount', 'a', 'a', 8, 'Electrical Engineering Department ');\n" +
+                "INSERT INTO `model_db`.`Doctor` (`idDoctor`, `DoctorName`, `DoctorPassword`, `DoctorEmail`, `College_idCollege`, `DoctorDepartment`, `PreferredExamLayout`) VALUES (1, 'TestAccount', 'a', 'a', 8, 'Electrical Engineering Department ', 'English');\n" +
                 "\n" +
                 "COMMIT;\n" +
                 "\n" +
@@ -513,50 +524,45 @@ public class DBSingletonHandler {
                 "-- -----------------------------------------------------\n" +
                 "START TRANSACTION;\n" +
                 "USE `model_db`;\n" +
-                "INSERT INTO `model_db`.`Topic` (`idTopic`, `Name`, `Chapter_idChapter`) VALUES (1, 'topic1', 1);\n" +
-                "INSERT INTO `model_db`.`Topic` (`idTopic`, `Name`, `Chapter_idChapter`) VALUES (2, 'tobic2', 1);\n" +
+                "INSERT INTO `model_db`.`Topic` (`idTopic`, `Chapter_idChapter`, `Name`) VALUES (1, 1, 'topic1');\n" +
+                "INSERT INTO `model_db`.`Topic` (`idTopic`, `Chapter_idChapter`, `Name`) VALUES (2, 1, 'tobic2');\n" +
                 "\n" +
                 "COMMIT;\n" +
                 "\n";
         sql = sql
                 .replace("model_db", DB_NAME)
                 .replace("\n", System.lineSeparator());
-//                .replace("University","University".toLowerCase())
-//                .replace("College","College".toLowerCase())
-//                .replace("Doctor","Doctor".toLowerCase())
-//
-//                .replace("Course","Course".toLowerCase())
-//                .replace("Chapter","Chapter".toLowerCase())
-//                .replace("Topic","Topic".toLowerCase())
-//
-//                .replace("Question","Question".toLowerCase())
-//                .replace("QuestionAnswer","QuestionAnswer".toLowerCase())
-//
-//                .replace("Exam","Exam".toLowerCase())
-//                .replace("ExamModel","ExamModel".toLowerCase())
-//                .replace("ExamQuestion","ExamQuestion".toLowerCase())
-//                .replace("ExamQuestionAnswer","ExamQuestionAnswer".toLowerCase());
 
-        //System.out.println(sql);
-        try {
-            Connection _connection = getCreationConnection();
-            if (_connection != null) {
-                PreparedStatement pstmt =
-                        _connection.prepareStatement(sql);
+        connect(true);
+
+        if (!isConnected())
+            return false;
+        else {
+            PreparedStatement pstmt = null;
+            try {
+                pstmt =
+                        connection.prepareStatement(sql);
                 pstmt.addBatch();
                 pstmt.executeBatch();
-                pstmt.close();
-                _connection.close();
-                return true;
-            }
-            return false;
-        } catch (SQLException e) {
-            if (e.getMessage().contains("Duplicate entry '1' for key 'PRIMARY'")
-                    || e.getErrorCode() == 121) // means db already there (Successfully Connected)
-                return true;
-            e.printStackTrace();
-            return false;
-        }
 
+                return true;
+            } catch (SQLException e) {
+                if (e.getMessage().contains("Duplicate entry '1' for key 'PRIMARY'")
+                        || e.getErrorCode() == 121) // means db already there (Successfully Connected)
+                    return true;
+                e.printStackTrace();
+                return false;
+            } finally {
+                if (null != pstmt) {
+                    try {
+                        pstmt.close();
+                        connection.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        }
     }
 }

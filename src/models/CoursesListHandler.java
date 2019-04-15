@@ -35,14 +35,14 @@ public class CoursesListHandler {
         String sql =
                 "insert into Course (CourseLevel, CourseName, CourseCode, CourseYear,Doctor_idDoctor) values (?, ?, ?, ?, ?) ;";
                 String[] params = new String[]{ course.level, course.name, course.code,course.year, DashboardController.doctor.getId()};
-       return DBSingletonHandler.getInstance().execute_PreparedStatement(sql, params);
+       return DBHandler.getInstance().execute_PreparedStatement(sql, params);
     }
     public boolean Edit(Course course) {
         //DBHandler db = new DBHandler();
         String sql = MessageFormat.format(
                 "UPDATE Course SET CourseName =\"{0}\" , CourseCode = \"{1}\", CourseLevel = \"{2}\", CourseYear = \"{3}\"  WHERE idCourse = {4}  ;"
                 ,course.name, course.code, course.level, course.year, course.id);
-        return DBSingletonHandler.getInstance().execute_sql(sql);
+        return DBHandler.getInstance().execute_sql(sql);
     }
     public boolean Delete(String id) {
         //DBHandler db = new DBHandler();
@@ -50,7 +50,7 @@ public class CoursesListHandler {
         String sql = MessageFormat.format(
                 "DELETE FROM Course WHERE idCourse = {0}  ;",
                  id);
-        return DBSingletonHandler.getInstance().execute_sql(sql);
+        return DBHandler.getInstance().execute_sql(sql);
     }
 
     public ObservableList<Course> getList(String filter){
@@ -66,7 +66,7 @@ public class CoursesListHandler {
                     "SELECT * FROM Course WHERE Doctor_idDoctor ={0} AND CourseLevel = \"{1}\";"
                     , DashboardController.doctor.getId(), filter);
         }
-        ResultSet rs =  DBSingletonHandler.getInstance().execute_query(sql);
+        ResultSet rs =  DBHandler.getInstance().execute_query(sql);
         try {
             while (rs.next())
             {
@@ -79,7 +79,7 @@ public class CoursesListHandler {
             return null;
         }
         finally {
-            //db.closeConnection();
+            //db.disconnect();
         }
 
     }

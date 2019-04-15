@@ -14,7 +14,7 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.stage.WindowEvent;
 import models.*;
-import org.jsoup.Jsoup;
+import controllers.Vars.*;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -81,7 +81,7 @@ public class QuestionsTableController implements Initializable {
     }
 
     public void onAddClicked(ActionEvent e) {
-        AddQuestionController addQuestionController = new AddQuestionController("Add", topic, new Question());
+        AddQuestionController addQuestionController = new AddQuestionController(OperationType.ADD, topic, new Question());
         EventHandler<WindowEvent> onClose = new EventHandler<WindowEvent>() {
             public void handle(WindowEvent we) {
                 IWindow window = (IWindow) addQuestionController;
@@ -93,7 +93,7 @@ public class QuestionsTableController implements Initializable {
                     }
                 }
                 if (window.isSaveAndExitClicked()) {
-                    refresh(true, "Add");
+                    refresh(true, OperationType.ADD);
                 }
             }
         };
@@ -101,7 +101,7 @@ public class QuestionsTableController implements Initializable {
     }
 
     public void onEditClicked(Event e) {
-        AddQuestionController addQuestionController = new AddQuestionController("Edit", topic, questions_table.getSelectionModel().getSelectedItem());
+        AddQuestionController addQuestionController = new AddQuestionController(OperationType.EDIT, topic, questions_table.getSelectionModel().getSelectedItem());
         EventHandler<WindowEvent> onClose = new EventHandler<WindowEvent>() {
             public void handle(WindowEvent we) {
                 IWindow window = (IWindow) addQuestionController;
@@ -113,7 +113,7 @@ public class QuestionsTableController implements Initializable {
                     }
                 }
                 if (window.isSaveAndExitClicked()) {
-                    refresh(true, "Edit");
+                    refresh(true, OperationType.EDIT);
                 }
             }
         };
@@ -123,8 +123,8 @@ public class QuestionsTableController implements Initializable {
     public void onDeleteQuestionClicked(ActionEvent e) {
         if (Dialog.CreateDialog("Confirmation", "Are you sure?", "Yes", "No")) {
             Question model = questions_table.getSelectionModel().getSelectedItem();
-            QuestionsTableHandler.getInstance().DeleteQuestion(model);
-            refresh(true, "Delete");
+            QuestionsTableHandler.getInstance().Delete(model);
+            refresh(true, OperationType.DELETE);
         }
     }
 
@@ -176,17 +176,17 @@ public class QuestionsTableController implements Initializable {
                 btn_edit.setDisable(false);
                 btn_delete.setDisable(false);
                 switch (Operation) {
-                    case "Init":
+                    case OperationType.INIT:
                         selection = 0;
                         break;
 
-                    case "Add":
+                    case OperationType.ADD:
                         selection = tempList.size() - 1;
                         break;
-                    case "Edit":
+                    case OperationType.EDIT:
                         //No change
                         break;
-                    case "Delete":
+                    case OperationType.DELETE:
                         selection--;
                         break;
                 }

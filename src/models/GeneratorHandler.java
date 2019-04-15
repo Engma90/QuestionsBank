@@ -14,7 +14,7 @@ public class GeneratorHandler {
                 model.getExamType(), model.getDuration(), model.getTotalMarks(), model.getExamLanguage(), model.getCourseCode()
                 ,model.getCourseLevel(), model.getYear(), model.getDoctor_idDoctor()
         };
-        int exam_id = DBSingletonHandler.getInstance().execute_PreparedStatement(sql,params);
+        int exam_id = DBHandler.getInstance().execute_PreparedStatement(sql,params);
         model.setId(exam_id+"");
 
         for(ExamModel examModel :model.getExamModelList()) {
@@ -24,28 +24,42 @@ public class GeneratorHandler {
                             "VALUES (?,?);";
             params = new String[]{
                     examModel.getExam_idExam(), examModel.getExamModelNumber()};
-            int model_id = DBSingletonHandler.getInstance().execute_PreparedStatement(sql,params);
+            int model_id = DBHandler.getInstance().execute_PreparedStatement(sql,params);
             examModel.setId(model_id+"");
             for (ExamQuestion q : examModel.getExamQuestionsList()) {
                 q.setExamModel_idExamModel(model_id+"");
                 sql =
-                        "INSERT INTO ExamQuestion (QuestionContent,QuestionType,QuestionDifficulty, QuestionWeight, QuestionExpectedTime" +
+                        "INSERT INTO ExamQuestion (QuestionType,QuestionDifficulty, QuestionWeight, QuestionExpectedTime" +
                                 ", ExamModel_idExamModel) " +
-                                "VALUES (?,?,?,?,?,?);";
-                params = new String[]{
-                        q.getQuestionContent(), q.getQuestionType(), q.getQuestionDifficulty(), q.getQuestionWeight(), q.getQuestionExpectedTime()
+                                "VALUES (?,?,?,?,?);";
+                params = new String[]{q.getQuestionType(), q.getQuestionDifficulty(), q.getQuestionWeight(), q.getQuestionExpectedTime()
                 , q.getExamModel_idExamModel()};
-                int question_id = DBSingletonHandler.getInstance().execute_PreparedStatement(sql,params);
+                int question_id = DBHandler.getInstance().execute_PreparedStatement(sql,params);
                 q.setId(question_id+"");
-                for (Answer ans : q.getAnswers()) {
+
+                for (QuestionContent questionContent : q.getContents()) {
 
                     sql =
-                            "INSERT INTO ExamQuestionAnswer (AnswerLabel, AnswerContent, IsRightAnswer, ExamQuestion_idQuestion) " +
-                                    "VALUES (?,?,?,?);";
-                    params = new String[]{"-", ans.answer_text, ans.is_right_answer+"", q.getId()};
-                    DBSingletonHandler.getInstance().execute_PreparedStatement(sql,params);
+                            "INSERT INTO ExamQuestionContent (ExamQuestion_idQuestion, QuestionContent) " +
+                                    "VALUES (?,?);";
+                    params = new String[]{q.getId(), questionContent.getContent()};
+                    DBHandler.getInstance().execute_PreparedStatement(sql,params);
 
+
+                    for (Answer ans : questionContent.getAnswers()) {
+
+                        sql =
+                                "INSERT INTO ExamQuestionAnswer (AnswerContent, IsRightAnswer, ExamQuestionContent_idQuestionContent) " +
+                                        "VALUES (?,?,?);";
+                        params = new String[]{ ans.answer_text, ans.is_right_answer+"", questionContent.getId()};
+                        DBHandler.getInstance().execute_PreparedStatement(sql, params);
+
+                    }
                 }
+
+
+
+
 
             }
         }

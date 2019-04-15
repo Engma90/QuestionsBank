@@ -6,6 +6,16 @@ public class Doctor {
     private String name;
     private String university;
 
+    public String getAltUniversity() {
+        return altUniversity;
+    }
+
+    public void setAltUniversity(String altUniversity) {
+        this.altUniversity = altUniversity;
+    }
+
+    private String altUniversity;
+
     public String getId() {
         return id;
     }
@@ -62,10 +72,22 @@ public class Doctor {
         this.department = department;
     }
 
+    public String getPreferredExamLayout() {
+        return preferredExamLayout;
+    }
+
+    public void setPreferredExamLayout(String preferredExamLayout) {
+        this.preferredExamLayout = preferredExamLayout;
+    }
+
     private String email;
     private String password;
     private String college;
     private String department;
+
+
+
+    private String preferredExamLayout;
 
 
 

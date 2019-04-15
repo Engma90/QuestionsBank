@@ -24,7 +24,7 @@ public class SignupController implements Initializable, IWindow {
     public TextField full_name,email,department;
     public PasswordField password,re_password;
     public MyButton signup;
-    public ComboBox<String> combo_college;
+    public ComboBox<String> combo_college,preferredExamLayout;
     private SignupHandler signupHandler;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -61,7 +61,10 @@ public class SignupController implements Initializable, IWindow {
 
         if(validate()){
 
-            if(signupHandler.Signup(full_name.getText(), email.getText(), password.getText(),(combo_college.getSelectionModel().getSelectedIndex()+1)+"",department.getText())){
+            if(signupHandler.
+                    Signup(full_name.getText(), email.getText(), password.getText(),
+                            (combo_college.getSelectionModel().getSelectedIndex()+1)+"",
+                            department.getText(),preferredExamLayout.getValue())){
 
                 if(LoginHandler.getInstance().login(email.getText(), password.getText())){
                     new WindowLoader().load(e,"/views/Dashboard.fxml",null,null,false,true,null);
@@ -83,6 +86,9 @@ public class SignupController implements Initializable, IWindow {
     public void onBackClicked(MouseEvent e){
         new WindowLoader().load(e,"/views/Home.fxml",null,null,false,true,null);
     }
+
+
+    //Todo: validate Preferred layout
     boolean validate(){
         if(!isValidEmail(email.getText())){
             return false;

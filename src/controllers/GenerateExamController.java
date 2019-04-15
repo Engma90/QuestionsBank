@@ -1,11 +1,20 @@
 package controllers;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.NodeOrientation;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
@@ -13,6 +22,7 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.util.StringConverter;
 import models.*;
+import controllers.Vars.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,6 +30,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.List;
 
 public class GenerateExamController implements Initializable, IUpdatable, IWindow {
     public NumberField number_of_models;
@@ -31,6 +42,7 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
     private List<GenerateExamChapterRowController> generateExamChapterRowControllerList;
     private List<Chapter> chapterList;
     public Button generate;
+    public ProgressBar progress_bar;
 
 
     public TextField college_text, exam_duration, department_text,
@@ -75,7 +87,55 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
 
     public void initUI() {
         generate.setDisable(true);
-        exam_language.getSelectionModel().select("English");
+        progress_bar.setVisible(false);
+
+
+        exam_language.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                int selection = exam_year.getSelectionModel().getSelectedIndex();
+                if(newValue.equals(Languages.ENGLISH)){
+                    exam_name_text.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
+                    college_text.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
+                    department_text.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
+                    note_text.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
+                    exam_duration.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
+                    exam_total_marks.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
+
+                    ObservableList<String> years = FXCollections.observableArrayList();
+                    years.add("Prep Year");
+                    years.add("1st Year");
+                    years.add("2nd Year");
+                    years.add("3rd Year");
+                    years.add("4th Year");
+                    years.add("5th Year");
+                    years.add("6th Year");
+                    exam_year.setItems(years);
+
+
+                }else {
+                    exam_name_text.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+                    college_text.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+                    department_text.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+                    note_text.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+                    exam_duration.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+                    exam_total_marks.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+                    //Todo: implement in a better way (bundles)
+                    ObservableList<String> years = FXCollections.observableArrayList();
+                    years.add("الفرقة الاعدادية");
+                    years.add("الفرقة الاولى");
+                    years.add("الفرقة الثانية");
+                    years.add("الفرقة الثالثة");
+                    years.add("الفرقة الرابعة");
+                    years.add("الفرقة الخامسة");
+                    years.add("الفرقة السادسة");
+                    exam_year.setItems(years);
+                }
+                exam_year.getSelectionModel().select(selection);
+            }
+        });
+        exam_language.getSelectionModel().select(DashboardController.doctor.getPreferredExamLayout());
+
         exam_year.getSelectionModel().select(course.year);
         format.getSelectionModel().selectFirst();
 
@@ -136,61 +196,90 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
     /* Todo: - Separate import exam to db from exporting to avoid db redundancy (word and pdf)
              - Add Progressbar
      */
-    public void onGenerateClicked(ActionEvent e) {
-        try {
-
+    public void onGenerateClicked(final ActionEvent e) {
 
         if (validate()) {
-            generate.setDisable(true);
             DirectoryChooser directoryChooser = new DirectoryChooser();
             Node source = (Node) e.getSource();
             Window stage = source.getScene().getWindow();
-            File selectedDirectory = directoryChooser.showDialog(stage);
+            final File selectedDirectory = directoryChooser.showDialog(stage);
 
             if (selectedDirectory != null) {
-                //System.out.println(selectedDirectory.getAbsolutePath());
-                List<ExamQuestion> exam_questions = getExamQuestionsList();
-                Exam exam = new Exam();
-                exam.setExamModelList(new ArrayList<>());
-                if (exam_questions.size() > 0) {
-                    if (radio_same.isSelected() || Integer.parseInt(number_of_models.getText()) == 1) {
-                        for (int i = 0; i < Integer.parseInt(number_of_models.getText()); i++) {
-                            ExamModel examModel = new ExamModel();
-                            examModel.setExamModelNumber((i + 1) + "");
-                            List<ExamQuestion> temp = new ArrayList<>(exam_questions);
-                            Collections.shuffle(temp);
-                            examModel.setExamQuestionsList(temp);
-                            //Collections.shuffle(examModel.getExamQuestionsList());
-                            //System.out.println("---------------------------------------------------------------------");
-                            //System.out.println(examModel.getExamQuestionsList().get(0).getQuestionContent());
-                            exam.getExamModelList().add(examModel);
+                generate.setDisable(true);
+                progress_bar.setVisible(true);
+                Task<Void> task = new Task<Void>() {
+                    @Override
+                    protected Void call() throws Exception {
+                        FileExporterFactory fe = new FileExporterFactory();
+                        IFileExporter fileExporter = fe.getExporter(FileExporterFactory.LIBRE_OFFICE);
+                        if (null == fileExporter) {
+                            throw new Exception(fe.getError());
                         }
-
-                    } else if (radio_different.isSelected() && Integer.parseInt(number_of_models.getText()) > 1) {
-                        for (int i = 0; i < Integer.parseInt(number_of_models.getText()); i++) {
-                            exam_questions = getExamQuestionsList();
-                            ExamModel examModel = new ExamModel();
-                            examModel.setExamModelNumber((i + 1) + "");
-                            List<ExamQuestion> temp = new ArrayList<>(exam_questions);
-                            Collections.shuffle(temp);
-                            examModel.setExamQuestionsList(temp);
-                            exam.getExamModelList().add(examModel);
+                        if (generateExam(fileExporter, selectedDirectory)) {
+                            return null;
+                        } else {
+                            throw new Exception("GenerateExam error");
                         }
+                    }
+                };
 
+                task.setOnFailed(ev -> {
+                    generate.setDisable(false);
+                    progress_bar.setVisible(false);
+                    new Alert(Alert.AlertType.ERROR, "Operation Failed, " + ev.getSource().getException().getMessage()).show();
+                });
+                task.setOnSucceeded(ev -> {
+                    generate.setDisable(false);
+                    progress_bar.setVisible(false);
+                    new Alert(Alert.AlertType.INFORMATION, "Operation Completed").show();
+                });
+                new Thread(task).start();
+
+
+            }
+        }
+    }
+
+
+    private boolean generateExam(IFileExporter fileExporter, File selectedDirectory) {
+        try {
+            List<ExamQuestion> exam_questions = getExamQuestionsList();
+            Exam exam = new Exam();
+            exam.setExamModelList(new ArrayList<>());
+            if (exam_questions.size() > 0) {
+                if (radio_same.isSelected() || Integer.parseInt(number_of_models.getText()) == 1) {
+                    for (int i = 0; i < Integer.parseInt(number_of_models.getText()); i++) {
+                        ExamModel examModel = new ExamModel();
+                        examModel.setExamModelNumber((i + 1) + "");
+                        List<ExamQuestion> temp = new ArrayList<>(exam_questions);
+                        Collections.shuffle(temp);
+                        examModel.setExamQuestionsList(temp);
+                        exam.getExamModelList().add(examModel);
                     }
 
-                    addExamToDatabase(exam);
-                    new FileExporter().getExporter(FileExporter.LIBRE_OFFICE)
-                            .exportExam(exam, selectedDirectory.getAbsolutePath(), format.getValue());
-                    new Alert(Alert.AlertType.INFORMATION, "Operation Completed").show();
+                } else if (radio_different.isSelected() && Integer.parseInt(number_of_models.getText()) > 1) {
+                    for (int i = 0; i < Integer.parseInt(number_of_models.getText()); i++) {
+                        exam_questions = getExamQuestionsList();
+                        ExamModel examModel = new ExamModel();
+                        examModel.setExamModelNumber((i + 1) + "");
+                        List<ExamQuestion> temp = new ArrayList<>(exam_questions);
+                        Collections.shuffle(temp);
+                        examModel.setExamQuestionsList(temp);
+                        exam.getExamModelList().add(examModel);
+                    }
+
                 }
+
+                addExamToDatabase(exam);
+                fileExporter.exportExam(exam, selectedDirectory.getAbsolutePath(), format.getValue());
+                return true;
+            } else {
+                return false;
             }
 
-        }
-        }catch (Exception ex){
-            new Alert(Alert.AlertType.ERROR, "Operation Failed, " + ex.getCause()).show();
-        }finally {
-            generate.setDisable(false);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
         }
     }
 
@@ -209,18 +298,23 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
                             Question qmodel = temp_list.get(i);
 
                             ExamQuestion examQuestion = new ExamQuestion();
-                            examQuestion.setQuestionContent(qmodel.getQuestion_text());
+
                             examQuestion.setQuestionType(qmodel.getQuestion_type());
                             examQuestion.setQuestionDifficulty(qmodel.getQuestion_diff());
                             examQuestion.setQuestionWeight(qmodel.getQuestion_weight());
                             examQuestion.setQuestionExpectedTime(qmodel.getExpected_time());
-                            if (shuffle_answers.isSelected()) {
-                                List<Answer> temp = new ArrayList<>(qmodel.getAnswers());
-                                Collections.shuffle(temp);
-                                qmodel.setAnswers(temp);
-                            }
-                            examQuestion.setAnswers(qmodel.getAnswers());
+                            List<QuestionContent> questionContentTempList = new ArrayList<>();
+                            for(QuestionContent questionContent: qmodel.getContents()) {
 
+                                if (shuffle_answers.isSelected() && !(qmodel.getQuestion_type().equals(QuestionType.EXTENDED_MATCH))) {
+                                    List<Answer> temp = new ArrayList<>(questionContent.getAnswers());
+                                    Collections.shuffle(temp);
+                                    questionContent.setAnswers(temp);
+                                }
+                                //questionContent.setAnswers(questionContent.getAnswers());
+                                questionContentTempList.add(questionContent);
+                            }
+                            examQuestion.setContents(questionContentTempList);
                             examQuestionList.add(examQuestion);
                         }
                     }
@@ -241,11 +335,6 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
             new Alert(Alert.AlertType.ERROR, "Please fill all fields").show();
             return false;
         }
-        for (GenerateExamChapterRowController row : generateExamChapterRowControllerList) {
-            if (row.isSelected.isSelected()) {
-
-            }
-        }
         return true;
     }
 
@@ -254,7 +343,7 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
 
         exam.setDoctor_idDoctor(DashboardController.doctor.getId());
         exam.setCollege(college_text.getText());
-        exam.setDate(exam_date.getValue().getDayOfWeek().toString().substring(0, 3) + " " + exam_date.getConverter().toString(exam_date.getValue()));
+        exam.setDate(exam_date.getConverter().toString(exam_date.getValue()));
         exam.setDepartment(department_text.getText());
         exam.setDuration(exam_duration.getText());
         exam.setCourseCode(course.code);
@@ -262,26 +351,12 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
         exam.setNote(note_text.getText());
         exam.setCourseName(course.name);
         exam.setCourseLevel(course.level);
-        exam.setExamType(exam_type.getValue().toString());
+        exam.setExamType(exam_type.getValue());
         exam.setTotalMarks(exam_total_marks.getText());
-        exam.setYear(exam_year.getValue().toString());
-        exam.setExamLanguage(exam_language.getValue().toString());
+        exam.setYear(exam_year.getValue());
+        exam.setExamLanguage(exam_language.getValue());
         generatorHandler.Add(exam);
     }
-
-
-//
-//        for(GenerateExamChapterRowController row:generateExamChapterRowControllerList){
-//            int questions_chapter = row.getNumber_of_questions();
-//            int diff_chapter_len = row.getDiff().size();
-//            for (int i = 0; i< diff_chapter_len; i++){
-//
-//
-//            }
-//            int diff_= questions_chapter / diff_chapter_len;
-//            int mediumQuestion_chapter = ((questions_chapter - easyQuestion_chapter)/ diff_chapter_len);
-//            int hardQuestion_chapter = questions_chapter - (mediumQuestion_chapter + easyQuestion_chapter);
-//        }
 
 
     private void addRow(Chapter chapter) {
@@ -289,12 +364,7 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/GenerateExamChapterRow.fxml"));
             Parent p = loader.load();
 
-            generateExamChapterRowControllerList.add(((GenerateExamChapterRowController) loader.getController()));
-
-//            GenerateExamChapterRowController generateExamFormRowController = new GenerateExamChapterRowController();
-//
-//            loader.setController(generateExamFormRowController);
-
+            generateExamChapterRowControllerList.add(loader.getController());
             ((GenerateExamChapterRowController) loader.getController()).initUI(chapter);
             ((GenerateExamChapterRowController) loader.getController()).parent = this;
             exam_content.getChildren().add((p));
@@ -313,16 +383,13 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
             if (gecrc.isSelected.isSelected()) {
                 for (GenerateExamTopicRowController getrc : gecrc.generateExamTopicRowControllerList) {
                     if (getrc.isSelected.isSelected()) {
-//                        Topic topic = new Topic();
-//                        topic.id = getrc.topic.id;
                         int questions_less_than_level = 0;
-                        for(Question q: getrc.topic.AllQuestionsList){
-                            if (Integer.parseInt(q.getQuestion_diff()) <= Integer.parseInt(getrc.diff_max_level.getText())){
+                        for (Question q : getrc.topic.AllQuestionsList) {
+                            if (Integer.parseInt(q.getQuestion_diff()) <= Integer.parseInt(getrc.diff_max_level.getText())) {
                                 questions_less_than_level++;
                             }
                         }
                         getrc.topic_number_of_questions.setMax(
-                                //QuestionsTableHandler.getInstance().getQuestionList(topic, getrc.diff_max_level.getText()).size()
                                 questions_less_than_level
                         );
                         sum += Integer.parseInt(getrc.topic_number_of_questions.getText());

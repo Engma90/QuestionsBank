@@ -6,15 +6,10 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.sun.javafx.PlatformUtil;
-import javafx.scene.control.Alert;
-import models.Answer;
-import models.Exam;
-import models.ExamModel;
-import models.ExamQuestion;
+import models.*;
 import org.apache.commons.io.FileUtils;
 
 import java.io.*;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
@@ -45,36 +40,38 @@ public class FileExporterLibreOffice implements IFileExporter {
                     return true;
                 }
             }
-            new Alert(Alert.AlertType.ERROR, "Please install LibreOffice").show();
             return false;
 
         } else if (PlatformUtil.isLinux()) {
             //Todo: check for libreOffice on linux (/bin/bash -c soffice) (/opt/libreoffice/program/soffice)
-            possibleBinaryPath.add("soffice");
+            possibleBinaryPath.add("/opt/libreoffice*/program/soffice");
 
             try {
-                Process p = Runtime.getRuntime().exec
-                        ("soffice -h");
-                BufferedReader input =
-                        new BufferedReader
-                                (new InputStreamReader(p.getInputStream()));
-                String outputLine;
-                while ((outputLine = input.readLine()) != null) {
-                    if (outputLine.toLowerCase().contains("LibreOffice".toLowerCase())) {
-                        selectedBinaryPath = "soffice";
+                List<String> commands = new ArrayList<>();
+                ProcessBuilder builder = new ProcessBuilder();
+                commands.add("/bin/bash");
+                commands.add("-c");
+                commands.add(possibleBinaryPath.get(0) + " --version");
+                builder.command(commands);
+                builder.redirectErrorStream(true);
+                Process process = builder.start();
+                Scanner s = new Scanner(process.getInputStream());
+                while (s.hasNextLine()) {
+                    String outputLine = s.nextLine();
+                    System.out.println(outputLine);
+                    if (outputLine.startsWith("LibreOffice")) {
+                        selectedBinaryPath = possibleBinaryPath.get(0);
                         return true;
                     }
-                    //System.out.println(outputLine);
                 }
-                input.close();
-                new Alert(Alert.AlertType.ERROR, "Please install LibreOffice").show();
+                s.close();
+                int result = process.waitFor();
                 return false;
             } catch (Exception err) {
                 err.printStackTrace();
                 return false;
             }
         }
-        new Alert(Alert.AlertType.ERROR, "Not supported OS").show();
         return false;
     }
 
@@ -84,40 +81,45 @@ public class FileExporterLibreOffice implements IFileExporter {
 
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
         if (!new File(TEMP_DIR).exists()) {
             File tmp = new File(TEMP_DIR);
             boolean done = tmp.mkdir();
 
-            //if(PlatformUtil.isLinux()){
-            try {
-                File copied = new File(
-                        tmp.getAbsolutePath() + File.separator + "logo.png");
-                String logoLocation = new File(FileExporterLibreOffice.class
-                        .getProtectionDomain()
-                        .getCodeSource()
-                        .getLocation()
-                        .getPath()).getParent() + File.separator + "logo.png";
-                File original = new File(logoLocation);
-                if (!original.exists()) {
-                    logoLocation = new File(FileExporterLibreOffice.class
+            if (done) {
+                //if(PlatformUtil.isLinux()){
+                try {
+                    File copied = new File(
+                            tmp.getAbsolutePath() + File.separator + "logo.png");
+                    String logoLocation = new File(FileExporterLibreOffice.class
                             .getProtectionDomain()
                             .getCodeSource()
                             .getLocation()
-                            .getPath()) + File.separator + "logo.png";
-                    original = new File(logoLocation);
-                }
-                FileUtils.copyFile(original, copied);
+                            .getPath()).getParent() + File.separator + "logo.png";
+                    File original = new File(logoLocation);
+                    if (!original.exists()) {
+                        logoLocation = new File(FileExporterLibreOffice.class
+                                .getProtectionDomain()
+                                .getCodeSource()
+                                .getLocation()
+                                .getPath()) + File.separator + "logo.png";
+                        original = new File(logoLocation);
+                    }
+                    FileUtils.copyFile(original, copied);
 //                System.out.println(original.getAbsolutePath());
 //                System.out.println(copied.getAbsolutePath());
 //                new Alert(Alert.AlertType.INFORMATION,
 //                        original.getAbsolutePath()
 //                                + "\n"
 //                                + copied.getAbsolutePath());
-            } catch (Exception ex) {
-                ex.printStackTrace();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    return false;
+                }
+            } else {
+                return false;
             }
-
             //}
         }
 
@@ -182,32 +184,20 @@ public class FileExporterLibreOffice implements IFileExporter {
 
     private boolean runCMD(String cmd) {
         try {
-//            Process p = Runtime.getRuntime().exec
-//                    (cmd);
-//            BufferedReader input =
-//                    new BufferedReader
-//                            (new InputStreamReader(p.getInputStream()));
-//            String outputLine;
-//            while ((outputLine = input.readLine()) != null) {
-//                System.out.println(outputLine);
-//            }
-//            input.close();
-            //System.out.println(cmd);
             List<String> commands = new ArrayList<>();
             ProcessBuilder builder = new ProcessBuilder();
             if (PlatformUtil.isWindows()) {
                 commands.add("C:\\Windows\\System32\\cmd.exe");
                 commands.add("/c");
                 commands.add(cmd);
-                builder.command(commands);
-                //builder = new ProcessBuilder(commands);
+                //builder.command(commands);
             } else if (PlatformUtil.isLinux()) {
-                //commands.add("/bin/bash -c " + cmd);
-                //commands.add(selectedBinaryPath);
-                //commands.add(cmd);
-                //builder = new ProcessBuilder(commands);
-                builder.command("/bin/bash", "-c", cmd);
+                commands.add("/bin/bash");
+                commands.add("-c");
+                commands.add(cmd);
+                //builder.command("/bin/bash", "-c", cmd);
             }
+            builder.command(commands);
 
 
             builder.directory(new File(TEMP_DIR).getAbsoluteFile());
@@ -224,8 +214,6 @@ public class FileExporterLibreOffice implements IFileExporter {
             s.close();
             int result = process.waitFor();
             System.out.printf("Process exited with result %d and output %s%n", result, text);
-
-
             return true;
         } catch (Exception err) {
             err.printStackTrace();
@@ -244,11 +232,27 @@ public class FileExporterLibreOffice implements IFileExporter {
             System.out.println("Could not generate QR Code, IOException :: " + e.getMessage());
         }
 
+        String university = (model.getExamLanguage().equals(FileExporterFactory.ENGLISH)) ?
+                DashboardController.doctor.getUniversity().toUpperCase():
+                DashboardController.doctor.getAltUniversity().toUpperCase();
+        String collage = model.getCollege();
+        String department = model.getDepartment();
+        String year = model.getYear();
+        String type = model.getExamType();
+        String name =  ((model.getExamLanguage().equals(FileExporterFactory.ENGLISH)) ?"Subject: ":"المادة: ") +
+                model.getExamName();
+        String date = ((model.getExamLanguage().equals(FileExporterFactory.ENGLISH)) ?"Date: ":"التاريخ: ") +
+                model.getDate();
+        String duration = ((model.getExamLanguage().equals(FileExporterFactory.ENGLISH)) ?"Duration: ":"الزمن: ") +
+                model.getDuration();
+        String totalMarks = ((model.getExamLanguage().equals(FileExporterFactory.ENGLISH)) ?"Total Marks: ":"المجموع: ") +
+                model.getTotalMarks();
+
 
         String htmlHeaderToRemove = "<html dir=\"ltr\"><head></head><body contenteditable=\"true\"><p>";
         String htmlFooterToRemove = "</p></body></html>";
         String examHeader2 = "<html dir=\"" +
-                (model.getExamLanguage().equals(FileExporter.ENGLISH) ? "ltr" : "rtl") + "\">" +
+                (model.getExamLanguage().equals(FileExporterFactory.ENGLISH) ? "ltr" : "rtl") + "\">" +
                 "<head>" +
                 "<style>td{ font-size: 0.9em; margin:0;} body{ margin:0 0 0 0;}" +
                 ".avoid-page-break{}" +
@@ -259,23 +263,25 @@ public class FileExporterLibreOffice implements IFileExporter {
                 "<table width=\"100%\">\n" +
                 "    <tr>\n" +
                 "        <td width=\"35%\">\n" +
-                "            " + DashboardController.doctor.getUniversity().toUpperCase() + " UNIVERSITY<br/>\n" +
-                "            " + "Faculty of " + model.getCollege() + "<br/>\n" +
-                "            " + model.getDepartment() + "<br/>\n" +
-                "            " + model.getYear() + "\n" +
+                "            " + university + "<br/>\n" +
+                "            " + collage + "<br/>\n" +
+                "            " + department + "<br/>\n" +
+                "            " + year + "\n" +
                 "        </td>\n" +
                 "\n" +
                 "        <td align=\"center\" width=\"30%\">\n" +
                 "            <img align=\"center\" src=\"" + getImageBase64("./" + TEMP_DIR + "/logo.png") + "\" height=\"64\" width=\"64\"/>\n" +
                 "            <br />\n" +
                 "            <img align=\"center\" src=\"" + getImageBase64("./" + TEMP_DIR + "/QR_" + examModel.getExamModelNumber() + ".png") + "\" height=\"32\" width=\"32\"/>\n" +
+                "            <br />\n" +
+                "            " + type + "\n" +
                 "        </td>\n" +
                 "\n" +
                 "        <td width=\"35%\">\n" +
-                "            " + model.getExamType() + "<br/>\n" +
-                "            " + model.getExamName() + "<br/>\n" +
-                "            " + model.getDate() + "<br/>\n" +
-                "            " + model.getDuration() + "\n" +
+                "            " + name + "<br/>\n" +
+                "            " + date + "<br/>\n" +
+                "            " + duration + "<br/>\n" +
+                "            " + totalMarks + "<br/>\n" +
                 "        </td>\n" +
                 "    </tr>\n" +
                 "</table>" +
@@ -286,28 +292,49 @@ public class FileExporterLibreOffice implements IFileExporter {
         int q_counter = 1;
         for (ExamQuestion qm : examModel.getExamQuestionsList()) {
 
-            body.append("<div class=\"avoid-page-break\">");
-            body.append("<b><font size=\"4\">Question ");
-            body.append((q_counter++));
-            body.append(": </font></b>");
-            body.append("<div class=\"avoid-page-break\">");
-            body.append(qm.getQuestionContent().replace(htmlHeaderToRemove, "").replace(htmlFooterToRemove, ""));
-            body.append("</div>");
-            int i = 0;
-            body.append("<div class=\"avoid-page-break\">");
-            for (Answer answer : qm.getAnswers()) {
+            if(qm.getQuestionType().equals(Vars.QuestionType.EXTENDED_MATCH)){
+                int i = 0;
                 body.append("<div class=\"avoid-page-break\">");
-                body.append((char) (65 + i));
-                body.append(") ");
-                body.append(answer.answer_text.replace(htmlHeaderToRemove, "").replace(htmlFooterToRemove, ""));
-                //body.append("<br />");
+                for (Answer answer : qm.getContents().get(0).getAnswers()) {
+                    body.append("<div class=\"avoid-page-break\">");
+                    body.append((char) (65 + i));
+                    body.append(") ");
+                    body.append(answer.answer_text.replace(htmlHeaderToRemove, "").replace(htmlFooterToRemove, ""));
+                    //body.append("<br />");
+                    body.append("</div>");
+                    i++;
+                }
                 body.append("</div>");
-                i++;
             }
-            body.append("</div>");
-            body.append("<hr/>");
-            body.append("</div>");
 
+            for (QuestionContent questionContent : qm.getContents()) {
+                body.append("<div class=\"avoid-page-break\">");
+                body.append("<b><font size=\"4\">");
+                body.append(model.getExamLanguage().equals(Vars.Languages.ENGLISH)?"Q ":"س ");
+                body.append((q_counter++));
+                body.append(": </font></b>");
+                body.append("<div class=\"avoid-page-break\">");
+
+                body.append(questionContent.getContent().replace(htmlHeaderToRemove, "").replace(htmlFooterToRemove, ""));
+                body.append("</div>");
+
+                if(!qm.getQuestionType().equals(Vars.QuestionType.EXTENDED_MATCH)) {
+                    int i = 0;
+                    body.append("<div class=\"avoid-page-break\">");
+                    for (Answer answer : questionContent.getAnswers()) {
+                        body.append("<div class=\"avoid-page-break\">");
+                        body.append((char) (65 + i));
+                        body.append(") ");
+                        body.append(answer.answer_text.replace(htmlHeaderToRemove, "").replace(htmlFooterToRemove, ""));
+                        //body.append("<br />");
+                        body.append("</div>");
+                        i++;
+                    }
+                    body.append("</div>");
+                }
+                body.append("</div>");
+            }
+            body.append("<hr/>");
         }
 
         String html = examHeader2 + body.toString() + footer;

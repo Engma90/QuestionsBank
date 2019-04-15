@@ -16,30 +16,37 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
+
 class QBBackup {
-    private List<String[]> CourseCSVList, ChapterCSVList, TopicCSVList, QuestionCSVList, AnswerCSVList;
-    public QBBackup(){
+    private List<String[]> CourseCSVList, ChapterCSVList, TopicCSVList,
+            QuestionCSVList, QuestionContentCSVList, AnswerCSVList;
+
+    public QBBackup() {
         CourseCSVList = new ArrayList<>();
         ChapterCSVList = new ArrayList<>();
         TopicCSVList = new ArrayList<>();
         QuestionCSVList = new ArrayList<>();
+        QuestionContentCSVList = new ArrayList<>();
         AnswerCSVList = new ArrayList<>();
     }
-    void qbExport(Course _course,String DestPath) {
+
+    void qbExport(Course _course, String DestPath) {
 
         cleanup();
 
         add_row(CourseCSVList, new String[]{"Id", "Name", "Code", "Level", "Year"});
         add_row(ChapterCSVList, new String[]{"Id", "Course_ID", "Name", "Number"});
         add_row(TopicCSVList, new String[]{"Id", "Chapter_ID", "Name"});
-        add_row(QuestionCSVList, new String[]{"Id", "Topic_ID", "Content", "Type", "Difficulty", "Time", "Weight"});
-        add_row(AnswerCSVList, new String[]{"Id", "Question_ID", "Content", "isRightAnswer"});
+        add_row(QuestionCSVList, new String[]{"Id", "Topic_ID", "Type", "Difficulty", "Time", "Weight"});
+        add_row(QuestionContentCSVList, new String[]{"Id", "Question_ID", "Content"});
+        add_row(AnswerCSVList, new String[]{"Id", "QuestionContent_ID", "Content", "isRightAnswer"});
         List<Course> coursesList = FXCollections.observableArrayList();//CoursesListHandler.getInstance().getList("All");
         coursesList.add(_course);
         int course_id = 0;
         int chapter_id = 0;
         int topic_id = 0;
         int question_id = 0;
+        int question_content_id = 0;
         int answer_id = 0;
 
         for (Course course : coursesList) {
@@ -65,18 +72,25 @@ class QBBackup {
                     for (Question question : questionsList) {
                         add_row(QuestionCSVList,
                                 new String[]{(question_id++ + 1) + "", (topic_id) + "",
-                                        question.getQuestion_text(),
                                         question.getQuestion_type(),
                                         question.getQuestion_diff(),
                                         question.getExpected_time(),
                                         question.getQuestion_weight()
                                 });
-                        List<Answer> answerList = question.getAnswers();
+                        List<QuestionContent> questionContentsList = question.getContents();
 
-                        for (Answer answer : answerList) {
-                            add_row(AnswerCSVList,
-                                    new String[]{(answer_id++ + 1) + "", (question_id) + "",
-                                            answer.answer_text, answer.is_right_answer + ""});
+                        for (QuestionContent questionContent : questionContentsList) {
+                            add_row(QuestionContentCSVList,
+                                    new String[]{(question_content_id++ + 1) + "", (question_id) + "",
+                                            questionContent.getContent()
+                                    });
+                            List<Answer> answerList = questionContent.getAnswers();
+
+                            for (Answer answer : answerList) {
+                                add_row(AnswerCSVList,
+                                        new String[]{(answer_id++ + 1) + "", (question_id) + "",
+                                                answer.answer_text, answer.is_right_answer + ""});
+                            }
                         }
 
                     }
@@ -87,6 +101,7 @@ class QBBackup {
         writeData("Chapter.csv", ChapterCSVList);
         writeData("Topic.csv", TopicCSVList);
         writeData("Question.csv", QuestionCSVList);
+        writeData("QuestionContent.csv", QuestionContentCSVList);
         writeData("Answer.csv", AnswerCSVList);
         try {
             zip(DestPath);
@@ -94,8 +109,7 @@ class QBBackup {
         } catch (IOException e) {
             new Alert(Alert.AlertType.ERROR, "Export Error").show();
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             cleanup();
         }
     }
@@ -128,13 +142,14 @@ class QBBackup {
             ChapterCSVList = readData(path + "/Chapter.csv");
             TopicCSVList = readData(path + "/Topic.csv");
             QuestionCSVList = readData(path + "/Question.csv");
+            QuestionContentCSVList = readData(path + "/QuestionContent.csv");
             AnswerCSVList = readData(path + "/Answer.csv");
             CourseCSVList.remove(0);
             ChapterCSVList.remove(0);
             TopicCSVList.remove(0);
             QuestionCSVList.remove(0);
             AnswerCSVList.remove(0);
-            for (String[] course_data:CourseCSVList) {
+            for (String[] course_data : CourseCSVList) {
                 //String fake_course_id = course_data[0];
                 Course course = new Course();
                 course.name = course_data[1];
@@ -159,20 +174,39 @@ class QBBackup {
                                     //String fake_question_id = question_data[0];
                                     if (topic_data[0].equals(question_data[1])) {
                                         Question question = new Question();
-                                        question.setQuestion_text(question_data[2]);
-                                        question.setQuestion_type(question_data[3]);
-                                        question.setQuestion_diff(question_data[4]);
-                                        question.setExpected_time(question_data[5]);
-                                        question.setQuestion_weight(question_data[6]);
-                                        List<Answer> temp_list = new ArrayList<>();
-                                        for (String[] answer_data : AnswerCSVList) {
-                                            if (question_data[0].equals(answer_data[1])) {
-                                                Answer answer = new Answer();
-                                                answer.answer_text = answer_data[2];
-                                                answer.is_right_answer = Integer.parseInt(answer_data[3]);
-                                                temp_list.add(answer);
-                                            }}
-                                        question.setAnswers(temp_list);
+                                        question.setQuestion_type(question_data[2]);
+                                        question.setQuestion_diff(question_data[3]);
+                                        question.setExpected_time(question_data[4]);
+                                        question.setQuestion_weight(question_data[5]);
+
+
+                                        List<QuestionContent> temp_content_list = new ArrayList<>();
+                                        for (String[] content_data : QuestionContentCSVList) {
+                                            if (question_data[0].equals(content_data[1])) {
+                                                QuestionContent questionContent = new QuestionContent();
+                                                questionContent.setContent(content_data[2]);
+
+                                                temp_content_list.add(questionContent);
+
+
+                                                List<Answer> temp_list = new ArrayList<>();
+                                                for (String[] answer_data : AnswerCSVList) {
+                                                    if (content_data[0].equals(answer_data[1])) {
+                                                        Answer answer = new Answer();
+                                                        answer.answer_text = answer_data[2];
+                                                        answer.is_right_answer = Integer.parseInt(answer_data[3]);
+                                                        temp_list.add(answer);
+                                                    }
+                                                }
+                                                questionContent.setAnswers(temp_list);
+
+
+                                            }
+                                        }
+                                        question.setContents(temp_content_list);
+
+
+
                                         QuestionsTableHandler.getInstance().Add(topic, question);
 
                                     }
@@ -192,7 +226,7 @@ class QBBackup {
         } catch (IOException e) {
             new Alert(Alert.AlertType.ERROR, "Import Error").show();
             e.printStackTrace();
-        }finally {
+        } finally {
             cleanup();
         }
     }
@@ -228,11 +262,11 @@ class QBBackup {
 
     private static Path createFileWithDir(String filename) {
         File dir = new File("tmp");
-        if (!dir.exists()) {boolean done = dir.mkdir();}
+        if (!dir.exists()) {
+            boolean done = dir.mkdir();
+        }
         return Paths.get("tmp" + File.separatorChar + filename);
     }
-
-
 
 
     private void zip(String SavePath) throws IOException {
@@ -263,8 +297,6 @@ class QBBackup {
         }
         fis.close();
     }
-
-
 
 
     private void unzip(String ArchivePath) throws IOException {
@@ -299,8 +331,6 @@ class QBBackup {
 
         return destFile;
     }
-
-
 
 
 }

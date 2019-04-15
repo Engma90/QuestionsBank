@@ -1,6 +1,6 @@
 package controllers;
 
-import javafx.event.ActionEvent;
+
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -32,7 +32,7 @@ public class WindowLoader {
                 stage.initOwner(((Node) e.getTarget()).getScene().getWindow());
             }
             stage.setScene(new Scene(root));
-            IWindow window = (IWindow)((IWindow) loader.getController()).setWindowData(stage, initObject);
+            ((IWindow) loader.getController()).setWindowData(stage, initObject);
             if(null != onCloseEvent){
                 stage.setOnCloseRequest(onCloseEvent);
             }

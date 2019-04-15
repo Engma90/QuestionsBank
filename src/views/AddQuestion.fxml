@@ -6,80 +6,103 @@
 <?import controllers.NumberField?>
 <?import javafx.geometry.Insets?>
 <?import controllers.MyHtmlEditor?>
-    <VBox xmlns:fx="http://javafx.com/fxml"  spacing="10" stylesheets="@css/AddQuestion.css" fx:id="container"
-          prefHeight="700" prefWidth="1000">
+<VBox spacing="10" xmlns:fx="http://javafx.com/fxml"  stylesheets="@css/AddQuestion.css" styleClass="m-container"
+      prefHeight="700" prefWidth="1000">
     <padding>
-        <Insets top="10" right="10" bottom="10" left="10"/>
+        <Insets bottom="10"/>
     </padding>
-        <MyHtmlEditor fx:id="question_html_editor"  prefHeight="300" maxHeight="300" stylesheets="@css/modena/modena.css"/>
-        <HBox spacing="10">
-            <Label text="Type"/>
-            <RadioButton text="MCQ" fx:id="radio_mcq"/>
-            <RadioButton text="True/False" fx:id="radio_true_false"/>
-            <RadioButton text="Extended match" fx:id="radio_ext_match"/>
 
-        </HBox>
-        <HBox spacing="10" alignment="CENTER_LEFT">
-            <!--<ComboBox value="Difficulty" fx:id="combo_q_diff">-->
-            <!--<items>-->
-            <!--<FXCollections fx:factory="observableArrayList">-->
-            <!--<String fx:id="easy" fx:value="Easy"/>-->
-            <!--<String fx:id="medium" fx:value="Medium"/>-->
-            <!--<String fx:id="hard" fx:value="Hard"/>-->
-            <!--</FXCollections>-->
-            <!--</items>-->
-            <!--</ComboBox>-->
-            <Label text="Difficulty"/>
-            <NumberField fx:id="txt_q_diff"/>
+    <SplitPane orientation="VERTICAL" styleClass="m-container" VBox.vgrow="ALWAYS" >
 
-            <Label text="Weight"/>
-            <NumberField fx:id="txt_q_weight"/>
 
-            <Label text="Expected Time"/>
-            <NumberField fx:id="txt_q_exp_time"/>
-
-            <!--<ComboBox value="Weight" fx:id="combo_q_weight">-->
-            <!--<items>-->
-            <!--<FXCollections fx:factory="observableArrayList">-->
-            <!--<String fx:id="wlow" fx:value="Low"/>-->
-            <!--<String fx:id="wmedium" fx:value="Medium"/>-->
-            <!--<String fx:id="whigh" fx:value="high"/>-->
-            <!--</FXCollections>-->
-            <!--</items>-->
-            <!--</ComboBox>-->
-        </HBox>
-        <ScrollPane vbarPolicy="ALWAYS" fitToWidth="true" minHeight="300" maxHeight="300"  fx:id="mcq_answers_list_scroll_pane">
+        <VBox fx:id="Group1" spacing="10" VBox.vgrow="ALWAYS" minHeight="0">
             <padding>
                 <Insets top="10" right="10" bottom="10" left="10"/>
             </padding>
-            <StackPane styleClass="transparent" VBox.vgrow="ALWAYS">
-            <VBox fx:id="mcq_ui_group" spacing="10" styleClass="transparent" VBox.vgrow="ALWAYS">
-                <VBox fx:id="mcq_ui_answers_list" spacing="10" styleClass="transparent" VBox.vgrow="ALWAYS"/>
-                <Button fx:id="add_answer" text="Add Answer" onAction="#onAddAnswerClicked" styleClass="add-button"></Button>
-            </VBox>
-            </StackPane>
-        </ScrollPane>
-        <ScrollPane  fitToWidth="true" vbarPolicy="NEVER" minHeight="300" maxHeight="300"  fx:id="true_false_answers_list_scroll_pane">
-        <padding>
-            <Insets top="10" right="10" bottom="10" left="10"/>
-        </padding>
-            <VBox VBox.vgrow="ALWAYS" spacing="20" fx:id="true_false_ui_group" minHeight="300" maxHeight="300" styleClass="transparent">
-                <HBox spacing="10">
-                    <Label text="A)"></Label>
-                    <Label text="True"></Label>
 
-                    <RadioButton fx:id="radio_answer_true"></RadioButton>
-                </HBox>
-                <HBox spacing="10">
-                    <Label text="B)"></Label>
-                    <Label text="False"></Label>
+            <ScrollPane vbarPolicy="ALWAYS" fitToWidth="true"  VBox.vgrow="ALWAYS"
+                        fx:id="question_bodies_list_scroll_pane">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+                <StackPane styleClass="transparent" VBox.vgrow="ALWAYS">
+                    <VBox fx:id="question_contents_ui" spacing="10" styleClass="transparent" VBox.vgrow="ALWAYS">
+                        <VBox fx:id="question_contents_list" spacing="10" styleClass="transparent" VBox.vgrow="ALWAYS">
+                            <!--<MyHtmlEditor fx:id="question_html_editor"-->
+                                          <!--stylesheets="@css/modena/modena.css"/>-->
 
-                    <RadioButton fx:id="radio_answer_false"></RadioButton>
-                </HBox>
-            </VBox>
-        </ScrollPane>
-        <HBox alignment="BOTTOM_CENTER">
-            <Button fx:id="add_question" text="Add" onAction="#onAddClicked" maxHeight="50" styleClass="add-button"/>
-            <Button fx:id="edit_question" text="Edit" onAction="#onEditClicked" maxHeight="50" styleClass="edit-button"/>
-        </HBox>
-    </VBox>
+                        </VBox>
+                        <Button fx:id="add_question_content" text="Add sub question" onAction="#onAddContentClicked" styleClass="add-button" visible="false"></Button>
+                    </VBox>
+
+                </StackPane>
+            </ScrollPane>
+
+
+            <HBox spacing="10">
+                <Label text="Type"/>
+                <RadioButton text="MCQ" fx:id="radio_mcq"/>
+                <RadioButton text="True/False" fx:id="radio_true_false"/>
+                <RadioButton text="Extended match" fx:id="radio_ext_match"/>
+
+            </HBox>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Difficulty"/>
+                <NumberField fx:id="txt_q_diff"/>
+
+                <Label text="Weight"/>
+                <NumberField fx:id="txt_q_weight"/>
+
+                <Label text="Expected Time"/>
+                <NumberField fx:id="txt_q_exp_time"/>
+            </HBox>
+        </VBox>
+
+
+        <VBox fx:id="Group2" spacing="10" VBox.vgrow="ALWAYS" minHeight="0" >
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <ScrollPane vbarPolicy="ALWAYS" fitToWidth="true"  VBox.vgrow="ALWAYS"
+                        fx:id="mcq_answers_list_scroll_pane" visible="false" managed="false">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+                <StackPane styleClass="transparent" VBox.vgrow="ALWAYS">
+                    <VBox fx:id="mcq_ui_group" spacing="10" styleClass="transparent" VBox.vgrow="ALWAYS">
+                        <VBox fx:id="mcq_ui_answers_list" spacing="10" styleClass="transparent" VBox.vgrow="ALWAYS"/>
+                        <Button fx:id="add_answer" text="Add Answer" onAction="#onAddAnswerClicked"
+                                styleClass="add-button"></Button>
+                    </VBox>
+                </StackPane>
+            </ScrollPane>
+            <ScrollPane fitToWidth="true" vbarPolicy="NEVER" VBox.vgrow="ALWAYS"
+                        fx:id="true_false_answers_list_scroll_pane" visible="false">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+                <VBox VBox.vgrow="ALWAYS" spacing="20" fx:id="true_false_ui_group"
+                      styleClass="transparent">
+                    <HBox spacing="10">
+                        <Label text="A)"></Label>
+                        <Label text="True"></Label>
+
+                        <RadioButton fx:id="radio_answer_true"></RadioButton>
+                    </HBox>
+                    <HBox spacing="10">
+                        <Label text="B)"></Label>
+                        <Label text="False"></Label>
+
+                        <RadioButton fx:id="radio_answer_false"></RadioButton>
+                    </HBox>
+                </VBox>
+            </ScrollPane>
+        </VBox>
+    </SplitPane>
+    <HBox alignment="BOTTOM_CENTER">
+        <Button fx:id="add_question" text="Add" onAction="#onAddClicked" maxHeight="50" styleClass="add-button"/>
+        <Button fx:id="edit_question" text="Edit" onAction="#onEditClicked" maxHeight="50"
+                styleClass="edit-button"/>
+    </HBox>
+
+</VBox>

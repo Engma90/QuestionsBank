@@ -32,14 +32,14 @@ public class ChaptersListHandler {
         //DBHandler db = new DBHandler();
         String sql = "insert into Chapter (ChapterName, Course_idCourse, ChapterNumber) values (?,?,?) ;";
                String[] params = new String[]{ model.name, course.id,model.number};
-        return DBSingletonHandler.getInstance().execute_PreparedStatement(sql, params);
+        return DBHandler.getInstance().execute_PreparedStatement(sql, params);
     }
     public boolean Edit(Chapter model) {
         //DBHandler db = new DBHandler();
         String sql = MessageFormat.format(
                 "UPDATE Chapter SET ChapterName = \"{0}\", ChapterNumber = {1} WHERE idChapter = {2} ;"
                 , model.name,model.number,model.id);
-        return DBSingletonHandler.getInstance().execute_sql(sql);
+        return DBHandler.getInstance().execute_sql(sql);
     }
     public boolean Delete(Chapter model) {
         //QuestionsTableController.questionsTableHandler.DeleteAllSelectedChapterQuestions();
@@ -47,7 +47,7 @@ public class ChaptersListHandler {
         String sql = MessageFormat.format(
                 "DELETE  FROM Chapter WHERE idChapter = {0} ;"
                 , model.id);
-        return DBSingletonHandler.getInstance().execute_sql(sql);
+        return DBHandler.getInstance().execute_sql(sql);
     }
 //    boolean DeleteAllSelectedCourseChapters(){
 //        boolean success = false;
@@ -63,7 +63,7 @@ public class ChaptersListHandler {
         String sql = MessageFormat.format(
                 "SELECT * FROM Chapter WHERE Course_idCourse ={0};"
                 ,  course.id);
-        ResultSet rs =  DBSingletonHandler.getInstance().execute_query(sql);
+        ResultSet rs =  DBHandler.getInstance().execute_query(sql);
         try {
             while (rs.next())
             {
@@ -76,7 +76,7 @@ public class ChaptersListHandler {
             return null;
         }
         finally {
-            //db.closeConnection();
+            //db.disconnect();
         }
 
         }

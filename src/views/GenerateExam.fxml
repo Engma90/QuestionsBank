@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import controllers.NumberField?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
-<?import javafx.collections.FXCollections?>
-<?import controllers.NumberField?>
-<?import javafx.geometry.Insets?>
-    <VBox spacing="10" xmlns="http://javafx.com/javafx"
-          xmlns:fx="http://javafx.com/fxml"
-          fx:controller="controllers.GenerateExamController" stylesheets="@css/SimpleForm.css" fx:id="container"
-          prefWidth="1000" prefHeight="600">
-    <VBox spacing="10" VBox.vgrow="ALWAYS" >
-    <padding>
-        <Insets top="10" right="10" bottom="10" left="10"/>
-    </padding>
+<?import java.lang.*?>
+<VBox spacing="10" xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controllers.GenerateExamController" stylesheets="@css/SimpleForm.css" fx:id="container"
+      prefWidth="1000" prefHeight="600">
+    <VBox spacing="10" VBox.vgrow="ALWAYS">
+        <padding>
+            <Insets top="10" right="10" bottom="10" left="10"/>
+        </padding>
         <HBox spacing="50">
             <VBox spacing="10" HBox.hgrow="ALWAYS">
                 <TextField promptText="Exam name, Computer Programming (1) - ECE 113C"
@@ -29,20 +26,15 @@
                           fx:id="note_text" VBox.vgrow="NEVER" maxHeight="115"/>
             </VBox>
             <VBox spacing="10">
-
-                <!--<Label text="Date"></Label>-->
-                <!--<TextField promptText="Mon 05/01/2015" fx:id="exam_date"></TextField>-->
                 <DatePicker fx:id="exam_date" stylesheets="@css/modena/modena.css"/>
-                <!--<Label text="Duration"></Label>-->
                 <TextField fx:id="exam_duration" promptText="Duration"/>
-                <!--<Label text="Total marks"></Label>-->
                 <TextField fx:id="exam_total_marks" promptText="Total marks"/>
                 <ComboBox value="Exam type" fx:id="exam_type">
                     <items>
                         <FXCollections fx:factory="observableArrayList">
-                            <String fx:id="exam_type_option1" fx:value="Quiz"/>
-                            <String fx:id="exam_type_option2" fx:value="Midterm Exam"/>
-                            <String fx:id="exam_type_option3" fx:value="Final Exam"/>
+                            <String fx:value="Quiz"/>
+                            <String fx:value="Midterm Exam"/>
+                            <String fx:value="Final Exam"/>
                         </FXCollections>
                     </items>
                 </ComboBox>
@@ -69,19 +61,6 @@
                 </ComboBox>
             </VBox>
         </HBox>
-        <!--<ComboBox value="Number of models" fx:id="number_of_models">-->
-        <!--<items>-->
-        <!--<FXCollections fx:factory="observableArrayList">-->
-        <!--<String fx:id="option1" fx:value="1"/>-->
-        <!--<String fx:id="option2" fx:value="2"/>-->
-        <!--<String fx:id="option3" fx:value="3"/>-->
-        <!--<String fx:id="option4" fx:value="4"/>-->
-        <!--<String fx:id="option5" fx:value="5"/>-->
-        <!--<String fx:id="option6" fx:value="6"/>-->
-
-        <!--</FXCollections>-->
-        <!--</items>-->
-        <!--</ComboBox>-->
         <HBox spacing="10">
             <Label text="Number of models"/>
             <NumberField fx:id="number_of_models"/>
@@ -97,44 +76,58 @@
                 <Insets left="10"/>
             </padding>
             <Label text="Exam chapters and topics" prefWidth="270" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
-            <Label text="Max Difficulty level" prefWidth="150" />
-            <Label text="Number of questions" prefWidth="150" />
-            <!--<Label text="Number of hard questions" prefWidth="200"/>-->
+            <Label text="Max Difficulty level" prefWidth="150"/>
+            <Label text="Number of questions" prefWidth="150"/>
         </HBox>
-    <VBox spacing="0" VBox.vgrow="ALWAYS">
-        <ScrollPane  maxHeight="Infinity"  fitToWidth="true" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
-            <padding>
-                <Insets top="10" right="10" bottom="10" left="10"/>
-            </padding>
-            <!--<StackPane VBox.vgrow="ALWAYS" HBox.Hgrow="ALWAYS" maxWidth="Infinity" maxHeight="Infinity">-->
+        <VBox VBox.vgrow="ALWAYS">
+            <ScrollPane maxHeight="Infinity" fitToWidth="true" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
                 <VBox fx:id="exam_content" spacing="10" HBox.hgrow="ALWAYS" maxWidth="Infinity">
 
                 </VBox>
-            <!--</StackPane>-->
-        </ScrollPane>
-        <HBox alignment="CENTER_RIGHT">
+            </ScrollPane>
+            <HBox alignment="CENTER_RIGHT">
+                <padding>
+                    <Insets right="10"/>
+                </padding>
+                <Label HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                <!--<HBox HBox.hgrow="ALWAYS" maxWidth="Infinity" alignment="CENTER_RIGHT">-->
+                <Label text="Total number of questions:"  minWidth="150" textAlignment="RIGHT"/>
+                <!--</HBox>-->
+                <NumberField disable="true" fx:id="lbl_sum" prefWidth="150"/>
+            </HBox>
+        </VBox>
+    </VBox>
+    <HBox spacing="20" alignment="CENTER" style="-fx-background-color:#221936;">
+        <HBox HBox.Hgrow="ALWAYS" alignment="CENTER_LEFT">
+            <padding>
+                <Insets left="10"/>
+            </padding>
+            <ProgressBar fx:id="progress_bar"/>
+        </HBox>
+        <padding>
+            <Insets top="10" bottom="10"/>
+        </padding>
+
+        <ComboBox value="Format" fx:id="format">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="PDF"/>
+                    <String fx:value="Word"/>
+                </FXCollections>
+            </items>
+        </ComboBox>
+        <Button text="Generate" fx:id="generate" onAction="#onGenerateClicked" styleClass="main-button"/>
+
+        <!-- START Just for Symmetrical alignment-->
+        <HBox HBox.Hgrow="ALWAYS" alignment="CENTER_LEFT">
             <padding>
                 <Insets right="10"/>
             </padding>
-            <Label HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
-            <Label text="Total number of questions:" prefWidth="150" minWidth="150" textAlignment="RIGHT"/>
-            <NumberField disable="true" fx:id="lbl_sum" prefWidth="150"/>
+            <ProgressBar visible="false"/>
         </HBox>
-    </VBox>
-    </VBox>
-        <HBox spacing="20" alignment="CENTER" style="-fx-background-color:#221936;">
-            <padding>
-                <Insets top="10" bottom="10"/>
-            </padding>
-            <ComboBox value="Format" fx:id="format">
-                <items>
-                    <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="PDF"/>
-                        <String fx:value="Word"/>
-                    </FXCollections>
-                </items>
-            </ComboBox>
-            <Button text="Generate" fx:id="generate" onAction="#onGenerateClicked" styleClass="main-button" />
-        </HBox>
-
+        <!-- END Just for Symmetrical alignment-->
+    </HBox>
 </VBox>

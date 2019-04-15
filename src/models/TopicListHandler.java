@@ -1,6 +1,5 @@
 package models;
 
-import controllers.QuestionsTableController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -32,14 +31,14 @@ public class TopicListHandler {
         //DBHandler db = new DBHandler();
         String sql = "insert into Topic (Name, Chapter_idChapter) values (?,?) ;";
                 String[]params = new String[]{model.name, chapter.id};
-        return DBSingletonHandler.getInstance().execute_PreparedStatement(sql, params);
+        return DBHandler.getInstance().execute_PreparedStatement(sql, params);
     }
     public boolean Edit(Topic model) {
         //DBHandler db = new DBHandler();
         String sql = MessageFormat.format(
                 "UPDATE Topic SET Name = \"{0}\"  WHERE idTopic = {1} ;"
                 , model.name,model.id);
-        return DBSingletonHandler.getInstance().execute_sql(sql);
+        return DBHandler.getInstance().execute_sql(sql);
     }
     public boolean Delete(Topic model) {
         //QuestionsTableController.questionsTableHandler.DeleteAllSelectedChapterQuestions();
@@ -47,7 +46,7 @@ public class TopicListHandler {
         String sql = MessageFormat.format(
                 "DELETE  FROM Topic WHERE idTopic = {0} ;"
                 , model.id);
-        return DBSingletonHandler.getInstance().execute_sql(sql);
+        return DBHandler.getInstance().execute_sql(sql);
     }
 //    boolean DeleteAllSelectedCourseChapters(){
 //        boolean success = false;
@@ -63,7 +62,7 @@ public class TopicListHandler {
         String sql = MessageFormat.format(
                 "SELECT * FROM Topic WHERE Chapter_idChapter ={0};"
                 ,  chapter.id);
-        ResultSet rs =  DBSingletonHandler.getInstance().execute_query(sql);
+        ResultSet rs =  DBHandler.getInstance().execute_query(sql);
         try {
             while (rs.next())
             {
@@ -76,7 +75,7 @@ public class TopicListHandler {
             return null;
         }
         finally {
-            //db.closeConnection();
+            //db.disconnect();
         }
 
     }

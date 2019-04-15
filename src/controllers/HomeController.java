@@ -1,6 +1,5 @@
 package controllers;
 
-import javafx.application.Platform;
 import javafx.fxml.Initializable;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -8,7 +7,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import models.DBSingletonHandler;
 import models.LoginHandler;
 
 import java.io.IOException;
@@ -62,7 +60,7 @@ public class HomeController implements Initializable, IWindow  {
         return this;
     }
     public void onLoginClicked(MouseEvent e) throws IOException{
-
+        //Todo: alert on fail
         //loginHandler = new LoginHandler();
         if(LoginHandler.getInstance().login(login_email.getText(), login_password.getText())){
             isLogged_in = true;

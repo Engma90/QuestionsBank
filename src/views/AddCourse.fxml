@@ -31,16 +31,16 @@
             </items>
         </ComboBox>
 
-        <ComboBox value="1st Year" fx:id="year" maxWidth="Infinity">
+        <ComboBox value="Prep Year" fx:id="year" maxWidth="Infinity">
             <items>
                 <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Prep Year"/>
                     <String fx:value="1st Year"/>
                     <String fx:value="2nd Year"/>
                     <String fx:value="3rd Year"/>
                     <String fx:value="4th Year"/>
                     <String fx:value="5th Year"/>
                     <String fx:value="6th Year"/>
-                    <String fx:value="7th Year"/>
                 </FXCollections>
             </items>
         </ComboBox>

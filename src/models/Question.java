@@ -12,23 +12,26 @@ public class Question {
     private SimpleStringProperty raw_text = new SimpleStringProperty("");
     private SimpleStringProperty question_diff = new SimpleStringProperty("");
     private SimpleStringProperty question_type = new SimpleStringProperty("");
-    private SimpleStringProperty question_text = new SimpleStringProperty("");
+    //private SimpleStringProperty question_text = new SimpleStringProperty("");
     private SimpleStringProperty question_weight = new SimpleStringProperty("");
     private SimpleStringProperty expected_time = new SimpleStringProperty("");
     private String right_answer;
-    private List<Answer> answers = new ArrayList<>();
 
-    public Question(){
-        this("", "", "", "", "", "");
-    }
-    public Question(String id, String q, String d, String question_type, String w, String raw){
-        this.id = id;
-        setQuestion_text(q);
-        setQuestion_diff(d);
-        setQuestion_type(question_type);
-        setQuestion_weight(w);
-        setRaw_text(raw);
-    }
+
+    //private List<Answer> answers = new ArrayList<>();
+    private List<QuestionContent> contents = new ArrayList<>();
+
+//    public Question(){
+//        this("", "", "", "", "", "");
+//    }
+//    public Question(String id, String q, String d, String question_type, String w, String raw){
+//        this.id = id;
+//        //setQuestion_text(q);
+//        setQuestion_diff(d);
+//        setQuestion_type(question_type);
+//        setQuestion_weight(w);
+//        setRaw_text(raw);
+//    }
 
     public String getId() {
         return id;
@@ -37,12 +40,12 @@ public class Question {
     public void setId(String id) {
         this.id = id;
     }
-    public String getQuestion_text() {
-        return question_text.get().toString();
-    }
-    public void setQuestion_text(String q){
-        this.question_text.set(q);
-    }
+//    public String getQuestion_text() {
+//        return question_text.get().toString();
+//    }
+//    public void setQuestion_text(String q){
+//        this.question_text.set(q);
+//    }
 
     public String getQuestion_diff() {
         return question_diff.get().toString();
@@ -76,13 +79,21 @@ public class Question {
         this.right_answer = right_answer;
     }
 
-    public List<Answer> getAnswers() {
-        return answers;
+    //    public List<Answer> getAnswers() {
+//        return answers;
+//    }
+//
+//    public void setAnswers(List<Answer> answers) {
+//        this.answers = answers;
+//    }
+    public List<QuestionContent> getContents() {
+        return contents;
     }
 
-    public void setAnswers(List<Answer> answers) {
-        this.answers = answers;
+    public void setContents(List<QuestionContent> contents) {
+        this.contents = contents;
     }
+
     public String getRaw_text() {
         return raw_text.get();
     }
@@ -94,6 +105,7 @@ public class Question {
     public String getQuestion_weight() {
         return question_weight.get();
     }
+
     public void setQuestion_weight(String question_weight) {
         this.question_weight.set(question_weight);
     }
