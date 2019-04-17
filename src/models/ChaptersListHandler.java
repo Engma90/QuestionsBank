@@ -29,7 +29,6 @@ public class ChaptersListHandler {
         return instance;
     }
     public int Add(Course course, Chapter model) {
-        //DBHandler db = new DBHandler();
         String sql = "insert into Chapter (ChapterName, Course_idCourse, ChapterNumber) values (?,?,?) ;";
                String[] params = new String[]{ model.name, course.id,model.number};
         return DBHandler.getInstance().execute_PreparedStatement(sql, params);
@@ -42,24 +41,14 @@ public class ChaptersListHandler {
         return DBHandler.getInstance().execute_sql(sql);
     }
     public boolean Delete(Chapter model) {
-        //QuestionsTableController.questionsTableHandler.DeleteAllSelectedChapterQuestions();
-        //DBHandler db = new DBHandler();
         String sql = MessageFormat.format(
                 "DELETE  FROM Chapter WHERE idChapter = {0} ;"
                 , model.id);
         return DBHandler.getInstance().execute_sql(sql);
     }
-//    boolean DeleteAllSelectedCourseChapters(){
-//        boolean success = false;
-//        for (Chapter ch: chaptersList){
-//            success = Delete(ch);
-//        }
-//        return success;
-//    }
 
     public ObservableList<Chapter> getList(Course course){
         chaptersList = FXCollections.observableArrayList();
-        //DBHandler db = new DBHandler();
         String sql = MessageFormat.format(
                 "SELECT * FROM Chapter WHERE Course_idCourse ={0};"
                 ,  course.id);
