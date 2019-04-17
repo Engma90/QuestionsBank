@@ -43,8 +43,8 @@ public class GeneratorHandler {
                             "INSERT INTO ExamQuestionContent (ExamQuestion_idQuestion, QuestionContent) " +
                                     "VALUES (?,?);";
                     params = new String[]{q.getId(), questionContent.getContent()};
-                    DBHandler.getInstance().execute_PreparedStatement(sql,params);
-
+                    int question_content_id =DBHandler.getInstance().execute_PreparedStatement(sql,params);
+                    questionContent.setId(question_content_id+"");
 
                     for (Answer ans : questionContent.getAnswers()) {
 

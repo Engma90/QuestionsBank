@@ -1,6 +1,7 @@
 package controllers;
 
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -73,6 +74,9 @@ public class HomeController implements Initializable, IWindow  {
 //            current_stage.show();
 //            ((Stage) ((Node)e.getSource()).getScene().getWindow()).close();
             new WindowLoader().load(e,"/views/Dashboard.fxml",null,null,false,true,null);
+        }
+        else {
+            new Alert(Alert.AlertType.ERROR, "Login failed").show();
         }
 
 

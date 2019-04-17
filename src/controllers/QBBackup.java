@@ -88,7 +88,7 @@ class QBBackup {
 
                             for (Answer answer : answerList) {
                                 add_row(AnswerCSVList,
-                                        new String[]{(answer_id++ + 1) + "", (question_id) + "",
+                                        new String[]{(answer_id++ + 1) + "", (question_content_id) + "",
                                                 answer.answer_text, answer.is_right_answer + ""});
                             }
                         }
@@ -246,15 +246,23 @@ class QBBackup {
         File file = createFileWithDir(filePath).toFile();
 
         try {
-            FileWriter output_file = new FileWriter(file);
-            CSVWriter writer = new CSVWriter(output_file,
-                    CSVWriter.DEFAULT_SEPARATOR,
-                    CSVWriter.DEFAULT_QUOTE_CHARACTER,
-                    CSVWriter.DEFAULT_ESCAPE_CHARACTER,
-                    CSVWriter.DEFAULT_LINE_END);
+            //FileWriter output_file = new FileWriter(file);
+//            CSVWriter writer = new CSVWriter(output_file,
+//                    CSVWriter.DEFAULT_SEPARATOR,
+//                    CSVWriter.DEFAULT_QUOTE_CHARACTER,
+//                    CSVWriter.DEFAULT_ESCAPE_CHARACTER,
+//                    CSVWriter.DEFAULT_LINE_END);
+
+            FileOutputStream os = new FileOutputStream(file);
+            os.write(0xef);
+            os.write(0xbb);
+            os.write(0xbf);
+            CSVWriter writer = new CSVWriter(new OutputStreamWriter(os));
+
+
             writer.writeAll(data);
             writer.close();
-            output_file.close();
+            //output_file.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

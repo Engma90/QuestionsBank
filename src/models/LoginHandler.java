@@ -69,9 +69,13 @@ public class LoginHandler {
                 DashboardController.doctor = doctor;
                 return true;
             }
+            else{
+                return false;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
-        return false;
+
     }
 }

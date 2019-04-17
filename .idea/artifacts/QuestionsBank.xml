@@ -29,6 +29,10 @@
         <element id="library" level="project" name="zxing-qr-code" />
         <element id="library" level="project" name="import-image" />
         <element id="library" level="project" name="QBBackup" />
+        <element id="directory" name="docx4j">
+          <element id="library" level="project" name="Docx4j" />
+          <element id="library" level="project" name="docx4j-dependencies" />
+        </element>
       </element>
       <element id="file-copy" path="$PROJECT_DIR$/res/logo.png" />
     </root>

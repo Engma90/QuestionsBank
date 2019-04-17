@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Docx4j">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/lib/Docx4j" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/lib/Docx4j" recursive="false" />
+  </library>
+</component>

@@ -77,7 +77,7 @@
                 </StackPane>
             </ScrollPane>
             <ScrollPane fitToWidth="true" vbarPolicy="NEVER" VBox.vgrow="ALWAYS"
-                        fx:id="true_false_answers_list_scroll_pane" visible="false">
+                        fx:id="true_false_answers_list_scroll_pane" visible="false" managed="false">
                 <padding>
                     <Insets top="10" right="10" bottom="10" left="10"/>
                 </padding>

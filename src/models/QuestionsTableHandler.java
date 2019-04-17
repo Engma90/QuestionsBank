@@ -68,6 +68,7 @@ public class QuestionsTableHandler {
             sql = "insert into QuestionContent (QuestionContent, Question_idQuestion) values (?,?);";
             int last_inserted_question_content_id = DBHandler.getInstance().execute_PreparedStatement(sql, new String[]
                     {questionContent.getContent(), model.getId() + ""});
+            questionContent.setId(last_inserted_question_content_id+"");
             sql = MessageFormat.format("DELETE FROM QuestionAnswer WHERE QuestionContent_idQuestionContent = {0};", questionContent.getId());
             boolean success2 = DBHandler.getInstance().execute_sql(sql);
             for (int i = 0; i < questionContent.getAnswers().size(); i++) {

@@ -46,7 +46,7 @@
                         </FXCollections>
                     </items>
                 </ComboBox>
-                <ComboBox value="1st Year" fx:id="exam_year" maxWidth="Infinity">
+                <ComboBox fx:id="exam_year" maxWidth="Infinity">
                     <items>
                         <FXCollections fx:factory="observableArrayList">
                             <String fx:value="1st Year"/>
@@ -111,7 +111,7 @@
             <Insets top="10" bottom="10"/>
         </padding>
 
-        <ComboBox value="Format" fx:id="format">
+        <ComboBox value="Format" fx:id="combo_format" visible="false" managed="false">
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="PDF"/>

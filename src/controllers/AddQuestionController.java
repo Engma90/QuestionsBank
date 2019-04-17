@@ -1,5 +1,6 @@
 package controllers;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -16,7 +17,7 @@ import models.*;
 import org.jsoup.Jsoup;
 import controllers.Vars.*;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,106 +47,37 @@ public class AddQuestionController implements Initializable, IWindow {
     private Question model;
     private Topic topic;
     private boolean isADDorEdeitClicked = false;
-    private static boolean isPrevConfigSet = false;
+    private boolean isPrevConfigSet = false;
+    //private static AddQuestionContentRowController lastSelectedContent = null;
 
     public AddQuestionController(String operation_type, Topic topic, Question model) {
         this.operation_type = operation_type;
         this.model = model;
         this.topic = topic;
 
-    }
-
-
-    private AddQuestionContentRowController addContentRow() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/AddQuestionContentRow.fxml"));
-        Parent root = loader.load();
-
-        question_contents_list.getChildren().add((root));
-        contentRowControllers.add((loader.getController()));
-        ((AddQuestionContentRowController) loader.getController()).addQuestionController = this;
-        ((AddQuestionContentRowController) loader.getController()).select.setToggleGroup(questionContentGroup);
-        ((AddQuestionContentRowController) loader.getController()).select.selectedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                //int count = 0;...
-                ...
-                //todo: on change update right answers
-                // also update them on content model
-                for (int j = 0; j < contentRowControllers.size(); j++) {
-                    AddQuestionContentRowController contentRowController = contentRowControllers.get(j);
-                    if (contentRowController.select.isSelected()) {
-                        for (int i = 0; i < answerRowControllers.size(); i++) {
-                            if(model.getContents().get(j).getAnswers().get(i).is_right_answer == 1){
-                                answerRowControllers.get(i).checkbox_right_answer.setSelected(true);
-                            }else {
-                                answerRowControllers.get(i).checkbox_right_answer.setSelected(true);
-                            }
-
-                        }
-                        break;
-                    }
-                }
-
-
-                for (Answer a : model.getContents().get(0).getAnswers()) {
-                    AddQuestionAnswerRowController addQuestionAnswerRowController = answerRowControllers;
-                    if (addQuestionAnswerRowController != null) {
-                        addQuestionAnswerRowController.txt_answer.setHtmlText(a.answer_text);
-                        if (a.is_right_answer == 1) {
-                            addQuestionAnswerRowController.checkbox_right_answer.setSelected(true);
-                        } else {
-                            addQuestionAnswerRowController.checkbox_right_answer.setSelected(false);
-                        }
-                    }
-                }
-            }
-        });
-        ((AddQuestionContentRowController) loader.getController()).loader = loader;
-        return ((AddQuestionContentRowController) loader.getController());
-    }
-
-    public void removeContentRow(AddQuestionContentRowController contentRowController) {
-        if (contentRowControllers.size() > 1) {
-            contentRowControllers.remove(contentRowController);
-            question_contents_list.getChildren().remove((Node) contentRowController.loader.getRoot());
-            int count = 0;
-//            for (AddQuestionContentRowController a : contentRowControllers) {
+//        try {
+//            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+//            ObjectOutputStream oos = new ObjectOutputStream(bos);
+//            oos.writeObject(model);
+//            oos.flush();
+//            oos.close();
+//            bos.close();
+//            byte[] byteData = bos.toByteArray();
+//            ByteArrayInputStream bais = new ByteArrayInputStream(byteData);
+//            Question object = (Question) new ObjectInputStream(bais).readObject();
+//            this.model = object;
+//        }catch (Exception ex){
 //
-//            }
-            if (contentRowController.select.isSelected()) {
-                contentRowControllers.get(0).select.setSelected(true);
-            }
-        }
+//        }
+
+
     }
 
-
-    private AddQuestionAnswerRowController addAnswerRow() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/AddQuestionAnswerRow.fxml"));
-        Parent root = loader.load();
-
-        mcq_ui_answers_list.getChildren().add((root));
-        answerRowControllers.add((loader.getController()));
-        ((AddQuestionAnswerRowController) loader.getController()).label.setText((char) (65 + (answerRowControllers.size() - 1)) + "");
-        ((AddQuestionAnswerRowController) loader.getController()).addQuestionController = this;
-        ((AddQuestionAnswerRowController) loader.getController()).loader = loader;
-        return ((AddQuestionAnswerRowController) loader.getController());
-    }
-
-    public void removeAnswerRow(AddQuestionAnswerRowController ans) {
-        answerRowControllers.remove(ans);
-        mcq_ui_answers_list.getChildren().remove((Node) ans.loader.getRoot());
-        int count = 0;
-        for (AddQuestionAnswerRowController a : answerRowControllers) {
-            a.label.setText(((char) (65 + count) + ""));
-            count++;
-        }
-    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-        //question_html_editor.setToggleModeEnabled(false);
-        //radio_ext_match.setDisable(true);
+//        isPrevConfigSet = false;
+//        isADDorEdeitClicked = false;
 
 
         txt_q_exp_time.setDefaultVal(2);
@@ -240,6 +172,21 @@ public class AddQuestionController implements Initializable, IWindow {
             if (isNowSelected) {
                 true_false_answers_list_scroll_pane.setVisible(true);
                 true_false_answers_list_scroll_pane.setManaged(true);
+
+//                if (answerRowControllers.size() == 0 && operation_type.equals(OperationType.ADD)) {
+//                    for (int i = 0; i < 2; i++) {
+//                        answerRowControllers.add(new Answer());
+//                    }
+//                } else if (answerRowControllers.size() == 0 && isPrevConfigSet) {
+//                    for (int i = 0; i < 2; i++) {
+//                        try {
+//                            addAnswerRow();
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                }
+
             } else {
                 true_false_answers_list_scroll_pane.setVisible(false);
                 true_false_answers_list_scroll_pane.setManaged(false);
@@ -323,8 +270,14 @@ public class AddQuestionController implements Initializable, IWindow {
         //question_html_editor.setHtmlText(model.getQuestion_text());
         for (QuestionContent questionContent : model.getContents()) {
             AddQuestionContentRowController addQuestionContentRowController = addContentRow();
-            addQuestionContentRowController.txt_answer.setHtmlText(questionContent.getContent());
+            addQuestionContentRowController.content.setHtmlText(questionContent.getContent());
+
+            //for (Answer a : questionContent.getAnswers()) {
+            addQuestionContentRowController.rightAnswersList = questionContent.getAnswers();
+            //}
         }
+        System.out.println("Model:" + model.getContents().get(0).getAnswers().get(0).answer_text);
+        System.out.println("contentRowControllers:" + contentRowControllers.get(0).rightAnswersList.get(0).answer_text);
 
         txt_q_diff.setText(model.getQuestion_diff());
         txt_q_weight.setText(model.getQuestion_weight());
@@ -332,6 +285,7 @@ public class AddQuestionController implements Initializable, IWindow {
         if (model.getQuestion_type().equals(QuestionType.TRUE_FALSE)) {
             radio_true_false.setSelected(true);
             switch (model.getContents().get(0).getAnswers().get(0).is_right_answer) {
+                //Here add to list
                 case 1:
                     radio_answer_true.setSelected(true);
                     break;
@@ -341,6 +295,8 @@ public class AddQuestionController implements Initializable, IWindow {
             }
         } else if (model.getQuestion_type().equals(QuestionType.MCQ)) {
             radio_mcq.setSelected(true);
+            System.out.println("Getting MCQ Answers");
+            System.out.println(model.getContents().get(0).getAnswers().get(0));
             for (Answer a : model.getContents().get(0).getAnswers()) {
                 AddQuestionAnswerRowController addQuestionAnswerRowController = addAnswerRow();
                 if (addQuestionAnswerRowController != null) {
@@ -354,7 +310,10 @@ public class AddQuestionController implements Initializable, IWindow {
             }
         } else if (model.getQuestion_type().equals(QuestionType.EXTENDED_MATCH)) {
             radio_ext_match.setSelected(true);
+            System.out.println("Getting EMQ Answers");
+            System.out.println(model.getContents().get(0).getAnswers().get(0));
             for (Answer a : model.getContents().get(0).getAnswers()) {
+                System.out.println(a.answer_text);
                 AddQuestionAnswerRowController addQuestionAnswerRowController = addAnswerRow();
                 if (addQuestionAnswerRowController != null) {
                     addQuestionAnswerRowController.txt_answer.setHtmlText(a.answer_text);
@@ -367,9 +326,22 @@ public class AddQuestionController implements Initializable, IWindow {
             }
         }
         contentRowControllers.get(0).select.setSelected(true);
+
+        System.out.println("Model2:" + model.getContents().get(0).getAnswers().get(0).answer_text);
+        System.out.println("contentRowControllers2:" + contentRowControllers.get(0).rightAnswersList.get(0).answer_text);
     }
 
     public void onAddClicked(ActionEvent e) {
+
+        for (AddQuestionContentRowController addQuestionContentRowController : contentRowControllers) {
+
+            if ((addQuestionContentRowController.select.isSelected())) {
+                // because data saved on un select set callUpdateModel false to avoid stackoverflow ex
+                updateContentRowAnswers(addQuestionContentRowController, false);
+                updateContentRowAnswers(addQuestionContentRowController, true);
+            }
+        }
+
         updateModelData();
         if (validate()) {
             isADDorEdeitClicked = true;
@@ -379,12 +351,21 @@ public class AddQuestionController implements Initializable, IWindow {
             new Alert(Alert.AlertType.ERROR, "Please fill all fields:\n" +
                     "Question\n" +
                     "At least 1 answer\n" +
-                    "Mark At least 1 answer as a right answer").show();
+                    "For each Question mark At least 1 answer as a right answer").show();
         }
     }
 
 
     public void onEditClicked(ActionEvent e) {
+        for (AddQuestionContentRowController addQuestionContentRowController : contentRowControllers) {
+
+            if ((addQuestionContentRowController.select.isSelected())) {
+                // because data saved on un select set callUpdateModel false to avoid stackoverflow ex
+                updateContentRowAnswers(addQuestionContentRowController, false);
+                updateContentRowAnswers(addQuestionContentRowController, true);
+            }
+        }
+
         updateModelData();
         if (validate()) {
             isADDorEdeitClicked = true;
@@ -394,11 +375,29 @@ public class AddQuestionController implements Initializable, IWindow {
             new Alert(Alert.AlertType.ERROR, "Please fill all fields:\n" +
                     "Question\n" +
                     "At least 1 answer\n" +
-                    "Mark At least 1 answer as a right answer").show();
+                    "For each Question mark At least 1 answer as a right answer").show();
         }
     }
 
     private Question updateModelData() {
+
+        for (AddQuestionContentRowController addQuestionContentRowController : contentRowControllers) {
+
+            if (addQuestionContentRowController.rightAnswersList.size() == 0) {
+                for (AddQuestionAnswerRowController a : answerRowControllers) {
+                    Answer answer = new Answer();
+                    answer.is_right_answer = 0;
+                    addQuestionContentRowController.rightAnswersList.add(answer);
+                }
+            }
+
+            //Todo: Solve only save on UnSelect
+//            if ((addQuestionContentRowController.select.isSelected())){
+//                // because data saved on un select set callUpdateModel false to avoid stackoverflow ex
+//                updateContentRowAnswers(addQuestionContentRowController,false, false);
+//                updateContentRowAnswers(addQuestionContentRowController,true, false);
+//            }
+        }
 
         List<QuestionContent> questionContentList = new ArrayList<>();
         for (AddQuestionContentRowController addQuestionContentRowController : contentRowControllers) {
@@ -418,7 +417,7 @@ public class AddQuestionController implements Initializable, IWindow {
             }
 
 
-            String Q = addQuestionContentRowController.txt_answer.getHtmlText();
+            String Q = addQuestionContentRowController.content.getHtmlText();
             String diff = txt_q_diff.getText();
             String weight = txt_q_weight.getText();
             String exp_time = txt_q_exp_time.getText();
@@ -455,30 +454,176 @@ public class AddQuestionController implements Initializable, IWindow {
             } else if (radio_ext_match.isSelected()) {
                 model.setQuestion_type(QuestionType.EXTENDED_MATCH);
                 List<Answer> answers = new ArrayList<>();
+                int counter = 0;
                 for (AddQuestionAnswerRowController a : answerRowControllers) {
                     Answer answer = new Answer();
                     answer.answer_text = a.txt_answer.getHtmlText();
-                    answer.is_right_answer = a.checkbox_right_answer.isSelected() ? 1 : 0;
+                    //will set right answer in radio change event for each content opject
+                    System.out.println("updateModelData: " + addQuestionContentRowController.rightAnswersList.size());
+
+
+                    answer.is_right_answer = addQuestionContentRowController.rightAnswersList.get(counter++)
+                            .is_right_answer == 1 ? 1 : 0;
+                    //a.checkbox_right_answer.isSelected() ? 1 : 0;
                     answers.add(answer);
                 }
                 questionContent.setAnswers(answers);
             }
         }
         model.setContents(questionContentList);
+        //System.out.println(model.getContents().get(0).getAnswers().get(0));
         return model;
     }
 
+//    private void refreshContentRowAnswers() {
+//        try {
+//            for (AddQuestionContentRowController addQuestionContentRowController : contentRowControllers) {
+//                if (addQuestionContentRowController.select.isSelected()) {
+//                    addQuestionContentRowController.select.setSelected(false);
+//                    addQuestionContentRowController.select.setSelected(true);
+//                }
+//            }
+//        } catch (Exception ignored) {
+//
+//        }
+//    }
+
     public void onAddAnswerClicked(ActionEvent e) throws IOException {
+        for (AddQuestionContentRowController contentRowController : contentRowControllers) {
+            Answer answer = new Answer();
+            answer.answer_text = "";
+            answer.id = "";
+            answer.is_right_answer = 0;
+            contentRowController.rightAnswersList.add(answer);
+        }
         addAnswerRow();
     }
 
     public void onAddContentClicked(ActionEvent e) throws IOException {
-        addContentRow();
+        AddQuestionContentRowController contentRowController = addContentRow();
+
+    }
+
+    private AddQuestionContentRowController addContentRow() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/AddQuestionContentRow.fxml"));
+        Parent root = loader.load();
+
+        question_contents_list.getChildren().add((root));
+        contentRowControllers.add((loader.getController()));
+        ((AddQuestionContentRowController) loader.getController()).addQuestionController = this;
+
+        ((AddQuestionContentRowController) loader.getController()).select.setToggleGroup(questionContentGroup);
+        ((AddQuestionContentRowController) loader.getController()).loader = loader;
+        if (operation_type.equals(OperationType.ADD)) {
+            for (int i = 0; i < 4; i++) {
+                Answer answer = new Answer();
+                answer.id = "";
+                answer.answer_text = "";
+                answer.is_right_answer = 0;
+                ((AddQuestionContentRowController) loader.getController()).rightAnswersList.add(answer);
+            }
+        }
+        return ((AddQuestionContentRowController) loader.getController());
+    }
+
+
+    public void updateContentRowAnswers(AddQuestionContentRowController contentRowController, Boolean newValue) {
+
+        if (newValue) {
+            System.out.println("updateContentRowAnswers_true");
+            if (radio_true_false.isSelected()) {
+            } else {
+                if (contentRowController.rightAnswersList.size() != answerRowControllers.size()) {
+                    contentRowController.rightAnswersList.clear();
+                    for (AddQuestionAnswerRowController a : answerRowControllers) {
+                        Answer answer = new Answer();
+                        answer.is_right_answer = a.checkbox_right_answer.isSelected() ? 1 : 0;
+                        contentRowController.rightAnswersList.add(answer);
+                    }
+                } else {
+                    for (int i = 0; i < answerRowControllers.size(); i++) {
+                        if (contentRowController.rightAnswersList.get(i).is_right_answer == 1) {
+                            answerRowControllers.get(i).checkbox_right_answer.setSelected(true);
+                        } else {
+                            answerRowControllers.get(i).checkbox_right_answer.setSelected(false);
+                        }
+                    }
+                }
+            }
+        } else {
+            System.out.println("updateContentRowAnswers_false");
+            if (contentRowController.rightAnswersList.size() != answerRowControllers.size()) {
+                contentRowController.rightAnswersList.clear();
+                for (AddQuestionAnswerRowController a : answerRowControllers) {
+                    Answer answer = new Answer();
+                    answer.is_right_answer = a.checkbox_right_answer.isSelected() ? 1 : 0;
+                    contentRowController.rightAnswersList.add(answer);
+                }
+            } else {
+                contentRowController.rightAnswersList.clear();
+                for (AddQuestionAnswerRowController a : answerRowControllers) {
+                    Answer answer = new Answer();
+                    answer.is_right_answer = a.checkbox_right_answer.isSelected() ? 1 : 0;
+                    contentRowController.rightAnswersList.add(answer);
+                }
+
+            }
+            System.out.println("updateContentRowAnswers: " + contentRowController.rightAnswersList.size());
+            //if(callUpdateModel)
+            updateModelData();
+        }
+    }
+
+    public void removeContentRow(AddQuestionContentRowController contentRowController) {
+        if (contentRowControllers.size() > 1) {
+            contentRowControllers.remove(contentRowController);
+            question_contents_list.getChildren().remove((Node) contentRowController.loader.getRoot());
+            int count = 0;
+//            for (AddQuestionContentRowController a : contentRowControllers) {
+//
+//            }
+            if (contentRowController.select.isSelected()) {
+                contentRowControllers.get(0).select.setSelected(true);
+            }
+        }
+    }
+
+
+    private AddQuestionAnswerRowController addAnswerRow() throws IOException {
+        //refreshContentRowAnswers();
+        //if(operation_type.equals(OperationType.ADD))
+
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/AddQuestionAnswerRow.fxml"));
+        Parent root = loader.load();
+        mcq_ui_answers_list.getChildren().add((root));
+        answerRowControllers.add((loader.getController()));
+        ((AddQuestionAnswerRowController) loader.getController()).label.setText((char) (65 + (answerRowControllers.size() - 1)) + "");
+        ((AddQuestionAnswerRowController) loader.getController()).addQuestionController = this;
+        ((AddQuestionAnswerRowController) loader.getController()).loader = loader;
+        return ((AddQuestionAnswerRowController) loader.getController());
+    }
+
+    public void removeAnswerRow(AddQuestionAnswerRowController ans) {
+        //refreshContentRowAnswers();
+
+        for (AddQuestionContentRowController contentRowController : contentRowControllers) {
+            contentRowController.rightAnswersList.remove(answerRowControllers.indexOf(ans));
+        }
+
+        answerRowControllers.remove(ans);
+        mcq_ui_answers_list.getChildren().remove((Node) ans.loader.getRoot());
+        int count = 0;
+        for (AddQuestionAnswerRowController a : answerRowControllers) {
+            a.label.setText(((char) (65 + count) + ""));
+            count++;
+        }
     }
 
     private boolean validate() {
-        boolean isThereRightAnswer = false;
+
         for (QuestionContent questionContent : model.getContents()) {
+            boolean isThereRightAnswer = false;
             if (Jsoup.parse(questionContent.getContent()).text().isEmpty() &&
                     Jsoup.parse(questionContent.getContent()).getElementsByTag("img").size() == 0)
                 return false;
@@ -489,8 +634,10 @@ public class AddQuestionController implements Initializable, IWindow {
                 if (answer.is_right_answer == 1)
                     isThereRightAnswer = true;
             }
-            if (!isThereRightAnswer)
+            if (!isThereRightAnswer) {
+                System.out.println("No right Answer");
                 return false;
+            }
         }
 
         return true;
@@ -521,6 +668,8 @@ public class AddQuestionController implements Initializable, IWindow {
         stage.setHeight(stage.getMinHeight());
         return this;
     }
+
+
 
 
 /* Todo: add listeners to all node to invalidate save status ICachInvadidatable

@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="docx4j-dependencies">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/lib/Docx4j/docx4j-dependencies" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/lib/Docx4j/docx4j-dependencies" recursive="false" />
+  </library>
+</component>

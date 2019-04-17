@@ -7,10 +7,10 @@
 
 <HBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="controllers.AddQuestionContentRowController" spacing="10" fx:id="rowContainer">
+      fx:controller="controllers.AddQuestionContentRowController" spacing="10" fx:id="rowContainer" >
 
         <RadioButton fx:id="select"/>
-        <MyHtmlEditor fx:id="txt_answer" HBox.hgrow="ALWAYS" stylesheets="@css/modena/modena.css"/>
+        <MyHtmlEditor fx:id="content" HBox.hgrow="ALWAYS" stylesheets="@css/modena/modena.css"/>
         <Button text="" fx:id="remove_content" onAction="#onRemoveClicked" styleClass="delete-button"/>
 
 </HBox>

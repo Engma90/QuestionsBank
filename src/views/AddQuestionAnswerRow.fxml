@@ -10,7 +10,7 @@
       fx:controller="controllers.AddQuestionAnswerRowController" spacing="10" >
         <Label fx:id="label" text="A"/>
         <MyHtmlEditor fx:id="txt_answer" HBox.hgrow="ALWAYS" stylesheets="@css/modena/modena.css"/>
-        <!--<TextFlow prefWidth="500" fx:id="txt_answer" ></TextFlow>-->
+        <!--<TextFlow prefWidth="500" fx:id="content" ></TextFlow>-->
         <CheckBox fx:id="checkbox_right_answer"/>
         <Button text="" fx:id="remove_answer" onAction="#onRemoveClicked" styleClass="delete-button"/>
 </HBox>

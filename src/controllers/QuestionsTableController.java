@@ -112,7 +112,7 @@ public class QuestionsTableController implements Initializable {
                         we.consume();
                     }
                 }
-                if (window.isSaveAndExitClicked()) {
+                if (true) { //window.isSaveAndExitClicked() //till fix bug (#4)
                     refresh(true, OperationType.EDIT);
                 }
             }

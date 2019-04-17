@@ -93,6 +93,9 @@ public class SignupController implements Initializable, IWindow {
         if(!isValidEmail(email.getText())){
             return false;
         }
+        if (preferredExamLayout.getValue().equals("Preferred Exam Layout")){
+            return false;
+        }
         if(full_name.getText().isEmpty() || email.getText().isEmpty()
         || password.getText().isEmpty() || re_password.getText().isEmpty()){
             return false;

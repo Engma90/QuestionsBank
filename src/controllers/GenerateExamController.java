@@ -49,7 +49,7 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
             exam_total_marks, exam_name_text;
     public DatePicker exam_date;
     public TextArea note_text;
-    public ComboBox<String> exam_type, format, exam_language, exam_year;
+    public ComboBox<String> exam_type, combo_format, exam_language, exam_year;
 
     public Course course = new Course();
 
@@ -101,7 +101,7 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
                     note_text.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
                     exam_duration.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
                     exam_total_marks.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
-
+                    //Todo: fix this on change language
                     ObservableList<String> years = FXCollections.observableArrayList();
                     years.add("Prep Year");
                     years.add("1st Year");
@@ -111,8 +111,7 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
                     years.add("5th Year");
                     years.add("6th Year");
                     exam_year.setItems(years);
-
-
+                    exam_year.getSelectionModel().select(selection);
                 }else {
                     exam_name_text.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
                     college_text.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
@@ -134,10 +133,11 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
                 exam_year.getSelectionModel().select(selection);
             }
         });
+        exam_year.getSelectionModel().select(course.year);
         exam_language.getSelectionModel().select(DashboardController.doctor.getPreferredExamLayout());
 
-        exam_year.getSelectionModel().select(course.year);
-        format.getSelectionModel().selectFirst();
+
+        combo_format.getSelectionModel().selectFirst();
 
         chapterList = ChaptersListHandler.getInstance().getList(course);
         for (Chapter c : chapterList) {
@@ -211,7 +211,7 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
                     @Override
                     protected Void call() throws Exception {
                         FileExporterFactory fe = new FileExporterFactory();
-                        IFileExporter fileExporter = fe.getExporter(FileExporterFactory.LIBRE_OFFICE);
+                        IFileExporter fileExporter = fe.createExporter(FileExporterFactory.DEFAULT);
                         if (null == fileExporter) {
                             throw new Exception(fe.getError());
                         }
@@ -271,7 +271,7 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
                 }
 
                 addExamToDatabase(exam);
-                fileExporter.exportExam(exam, selectedDirectory.getAbsolutePath(), format.getValue());
+                fileExporter.exportExam(exam, selectedDirectory.getAbsolutePath(), combo_format.getValue());
                 return true;
             } else {
                 return false;

@@ -14,5 +14,7 @@
     <orderEntry type="library" name="import-image" level="project" />
     <orderEntry type="library" name="documents4j" level="project" />
     <orderEntry type="library" name="QBBackup" level="project" />
+    <orderEntry type="library" name="Docx4j" level="project" />
+    <orderEntry type="library" name="docx4j-dependencies" level="project" />
   </component>
 </module>

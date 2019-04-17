@@ -35,7 +35,7 @@ class FileExporterMSOffice implements IFileExporter{
                     .schedule();
 //            Future<Boolean> conversion = converter
 //                    .convert(new BufferedReader(new InputStreamReader(new FileInputStream(htmlFile)))).as(DocumentType.MHTML)
-//                    .to(target).as((format.equals("PDF")?DocumentType.PDF:DocumentType.DOCX))
+//                    .to(target).as((combo_format.equals("PDF")?DocumentType.PDF:DocumentType.DOCX))
 //                    .schedule();
 //            converter.shutDown();
             converter.shutDown();
