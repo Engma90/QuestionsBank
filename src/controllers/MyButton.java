@@ -48,7 +48,7 @@ public class MyButton extends HBox {
             //setBackground(new Background(new BackgroundFill(new Color(0, 0, 0.5,1), CornerRadii.EMPTY,new Insets(0))));
             ColorAdjust desaturate = new ColorAdjust();
             //desaturate.setSaturation(0.3);
-            desaturate.setHue(0.5);
+            desaturate.setContrast(0.5);
             setEffect(desaturate);
         });
 

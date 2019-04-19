@@ -91,6 +91,6 @@ public class Doctor {
 
 
 
-    Doctor() {
+    public Doctor() {
     }
 }

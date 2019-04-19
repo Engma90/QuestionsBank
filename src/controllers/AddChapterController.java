@@ -35,7 +35,7 @@ public class AddChapterController implements Initializable, IWindow {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         chapter_number.setDefaultVal(1);
-        chapter_number.setMin(1);
+        chapter_number.setMin(0);
         if (this.operation_type.contains("Add")) {
             edit_chapter.setVisible(false);
             edit_chapter.setManaged(false);

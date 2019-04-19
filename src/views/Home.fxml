@@ -45,7 +45,7 @@
                     <Image url="/views/images/passIcon.png"/>
                 </ImageView>
                 <PasswordField fx:id="login_password" promptText="Password"/>
-                <MyButton prefWidth="24" prefHeight="21" imageUrl="/views/images/loginIcon.png"
+                <MyButton fx:id="btnLogin" prefWidth="24" prefHeight="21" imageUrl="/views/images/loginIcon.png"
                           onMouseClicked="#onLoginClicked">
                 </MyButton>
             </HBox>

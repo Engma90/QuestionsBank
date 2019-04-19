@@ -15,8 +15,8 @@
             <Insets top="20" right="1" bottom="1" left="20"/>
         </padding>
         <HBox maxWidth="Infinity" HBox.hgrow="ALWAYS">
-            <ImageView fitWidth="80" fitHeight="120">
-                <Image url="/views/images/Dashboard_logo4.png"/>
+            <ImageView fitWidth="350" fitHeight="119">
+                <Image url="/views/images/dash_logo.png"/>
             </ImageView>
         </HBox>
 

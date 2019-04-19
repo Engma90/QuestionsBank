@@ -82,7 +82,7 @@ SplitPane{
 
 .rounded-header.label{
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
-    -fx-font: 24px "Tahoma";
+    -fx-font: 20px "Tahoma";
      -fx-font-weight: bold;
     -fx-text-fill:#020834;
 }
