@@ -1,5 +1,4 @@
 import controllers.WindowLoader;
-import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;

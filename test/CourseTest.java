@@ -1,22 +1,13 @@
-import controllers.DashboardController;
-import controllers.WindowLoader;
 import javafx.scene.control.TableView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseButton;
-import javafx.stage.Stage;
 import models.Course;
-import models.Doctor;
-import org.junit.After;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.testfx.api.FxAssert;
-import org.testfx.api.FxToolkit;
-import org.testfx.framework.junit.ApplicationTest;
 import org.testfx.matcher.control.TableViewMatchers;
 import org.testfx.util.WaitForAsyncUtils;
 
-import java.util.concurrent.TimeoutException;
 import static org.testfx.api.FxAssert.verifyThat;
 import static org.testfx.matcher.base.NodeMatchers.hasText;
 
@@ -101,7 +92,7 @@ public class CourseTest extends TestBaseSkipLogin {
         clickOn(CONTAINER + " " + BUTTON_DELETE);
         clickOn("Yes");
         WaitForAsyncUtils.waitForFxEvents(1);
-        FxAssert.verifyThat(tableView, TableViewMatchers.hasItems(size - 1));
+        FxAssert.verifyThat(tableView, TableViewMatchers.hasNumRows(size - 1));
     }
 
     public void selectLast(){

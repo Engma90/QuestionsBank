@@ -1,21 +1,12 @@
-import controllers.DashboardController;
-import controllers.WindowLoader;
 import javafx.scene.control.ListView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseButton;
-import javafx.stage.Stage;
 import models.Chapter;
-import models.Doctor;
-import models.LoginHandler;
-import org.junit.*;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.testfx.api.FxAssert;
-import org.testfx.api.FxToolkit;
-import org.testfx.framework.junit.ApplicationTest;
 import org.testfx.matcher.control.ListViewMatchers;
 import org.testfx.util.WaitForAsyncUtils;
-
-import java.util.concurrent.TimeoutException;
 
 import static org.testfx.api.FxAssert.verifyThat;
 import static org.testfx.matcher.base.NodeMatchers.hasText;
