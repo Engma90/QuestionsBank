@@ -27,7 +27,6 @@ public class AddQuestionController implements Initializable, IWindow {
     private List<AddQuestionAnswerRowController> answerRowControllers;
     private List<AddQuestionContentRowController> contentRowControllers;
     public Button add_question, edit_question, add_answer, add_question_content;
-    //public MyHtmlEditor question_html_editor;
     public RadioButton radio_mcq;
     public RadioButton radio_true_false;
     public RadioButton radio_ext_match;
@@ -44,52 +43,32 @@ public class AddQuestionController implements Initializable, IWindow {
     public NumberField txt_q_diff, txt_q_weight, txt_q_exp_time;
 
     private String operation_type;
-    private Question model;
+    private Question model, tempModel;
+
     private Topic topic;
     private boolean isADDorEdeitClicked = false;
     private boolean isPrevConfigSet = false;
-    //private static AddQuestionContentRowController lastSelectedContent = null;
 
     public AddQuestionController(String operation_type, Topic topic, Question model) {
         this.operation_type = operation_type;
         this.model = model;
         this.topic = topic;
-
-//        try {
-//            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-//            ObjectOutputStream oos = new ObjectOutputStream(bos);
-//            oos.writeObject(model);
-//            oos.flush();
-//            oos.close();
-//            bos.close();
-//            byte[] byteData = bos.toByteArray();
-//            ByteArrayInputStream bais = new ByteArrayInputStream(byteData);
-//            Question object = (Question) new ObjectInputStream(bais).readObject();
-//            this.model = object;
-//        }catch (Exception ex){
-//
-//        }
-
-
     }
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-//        isPrevConfigSet = false;
-//        isADDorEdeitClicked = false;
-
 
         txt_q_exp_time.setDefaultVal(2);
         txt_q_exp_time.setMin(1);
         txt_q_exp_time.setMax(Integer.MAX_VALUE);
 
         txt_q_weight.setDefaultVal(5);
-        txt_q_weight.setMin(0);
+        txt_q_weight.setMin(1);
         txt_q_weight.setMax(10);
 
         txt_q_diff.setDefaultVal(50);
-        txt_q_diff.setMin(0);
+        txt_q_diff.setMin(1);
         txt_q_diff.setMax(100);
 
         answerRowControllers = new ArrayList<>();
@@ -344,6 +323,7 @@ public class AddQuestionController implements Initializable, IWindow {
 
         updateModelData();
         if (validate()) {
+            this.model = tempModel;
             isADDorEdeitClicked = true;
             QuestionsTableHandler.getInstance().Add(topic, model);
             close(e);
@@ -368,6 +348,7 @@ public class AddQuestionController implements Initializable, IWindow {
 
         updateModelData();
         if (validate()) {
+            this.model = tempModel;
             isADDorEdeitClicked = true;
             QuestionsTableHandler.getInstance().Edit(model);
             close(e);
@@ -380,7 +361,8 @@ public class AddQuestionController implements Initializable, IWindow {
     }
 
     private Question updateModelData() {
-
+        tempModel = new Question();
+        tempModel.setId(model.getId());
         for (AddQuestionContentRowController addQuestionContentRowController : contentRowControllers) {
 
             if (addQuestionContentRowController.rightAnswersList.size() == 0) {
@@ -422,12 +404,12 @@ public class AddQuestionController implements Initializable, IWindow {
             String weight = txt_q_weight.getText();
             String exp_time = txt_q_exp_time.getText();
             questionContent.setContent(Q);
-            model.setQuestion_diff(diff);
-            model.setQuestion_weight(weight);
-            model.setExpected_time(exp_time);
+            tempModel.setQuestion_diff(diff);
+            tempModel.setQuestion_weight(weight);
+            tempModel.setExpected_time(exp_time);
 
             if (radio_mcq.isSelected()) {
-                model.setQuestion_type(QuestionType.MCQ);
+                tempModel.setQuestion_type(QuestionType.MCQ);
                 List<Answer> answers = new ArrayList<>();
                 for (AddQuestionAnswerRowController a : answerRowControllers) {
                     Answer answer = new Answer();
@@ -438,7 +420,7 @@ public class AddQuestionController implements Initializable, IWindow {
                 questionContent.setAnswers(answers);
 
             } else if (radio_true_false.isSelected()) {
-                model.setQuestion_type(QuestionType.TRUE_FALSE);
+                tempModel.setQuestion_type(QuestionType.TRUE_FALSE);
                 String A = "True";
                 String B = "False";
                 List<Answer> answers = new ArrayList<>();
@@ -452,7 +434,7 @@ public class AddQuestionController implements Initializable, IWindow {
                 answers.add(answer);
                 questionContent.setAnswers(answers);
             } else if (radio_ext_match.isSelected()) {
-                model.setQuestion_type(QuestionType.EXTENDED_MATCH);
+                tempModel.setQuestion_type(QuestionType.EXTENDED_MATCH);
                 List<Answer> answers = new ArrayList<>();
                 int counter = 0;
                 for (AddQuestionAnswerRowController a : answerRowControllers) {
@@ -470,9 +452,9 @@ public class AddQuestionController implements Initializable, IWindow {
                 questionContent.setAnswers(answers);
             }
         }
-        model.setContents(questionContentList);
+        tempModel.setContents(questionContentList);
         //System.out.println(model.getContents().get(0).getAnswers().get(0));
-        return model;
+        return tempModel;
     }
 
 //    private void refreshContentRowAnswers() {
@@ -622,7 +604,7 @@ public class AddQuestionController implements Initializable, IWindow {
 
     private boolean validate() {
 
-        for (QuestionContent questionContent : model.getContents()) {
+        for (QuestionContent questionContent : tempModel.getContents()) {
             boolean isThereRightAnswer = false;
             if (Jsoup.parse(questionContent.getContent()).text().isEmpty() &&
                     Jsoup.parse(questionContent.getContent()).getElementsByTag("img").size() == 0)

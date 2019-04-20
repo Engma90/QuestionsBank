@@ -6,13 +6,13 @@
 <?import controllers.NumberField?>
 <?import javafx.geometry.Insets?>
 <?import controllers.MyHtmlEditor?>
-<VBox spacing="10" xmlns:fx="http://javafx.com/fxml"  stylesheets="@css/AddQuestion.css" styleClass="m-container"
+<VBox spacing="10" xmlns:fx="http://javafx.com/fxml" stylesheets="@css/AddQuestion.css" styleClass="m-container"
       prefHeight="700" prefWidth="1000">
     <padding>
         <Insets bottom="10"/>
     </padding>
 
-    <SplitPane orientation="VERTICAL" styleClass="m-container" VBox.vgrow="ALWAYS" >
+    <SplitPane orientation="VERTICAL" styleClass="m-container" VBox.vgrow="ALWAYS">
 
 
         <VBox fx:id="Group1" spacing="10" VBox.vgrow="ALWAYS" minHeight="0">
@@ -20,7 +20,7 @@
                 <Insets top="10" right="10" bottom="10" left="10"/>
             </padding>
 
-            <ScrollPane vbarPolicy="ALWAYS" fitToWidth="true"  VBox.vgrow="ALWAYS"
+            <ScrollPane vbarPolicy="ALWAYS" fitToWidth="true" VBox.vgrow="ALWAYS"
                         fx:id="question_bodies_list_scroll_pane">
                 <padding>
                     <Insets top="10" right="10" bottom="10" left="10"/>
@@ -29,41 +29,51 @@
                     <VBox fx:id="question_contents_ui" spacing="10" styleClass="transparent" VBox.vgrow="ALWAYS">
                         <VBox fx:id="question_contents_list" spacing="10" styleClass="transparent" VBox.vgrow="ALWAYS">
                             <!--<MyHtmlEditor fx:id="question_html_editor"-->
-                                          <!--stylesheets="@css/modena/modena.css"/>-->
+                            <!--stylesheets="@css/modena/modena.css"/>-->
 
                         </VBox>
-                        <Button fx:id="add_question_content" text="Add sub question" onAction="#onAddContentClicked" styleClass="add-button" visible="false"></Button>
+                        <Button fx:id="add_question_content" text="Add sub question" onAction="#onAddContentClicked"
+                                styleClass="add-button" visible="false"></Button>
                     </VBox>
 
                 </StackPane>
             </ScrollPane>
 
 
-            <HBox spacing="10">
+            <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-font-size:18px;">
                 <Label text="Type"/>
                 <RadioButton text="MCQ" fx:id="radio_mcq"/>
                 <RadioButton text="True/False" fx:id="radio_true_false"/>
                 <RadioButton text="Extended match" fx:id="radio_ext_match"/>
 
             </HBox>
-            <HBox spacing="10" alignment="CENTER_LEFT">
-                <Label text="Difficulty"/>
-                <NumberField fx:id="txt_q_diff"/>
+            <HBox spacing="35" alignment="CENTER_LEFT" style="-fx-font-size:18px;">
+                <HBox alignment="CENTER_LEFT" spacing="5">
+                    <Label text="Difficulty"/>
+                    <NumberField fx:id="txt_q_diff" prefWidth="50"/>
+                    <Label text="/ 100"/>
+                </HBox>
 
-                <Label text="Weight"/>
-                <NumberField fx:id="txt_q_weight"/>
+                <HBox alignment="CENTER_LEFT" spacing="5">
+                    <Label text="Weight" />
+                    <NumberField fx:id="txt_q_weight" prefWidth="50"/>
+                    <Label text="/ 10"/>
+                </HBox>
 
-                <Label text="Expected Time"/>
-                <NumberField fx:id="txt_q_exp_time"/>
+                <HBox alignment="CENTER_LEFT" spacing="5">
+                    <Label text="Expected Time"/>
+                    <NumberField fx:id="txt_q_exp_time" prefWidth="50"/>
+                    <Label text="Min"/>
+                </HBox>
             </HBox>
         </VBox>
 
 
-        <VBox fx:id="Group2" spacing="10" VBox.vgrow="ALWAYS" minHeight="0" >
+        <VBox fx:id="Group2" spacing="10" VBox.vgrow="ALWAYS" minHeight="0">
             <padding>
                 <Insets top="10" right="10" bottom="10" left="10"/>
             </padding>
-            <ScrollPane vbarPolicy="ALWAYS" fitToWidth="true"  VBox.vgrow="ALWAYS"
+            <ScrollPane vbarPolicy="ALWAYS" fitToWidth="true" VBox.vgrow="ALWAYS"
                         fx:id="mcq_answers_list_scroll_pane" visible="false" managed="false">
                 <padding>
                     <Insets top="10" right="10" bottom="10" left="10"/>
