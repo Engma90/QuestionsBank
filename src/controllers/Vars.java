@@ -9,7 +9,7 @@ public class Vars {
 
     public static class OperationType{
         public static final String INIT = "Init";
-        public static final String ADD = "Add";
+        public static final String ADD = "add";
         public static final String EDIT = "Edit";
         public static final String DELETE = "Delete";
     }

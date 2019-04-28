@@ -25,7 +25,7 @@ public class AddTopicController implements Initializable, IWindow {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        if (this.operation_type.contains("Add")) {
+        if (this.operation_type.contains("add")) {
             edit_topic.setVisible(false);
             edit_topic.setManaged(false);
             add_topic.setDefaultButton(true);

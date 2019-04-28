@@ -64,11 +64,11 @@ public class CoursesTableController implements Initializable {
 
     public void onAddCourseClicked(ActionEvent e){
         //final int count1 = courses_table_view.getItems().size();
-        final AddCourseController addCourseController =new AddCourseController("Add", null);
+        final AddCourseController addCourseController =new AddCourseController("add", null);
 
         EventHandler<WindowEvent> onClose = we -> {
             if(((IWindow)addCourseController).isSaveAndExitClicked()){
-                refresh("Add");
+                refresh("add");
             }
 
         };
@@ -114,7 +114,7 @@ public class CoursesTableController implements Initializable {
                     selection = 0;
                     break;
 
-                case "Add":
+                case "add":
                     selection = tempList.size()-1;
                     break;
                 case "Edit":

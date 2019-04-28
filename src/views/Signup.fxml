@@ -22,8 +22,8 @@
     <ImageView AnchorPane.leftAnchor="30" AnchorPane.topAnchor="30">
         <Image url="/views/images/create_account.png"/>
     </ImageView>
-    <VBox spacing="30" AnchorPane.topAnchor="100" AnchorPane.rightAnchor="50"
-          AnchorPane.leftAnchor="50" alignment="CENTER" VBox.Vgrow="ALWAYS">
+    <VBox spacing="30" AnchorPane.topAnchor="100" AnchorPane.rightAnchor="100"
+          AnchorPane.leftAnchor="100" alignment="CENTER" VBox.Vgrow="ALWAYS" maxWidth="500">
         <padding>
             <Insets right="50" left="50"/>
         </padding>

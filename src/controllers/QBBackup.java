@@ -19,7 +19,7 @@ import java.util.zip.ZipOutputStream;
 
 class QBBackup {
     private List<String[]> CourseCSVList, ChapterCSVList, TopicCSVList,
-            QuestionCSVList, QuestionContentCSVList, AnswerCSVList;
+            QuestionCSVList, QuestionContentCSVList, AnswerCSVList,RightAnswerCSVList;
 
     public QBBackup() {
         CourseCSVList = new ArrayList<>();
@@ -28,18 +28,20 @@ class QBBackup {
         QuestionCSVList = new ArrayList<>();
         QuestionContentCSVList = new ArrayList<>();
         AnswerCSVList = new ArrayList<>();
+        RightAnswerCSVList = new ArrayList<>();
     }
 
     void qbExport(Course _course, String DestPath) {
 
         cleanup();
 
-        add_row(CourseCSVList, new String[]{"Id", "Name", "Code", "Level", "Year"});
+        add_row(CourseCSVList, new String[]{"Id", "Name", "Code", "Level", "Year", "PreferredExamLayout"});
         add_row(ChapterCSVList, new String[]{"Id", "Course_ID", "Name", "Number"});
         add_row(TopicCSVList, new String[]{"Id", "Chapter_ID", "Name"});
         add_row(QuestionCSVList, new String[]{"Id", "Topic_ID", "Type", "Difficulty", "Time", "Weight"});
         add_row(QuestionContentCSVList, new String[]{"Id", "Question_ID", "Content"});
-        add_row(AnswerCSVList, new String[]{"Id", "QuestionContent_ID", "Content", "isRightAnswer"});
+        add_row(AnswerCSVList, new String[]{"Id", "Question_ID", "Content"});
+        add_row(RightAnswerCSVList, new String[]{"Id", "Question_Content_ID", "Answer_ID"});
         List<Course> coursesList = FXCollections.observableArrayList();//CoursesListHandler.getInstance().getList("All");
         coursesList.add(_course);
         int course_id = 0;
@@ -48,10 +50,11 @@ class QBBackup {
         int question_id = 0;
         int question_content_id = 0;
         int answer_id = 0;
+        int right_answer_id = 0;
 
         for (Course course : coursesList) {
             add_row(CourseCSVList,
-                    new String[]{(course_id++ + 1) + "", course.getName(), course.getCode(), course.getLevel(), course.getYear()});
+                    new String[]{(course_id++ + 1) + "", course.getName(), course.getCode(), course.getLevel(), course.getYear(), course.getPreferredExamLayout()});
 
             List<Chapter> chaptersList = ChaptersListHandler.getInstance().getList(course);
 
@@ -77,20 +80,29 @@ class QBBackup {
                                         question.getExpected_time(),
                                         question.getQuestion_weight()
                                 });
-                        List<QuestionContent> questionContentsList = question.getContents();
+                        List<Answer> answerList = question.getAnswers();
+                        for (Answer answer : answerList) {
+                            add_row(AnswerCSVList,
+                                    new String[]{(answer_id++ + 1) + "", (question_id) + "",
+                                            answer.answer_text});
+                        }
 
+                        List<QuestionContent> questionContentsList = question.getContents();
                         for (QuestionContent questionContent : questionContentsList) {
+                            //Todo: Accumelative rightAnswer_ID
                             add_row(QuestionContentCSVList,
                                     new String[]{(question_content_id++ + 1) + "", (question_id) + "",
                                             questionContent.getContent()
                                     });
-                            List<Answer> answerList = questionContent.getAnswers();
 
-                            for (Answer answer : answerList) {
-                                add_row(AnswerCSVList,
-                                        new String[]{(answer_id++ + 1) + "", (question_content_id) + "",
-                                                answer.answer_text, answer.is_right_answer + ""});
+                            List<Answer> rightAnswersList = questionContent.getRightAnswers();
+                            for (Answer rightAnswer : rightAnswersList) {
+                                add_row(RightAnswerCSVList,
+                                        new String[]{(right_answer_id++ + 1) + "", (question_content_id) + "",
+                                                (question.getAnswers().indexOf(rightAnswer) +1) + ""
+                                        });
                             }
+
                         }
 
                     }
@@ -103,6 +115,7 @@ class QBBackup {
         writeData("Question.csv", QuestionCSVList);
         writeData("QuestionContent.csv", QuestionContentCSVList);
         writeData("Answer.csv", AnswerCSVList);
+        writeData("RightAnswer.csv", RightAnswerCSVList);
         try {
             zip(DestPath);
 
@@ -144,11 +157,14 @@ class QBBackup {
             QuestionCSVList = readData(path + "/Question.csv");
             QuestionContentCSVList = readData(path + "/QuestionContent.csv");
             AnswerCSVList = readData(path + "/Answer.csv");
+            RightAnswerCSVList = readData(path + "/RightAnswer.csv");
             CourseCSVList.remove(0);
             ChapterCSVList.remove(0);
             TopicCSVList.remove(0);
             QuestionCSVList.remove(0);
+            QuestionContentCSVList.remove(0);
             AnswerCSVList.remove(0);
+            RightAnswerCSVList.remove(0);
             for (String[] course_data : CourseCSVList) {
                 //String fake_course_id = course_data[0];
                 Course course = new Course();
@@ -179,32 +195,47 @@ class QBBackup {
                                         question.setExpected_time(question_data[4]);
                                         question.setQuestion_weight(question_data[5]);
 
+                                        List<Answer> temp_answer_list = new ArrayList<>();
+                                        for (String[] answer_data : AnswerCSVList) {
+                                            if (question_data[0].equals(answer_data[1])) {
+                                                Answer answer = new Answer();
+                                                answer.id = answer_data[1];
+                                                answer.answer_text = answer_data[2];
+                                                temp_answer_list.add(answer);
+                                            }
+                                        }
+                                        question.setAnswers(temp_answer_list);
+
 
                                         List<QuestionContent> temp_content_list = new ArrayList<>();
                                         for (String[] content_data : QuestionContentCSVList) {
                                             if (question_data[0].equals(content_data[1])) {
                                                 QuestionContent questionContent = new QuestionContent();
                                                 questionContent.setContent(content_data[2]);
-
                                                 temp_content_list.add(questionContent);
 
 
-                                                List<Answer> temp_list = new ArrayList<>();
-                                                for (String[] answer_data : AnswerCSVList) {
-                                                    if (content_data[0].equals(answer_data[1])) {
+
+                                                List<Answer> temp_right_answer_list = new ArrayList<>();
+                                                for (String[] right_answer_data : RightAnswerCSVList) {
+                                                    if (content_data[0].equals(right_answer_data[1])) {
                                                         Answer answer = new Answer();
-                                                        answer.answer_text = answer_data[2];
-                                                        answer.is_right_answer = Integer.parseInt(answer_data[3]);
-                                                        temp_list.add(answer);
+                                                        answer.id = right_answer_data[2];
+                                                        for(Answer answer1:question.getAnswers()){
+                                                            if (answer.id.equals(answer1.id)){
+                                                                temp_right_answer_list.add(answer1);
+                                                            }
+                                                        }
+
                                                     }
                                                 }
-                                                questionContent.setAnswers(temp_list);
+                                                questionContent.setRightAnswers(temp_right_answer_list);
+
 
 
                                             }
                                         }
                                         question.setContents(temp_content_list);
-
 
 
                                         QuestionsTableHandler.getInstance().Add(topic, question);

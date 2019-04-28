@@ -4,17 +4,20 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableListBase;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.NodeOrientation;
 import javafx.geometry.Orientation;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.web.HTMLEditor;
 import javafx.scene.web.WebView;
@@ -24,6 +27,9 @@ import org.jsoup.Jsoup;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -39,13 +45,16 @@ public class MyHtmlEditor extends HBox {
 
     private IUpdatable parentController;
 
-    //public static final String TOP_TOOLBAR = ".top-toolbar";
+    public static final String TOP_TOOLBAR = ".top-toolbar";
     public static final String BOTTOM_TOOLBAR = ".bottom-toolbar";
     public static final String WEB_VIEW = ".web-view";
+    public static final String RTL = ".html-editor-align-right";
+    public static final String LTR = ".html-editor-align-left";
 
     private final WebView mWebView;
-    //private final ToolBar mTopToolBar;
+    private final ToolBar mTopToolBar;
     private final ToolBar mBottomToolBar;
+    //private final Button mRTL,mLTR;
 
 
     public MyHtmlEditor(){
@@ -59,7 +68,8 @@ public class MyHtmlEditor extends HBox {
 
         button = new Button("^");
         htmlEditor = new HTMLEditor();
-        htmlEditor.setPrefHeight(50);
+
+        htmlEditor.setPrefHeight(25);
         htmlEditor.setPrefWidth(700);
         this.getChildren().add(htmlEditor);
 
@@ -72,11 +82,11 @@ public class MyHtmlEditor extends HBox {
             if(isShown){
                 button.setText("^");
                 hideToolbars(this.htmlEditor);
-                htmlEditor.setPrefHeight(50);
+                htmlEditor.setPrefHeight(25);
             }
             else {
                 button.setText("<");
-                htmlEditor.setPrefHeight(250);
+                htmlEditor.setPrefHeight(300);
                 showToolbars(this.htmlEditor);
             }
             isShown = !isShown;
@@ -87,8 +97,22 @@ public class MyHtmlEditor extends HBox {
 
         HBox.setHgrow(htmlEditor,Priority.ALWAYS);
         //HBox.setHgrow(mWebView,Priority.ALWAYS);
-        //mTopToolBar = (ToolBar) this.htmlEditor.lookup(TOP_TOOLBAR);
+        mTopToolBar = (ToolBar) this.htmlEditor.lookup(TOP_TOOLBAR);
         mBottomToolBar = (ToolBar) this.htmlEditor.lookup(BOTTOM_TOOLBAR);
+//        mRTL = (Button) htmlEditor.lookupAll(RTL).iterator().next();
+//        mLTR = (Button) htmlEditor.lookupAll(LTR).iterator().next();
+//        mRTL.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent event) {
+//                setRTL(true);
+//            }
+//        });
+//        mLTR.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent event) {
+//                setRTL(false);
+//            }
+//        });
 
         createCustomButtons();
         //this.htmlEditor.setHtmlText("<html />");
@@ -97,6 +121,52 @@ public class MyHtmlEditor extends HBox {
         //htmlEditor.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
         //mBottomToolBar.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
         //mTopToolBar.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
+
+        //setRTL(true);
+    }
+
+    private void setRTL(boolean val){
+
+        if(val) {
+            htmlEditor.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+        }else {
+            htmlEditor.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
+        }
+        mTopToolBar.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
+        mBottomToolBar.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
+
+//        final Map map = new HashMap();
+//        for (Node candidate: (mTopToolBar.lookupAll(".html-editor-align-right"))) {
+//            List list = ((ToolBar) candidate).getItems();
+//            for (int i = 0; i < list.size(); i++) {
+//                Node b = (Node) list.get(i);
+//                System.out.println(b.getStyleClass());
+//                map.put(map.size() + 1, b);
+//            }
+//        }
+
+
+//        htmlEditor.setVisible(false);
+//        Platform.runLater(new Runnable() {
+//
+//            @Override
+//            public void run() {
+//                Node[] nodes = htmlEditor.lookupAll(".tool-bar").toArray(new Node[0]);
+//                for (Node node : nodes) {
+////                    node.setVisible(false);
+////                    node.setManaged(false);
+//                    for(Node n:((Pane) node).getChildren())
+//                    System.out.println(node.getTypeSelector());
+//                    System.out.println(node.getStyleClass());
+//                    System.out.println(node.getClass());
+//                    System.out.println(node.toString());
+//                    System.out.println();
+//                }
+//                htmlEditor.setVisible(true);
+//            }
+//
+//        });
+
     }
 
     private void createCustomButtons() {
@@ -165,7 +235,7 @@ public class MyHtmlEditor extends HBox {
                 .replace("\r", "\\r")
                 .replace("\n", "\\n");
         //get script
-        //Todo: Add css class no-page-break to this divs
+        //Todo: add css class no-page-break to this divs
         String script = String.format(
                 "(function(html) {"
                         + "  var sel, range;"

@@ -31,15 +31,15 @@ public class ExamModel {
         ExamModelNumber = examModelNumber;
     }
 
-    public List<ExamQuestion> getExamQuestionsList() {
-        return ExamQuestionsList;
+    public List<Question> getQuestionsList() {
+        return QuestionsList;
     }
 
-    public void setExamQuestionsList(List<ExamQuestion> examQuestionsList) {
-        ExamQuestionsList = examQuestionsList;
+    public void setQuestionsList(List<Question> examQuestionsList) {
+        QuestionsList = examQuestionsList;
     }
 
-    private List<ExamQuestion> ExamQuestionsList;
+    private List<Question> QuestionsList;
 
     public ExamModel() {
     }

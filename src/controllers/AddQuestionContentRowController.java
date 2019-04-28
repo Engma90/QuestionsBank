@@ -3,45 +3,62 @@ package controllers;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import models.Answer;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class AddQuestionContentRowController implements Initializable {
     public RadioButton select;
     public MyHtmlEditor content;
     public Button remove_content;
-    public AddQuestionController addQuestionController;
+    public AddQuestionController.ContentHepler parent;
     public HBox rowContainer;
-    public List<Answer> rightAnswersList;
+    //public List<Answer> rightAnswersList;
     FXMLLoader loader;
-    final AddQuestionContentRowController thisReference = this;
+    private final AddQuestionContentRowController thisReference = this;
+    //private QuestionContent contentModel;
+
+
+//    public QuestionContent getContentModel() {
+//        return contentModel;
+//    }
+//
+//    public void setContentModel(QuestionContent contentModel) {
+//        this.contentModel = contentModel;
+//    }
+
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        rightAnswersList = new ArrayList<>();
-
+        //rightAnswersList = new ArrayList<>();
+        //contentModel = new QuestionContent();
         select.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 System.out.println(newValue);
-                addQuestionController.updateContentRowAnswers(thisReference, newValue);
+                parent.updateContentRowAnswersUI(thisReference, newValue);
+            }
+        });
+
+        content.lookup(".web-view").setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                select.setSelected(true);
             }
         });
     }
 
     public void onRemoveClicked(ActionEvent e){
         if (Dialog.CreateDialog("Confirmation","Are you sure?" , "Yes", "No")) {
-            addQuestionController.removeContentRow(this);
+            parent.remove(this);
         }
     }
 
@@ -51,5 +68,7 @@ public class AddQuestionContentRowController implements Initializable {
     public void setManaged(boolean val){
         rowContainer.setManaged(val);
     }
+
+
 
 }

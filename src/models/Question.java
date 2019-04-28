@@ -12,26 +12,20 @@ public class Question {
     private SimpleStringProperty raw_text = new SimpleStringProperty("");
     private SimpleStringProperty question_diff = new SimpleStringProperty("");
     private SimpleStringProperty question_type = new SimpleStringProperty("");
-    //private SimpleStringProperty question_text = new SimpleStringProperty("");
     private SimpleStringProperty question_weight = new SimpleStringProperty("");
     private SimpleStringProperty expected_time = new SimpleStringProperty("");
-    private String right_answer;
 
 
-    //private List<Answer> answers = new ArrayList<>();
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(List<Answer> answers) {
+        this.answers = answers;
+    }
+
+    private List<Answer> answers = new ArrayList<>();
     private List<QuestionContent> contents = new ArrayList<>();
-
-//    public Question(){
-//        this("", "", "", "", "", "");
-//    }
-//    public Question(String id, String q, String d, String question_type, String w, String raw){
-//        this.id = id;
-//        //setQuestion_text(q);
-//        setQuestion_diff(d);
-//        setQuestion_type(question_type);
-//        setQuestion_weight(w);
-//        setRaw_text(raw);
-//    }
 
     public String getId() {
         return id;
@@ -40,12 +34,6 @@ public class Question {
     public void setId(String id) {
         this.id = id;
     }
-//    public String getQuestion_text() {
-//        return question_text.get().toString();
-//    }
-//    public void setQuestion_text(String q){
-//        this.question_text.set(q);
-//    }
 
     public String getQuestion_diff() {
         return question_diff.get().toString();
@@ -71,21 +59,6 @@ public class Question {
         this.expected_time.set(expected_time);
     }
 
-    public String getRight_answer() {
-        return right_answer;
-    }
-
-    public void setRight_answer(String right_answer) {
-        this.right_answer = right_answer;
-    }
-
-    //    public List<Answer> getAnswers() {
-//        return answers;
-//    }
-//
-//    public void setAnswers(List<Answer> answers) {
-//        this.answers = answers;
-//    }
     public List<QuestionContent> getContents() {
         return contents;
     }
@@ -108,5 +81,56 @@ public class Question {
 
     public void setQuestion_weight(String question_weight) {
         this.question_weight.set(question_weight);
+    }
+
+
+    @Override
+    public Question clone() {
+//        Question clone = (Question) super.clone();
+//        try {
+//            super.clone();
+//        } catch (CloneNotSupportedException e) {
+//            //e.printStackTrace();
+//        }
+        System.out.println("rightAnswerslist.size1: " + getContents().get(0).getRightAnswers().size());
+        Question tempModel = new Question();
+        tempModel.setId(this.getId());
+        tempModel.setQuestion_diff(this.getQuestion_diff());
+        tempModel.setQuestion_weight(this.getQuestion_weight());
+        tempModel.setExpected_time(this.getExpected_time());
+        tempModel.setQuestion_type(this.getQuestion_type());
+
+        List<Answer> answers = new ArrayList<>();
+        for (Answer answer : this.getAnswers()) {
+            Answer answer1 = new Answer();
+            answer1.answer_text = answer.answer_text;
+            answer1.id = answer.id;
+            answers.add(answer1);
+        }
+        tempModel.setAnswers(answers);
+
+        List<QuestionContent> Contents = new ArrayList<>();
+        for (QuestionContent questionContent : this.getContents()) {
+            QuestionContent questionContent1 = new QuestionContent();
+            questionContent1.setId(questionContent.getId());
+            questionContent1.setContent(questionContent.getContent());
+            Contents.add(questionContent1);
+        }
+        tempModel.setContents(Contents);
+
+        for (QuestionContent questionContent:getContents()){
+            List<Answer> rightAnswers = new ArrayList<>();
+            for (Answer answer : tempModel.getAnswers()) {
+                for (Answer rightAnswer : questionContent.getRightAnswers()) {
+                    if (answer.id.equals(rightAnswer.id))
+                        rightAnswers.add(answer);
+                }
+            }
+            tempModel.getContents().get(getContents().indexOf(questionContent)).setRightAnswers(rightAnswers);
+        }
+
+
+        System.out.println("rightAnswerslist.size2: " + tempModel.getContents().get(0).getRightAnswers().size());
+        return tempModel;
     }
 }

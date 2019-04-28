@@ -35,7 +35,7 @@ public class AddCourseController implements Initializable, IWindow {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        if (this.operation_type.contains("Add")) {
+        if (this.operation_type.contains("add")) {
             edit_course.setVisible(false);
             edit_course.setManaged(false);
             add_course.setVisible(true);

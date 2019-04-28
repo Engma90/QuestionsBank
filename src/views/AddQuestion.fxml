@@ -1,11 +1,7 @@
-<?import javafx.collections.FXCollections?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.web.HTMLEditor?>
-<?import java.lang.*?>
 <?import controllers.NumberField?>
 <?import javafx.geometry.Insets?>
-<?import controllers.MyHtmlEditor?>
 <VBox spacing="10" xmlns:fx="http://javafx.com/fxml" stylesheets="@css/AddQuestion.css" styleClass="m-container"
       prefHeight="700" prefWidth="1000">
     <padding>
@@ -27,13 +23,13 @@
                 </padding>
                 <StackPane styleClass="transparent" VBox.vgrow="ALWAYS">
                     <VBox fx:id="question_contents_ui" spacing="10" styleClass="transparent" VBox.vgrow="ALWAYS">
-                        <VBox fx:id="question_contents_list" spacing="10" styleClass="transparent" VBox.vgrow="ALWAYS">
+                        <VBox fx:id="ui_question_contents_list" spacing="10" styleClass="transparent" VBox.vgrow="ALWAYS">
                             <!--<MyHtmlEditor fx:id="question_html_editor"-->
                             <!--stylesheets="@css/modena/modena.css"/>-->
 
                         </VBox>
                         <Button fx:id="add_question_content" text="Add sub question" onAction="#onAddContentClicked"
-                                styleClass="add-button" visible="false"></Button>
+                                styleClass="add-button" visible="false"/>
                     </VBox>
 
                 </StackPane>
@@ -74,38 +70,17 @@
                 <Insets top="10" right="10" bottom="10" left="10"/>
             </padding>
             <ScrollPane vbarPolicy="ALWAYS" fitToWidth="true" VBox.vgrow="ALWAYS"
-                        fx:id="mcq_answers_list_scroll_pane" visible="false" managed="false">
+                        fx:id="answers_list_scroll_pane">
                 <padding>
                     <Insets top="10" right="10" bottom="10" left="10"/>
                 </padding>
                 <StackPane styleClass="transparent" VBox.vgrow="ALWAYS">
                     <VBox fx:id="mcq_ui_group" spacing="10" styleClass="transparent" VBox.vgrow="ALWAYS">
-                        <VBox fx:id="mcq_ui_answers_list" spacing="10" styleClass="transparent" VBox.vgrow="ALWAYS"/>
+                        <VBox fx:id="ui_answers_list" spacing="10" styleClass="transparent" VBox.vgrow="ALWAYS"/>
                         <Button fx:id="add_answer" text="Add Answer" onAction="#onAddAnswerClicked"
-                                styleClass="add-button"></Button>
+                                styleClass="add-button"/>
                     </VBox>
                 </StackPane>
-            </ScrollPane>
-            <ScrollPane fitToWidth="true" vbarPolicy="NEVER" VBox.vgrow="ALWAYS"
-                        fx:id="true_false_answers_list_scroll_pane" visible="false" managed="false">
-                <padding>
-                    <Insets top="10" right="10" bottom="10" left="10"/>
-                </padding>
-                <VBox VBox.vgrow="ALWAYS" spacing="20" fx:id="true_false_ui_group"
-                      styleClass="transparent">
-                    <HBox spacing="10">
-                        <Label text="A)"></Label>
-                        <Label text="True"></Label>
-
-                        <RadioButton fx:id="radio_answer_true"></RadioButton>
-                    </HBox>
-                    <HBox spacing="10">
-                        <Label text="B)"></Label>
-                        <Label text="False"></Label>
-
-                        <RadioButton fx:id="radio_answer_false"></RadioButton>
-                    </HBox>
-                </VBox>
             </ScrollPane>
         </VBox>
     </SplitPane>

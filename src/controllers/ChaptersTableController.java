@@ -75,11 +75,11 @@ public class ChaptersTableController implements Initializable {
 
 
     public void onAddChapterClicked(ActionEvent e) {
-        AddChapterController addChapterController = new AddChapterController("Add", course, new Chapter());
+        AddChapterController addChapterController = new AddChapterController("add", course, new Chapter());
         EventHandler<WindowEvent> onClose = new EventHandler<WindowEvent>() {
             public void handle(WindowEvent we) {
                 if(((IWindow)addChapterController).isSaveAndExitClicked()){
-                refresh(true, "Add");
+                refresh(true, "add");
                 }
             }
         };
@@ -133,7 +133,7 @@ public class ChaptersTableController implements Initializable {
                         selection = 0;
                         break;
 
-                    case "Add":
+                    case "add":
                         selection = tempList.size()-1;
                         break;
                     case "Edit":

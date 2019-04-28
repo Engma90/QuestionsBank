@@ -15,7 +15,7 @@ import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/* Todo: - Add fields translation, preferred exam layout language
+/* Todo: - add fields translation, preferred exam layout language
          - Email already registered
          - Passwords match
  */

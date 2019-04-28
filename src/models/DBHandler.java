@@ -137,7 +137,13 @@ public class DBHandler {
                     connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             for (int i = 0; i < params.length; i++)
                 pstmt.setString(i + 1, params[i]);
+
             System.out.println(sql);
+            for (String s:params){
+                System.out.print(s + ",  ");
+            }
+            System.out.println();
+
             pstmt.executeUpdate();
             ResultSet rs = pstmt.getGeneratedKeys();
             int last_inserted_id = -1;
@@ -186,8 +192,9 @@ public class DBHandler {
                 "-- -----------------------------------------------------\n" +
                 "CREATE TABLE IF NOT EXISTS `model_db`.`College` (\n" +
                 "  `idCollege` INT NOT NULL AUTO_INCREMENT,\n" +
-                "  `Name` VARCHAR(100) NOT NULL,\n" +
                 "  `University_idUniversity` INT NOT NULL,\n" +
+                "  `Name` VARCHAR(100) NOT NULL,\n" +
+                "  `AltName` VARCHAR(100) NULL,\n" +
                 "  PRIMARY KEY (`idCollege`),\n" +
                 "  UNIQUE INDEX `idCollege_UNIQUE` (`idCollege` ASC),\n" +
                 "  INDEX `fk_College_University1_idx` (`University_idUniversity` ASC),\n" +
@@ -204,12 +211,11 @@ public class DBHandler {
                 "-- -----------------------------------------------------\n" +
                 "CREATE TABLE IF NOT EXISTS `model_db`.`Doctor` (\n" +
                 "  `idDoctor` INT NOT NULL AUTO_INCREMENT,\n" +
+                "  `College_idCollege` INT NOT NULL,\n" +
                 "  `DoctorName` VARCHAR(100) NOT NULL,\n" +
                 "  `DoctorPassword` VARCHAR(45) NOT NULL,\n" +
                 "  `DoctorEmail` VARCHAR(100) NOT NULL,\n" +
-                "  `College_idCollege` INT NOT NULL,\n" +
                 "  `DoctorDepartment` VARCHAR(100) NOT NULL,\n" +
-                "  `PreferredExamLayout` VARCHAR(45) NOT NULL,\n" +
                 "  PRIMARY KEY (`idDoctor`),\n" +
                 "  UNIQUE INDEX `idDoctor_UNIQUE` (`idDoctor` ASC),\n" +
                 "  UNIQUE INDEX `DoctorEmail_UNIQUE` (`DoctorEmail` ASC),\n" +
@@ -232,6 +238,7 @@ public class DBHandler {
                 "  `CourseName` VARCHAR(100) NOT NULL,\n" +
                 "  `CourseCode` VARCHAR(45) NOT NULL,\n" +
                 "  `CourseYear` VARCHAR(45) NOT NULL,\n" +
+                "  `PreferredExamLayout` VARCHAR(45) NOT NULL,\n" +
                 "  PRIMARY KEY (`idCourse`),\n" +
                 "  UNIQUE INDEX `idCourse_UNIQUE` (`idCourse` ASC),\n" +
                 "  INDEX `fk_Course_Doctor_idx` (`Doctor_idDoctor` ASC),\n" +
@@ -302,37 +309,18 @@ public class DBHandler {
                 "\n" +
                 "\n" +
                 "-- -----------------------------------------------------\n" +
-                "-- Table `model_db`.`QuestionContent`\n" +
-                "-- -----------------------------------------------------\n" +
-                "CREATE TABLE IF NOT EXISTS `model_db`.`QuestionContent` (\n" +
-                "  `idQuestionContent` INT NOT NULL AUTO_INCREMENT,\n" +
-                "  `Question_idQuestion` INT NOT NULL,\n" +
-                "  `QuestionContent` TEXT NOT NULL,\n" +
-                "  PRIMARY KEY (`idQuestionContent`),\n" +
-                "  INDEX `fk_QuestionContent_Question1_idx` (`Question_idQuestion` ASC),\n" +
-                "  UNIQUE INDEX `idQuestionContent_UNIQUE` (`idQuestionContent` ASC),\n" +
-                "  CONSTRAINT `fk_QuestionContent_Question1`\n" +
-                "    FOREIGN KEY (`Question_idQuestion`)\n" +
-                "    REFERENCES `model_db`.`Question` (`idQuestion`)\n" +
-                "    ON DELETE CASCADE\n" +
-                "    ON UPDATE NO ACTION)\n" +
-                "ENGINE = InnoDB;\n" +
-                "\n" +
-                "\n" +
-                "-- -----------------------------------------------------\n" +
                 "-- Table `model_db`.`QuestionAnswer`\n" +
                 "-- -----------------------------------------------------\n" +
                 "CREATE TABLE IF NOT EXISTS `model_db`.`QuestionAnswer` (\n" +
                 "  `idAnswer` INT NOT NULL AUTO_INCREMENT,\n" +
-                "  `QuestionContent_idQuestionContent` INT NOT NULL,\n" +
+                "  `Question_idQuestion` INT NOT NULL,\n" +
                 "  `AnswerContent` TEXT NOT NULL,\n" +
-                "  `IsRightAnswer` INT NOT NULL,\n" +
                 "  PRIMARY KEY (`idAnswer`),\n" +
                 "  UNIQUE INDEX `idAnswer_UNIQUE` (`idAnswer` ASC),\n" +
-                "  INDEX `fk_QuestionAnswer_QuestionContent1_idx` (`QuestionContent_idQuestionContent` ASC),\n" +
-                "  CONSTRAINT `fk_QuestionAnswer_QuestionContent1`\n" +
-                "    FOREIGN KEY (`QuestionContent_idQuestionContent`)\n" +
-                "    REFERENCES `model_db`.`QuestionContent` (`idQuestionContent`)\n" +
+                "  INDEX `fk_QuestionAnswer_Question1_idx` (`Question_idQuestion` ASC),\n" +
+                "  CONSTRAINT `fk_QuestionAnswer_Question1`\n" +
+                "    FOREIGN KEY (`Question_idQuestion`)\n" +
+                "    REFERENCES `model_db`.`Question` (`idQuestion`)\n" +
                 "    ON DELETE CASCADE\n" +
                 "    ON UPDATE NO ACTION)\n" +
                 "ENGINE = InnoDB;\n" +
@@ -408,6 +396,42 @@ public class DBHandler {
                 "\n" +
                 "\n" +
                 "-- -----------------------------------------------------\n" +
+                "-- Table `model_db`.`ExamQuestionAnswer`\n" +
+                "-- -----------------------------------------------------\n" +
+                "CREATE TABLE IF NOT EXISTS `model_db`.`ExamQuestionAnswer` (\n" +
+                "  `idAnswer` INT NOT NULL AUTO_INCREMENT,\n" +
+                "  `ExamQuestion_idQuestion` INT NOT NULL,\n" +
+                "  `AnswerContent` TEXT NOT NULL,\n" +
+                "  PRIMARY KEY (`idAnswer`),\n" +
+                "  UNIQUE INDEX `idAnswer_UNIQUE` (`idAnswer` ASC),\n" +
+                "  INDEX `fk_ExamQuestionAnswer_ExamQuestion1_idx` (`ExamQuestion_idQuestion` ASC),\n" +
+                "  CONSTRAINT `fk_ExamQuestionAnswer_ExamQuestion1`\n" +
+                "    FOREIGN KEY (`ExamQuestion_idQuestion`)\n" +
+                "    REFERENCES `model_db`.`ExamQuestion` (`idQuestion`)\n" +
+                "    ON DELETE CASCADE\n" +
+                "    ON UPDATE NO ACTION)\n" +
+                "ENGINE = InnoDB;\n" +
+                "\n" +
+                "\n" +
+                "-- -----------------------------------------------------\n" +
+                "-- Table `model_db`.`QuestionContent`\n" +
+                "-- -----------------------------------------------------\n" +
+                "CREATE TABLE IF NOT EXISTS `model_db`.`QuestionContent` (\n" +
+                "  `idQuestionContent` INT NOT NULL AUTO_INCREMENT,\n" +
+                "  `Question_idQuestion` INT NOT NULL,\n" +
+                "  `QuestionContent` TEXT NOT NULL,\n" +
+                "  PRIMARY KEY (`idQuestionContent`),\n" +
+                "  INDEX `fk_QuestionContent_Question1_idx` (`Question_idQuestion` ASC),\n" +
+                "  UNIQUE INDEX `idQuestionContent_UNIQUE` (`idQuestionContent` ASC),\n" +
+                "  CONSTRAINT `fk_QuestionContent_Question1`\n" +
+                "    FOREIGN KEY (`Question_idQuestion`)\n" +
+                "    REFERENCES `model_db`.`Question` (`idQuestion`)\n" +
+                "    ON DELETE CASCADE\n" +
+                "    ON UPDATE NO ACTION)\n" +
+                "ENGINE = InnoDB;\n" +
+                "\n" +
+                "\n" +
+                "-- -----------------------------------------------------\n" +
                 "-- Table `model_db`.`ExamQuestionContent`\n" +
                 "-- -----------------------------------------------------\n" +
                 "CREATE TABLE IF NOT EXISTS `model_db`.`ExamQuestionContent` (\n" +
@@ -426,19 +450,48 @@ public class DBHandler {
                 "\n" +
                 "\n" +
                 "-- -----------------------------------------------------\n" +
-                "-- Table `model_db`.`ExamQuestionAnswer`\n" +
+                "-- Table `model_db`.`ExamContentRightAnswer`\n" +
                 "-- -----------------------------------------------------\n" +
-                "CREATE TABLE IF NOT EXISTS `model_db`.`ExamQuestionAnswer` (\n" +
-                "  `idAnswer` INT NOT NULL AUTO_INCREMENT,\n" +
+                "CREATE TABLE IF NOT EXISTS `model_db`.`ExamContentRightAnswer` (\n" +
+                "  `idExamQuestionContentRightAnswer` INT UNSIGNED NOT NULL AUTO_INCREMENT,\n" +
                 "  `ExamQuestionContent_idQuestionContent` INT NOT NULL,\n" +
-                "  `AnswerContent` TEXT NOT NULL,\n" +
-                "  `IsRightAnswer` INT NOT NULL,\n" +
-                "  PRIMARY KEY (`idAnswer`),\n" +
-                "  UNIQUE INDEX `idAnswer_UNIQUE` (`idAnswer` ASC),\n" +
-                "  INDEX `fk_ExamQuestionAnswer_ExamQuestionContent1_idx` (`ExamQuestionContent_idQuestionContent` ASC),\n" +
-                "  CONSTRAINT `fk_ExamQuestionAnswer_ExamQuestionContent1`\n" +
+                "  `ExamQuestionAnswer_idAnswer` INT NOT NULL,\n" +
+                "  PRIMARY KEY (`idExamQuestionContentRightAnswer`),\n" +
+                "  UNIQUE INDEX `idExamQuestionContentRightAnswer_UNIQUE` (`idExamQuestionContentRightAnswer` ASC),\n" +
+                "  INDEX `fk_ExamContentRightAnswer_ExamQuestionContent1_idx` (`ExamQuestionContent_idQuestionContent` ASC),\n" +
+                "  INDEX `fk_ExamContentRightAnswer_ExamQuestionAnswer1_idx` (`ExamQuestionAnswer_idAnswer` ASC),\n" +
+                "  CONSTRAINT `fk_ExamContentRightAnswer_ExamQuestionContent1`\n" +
                 "    FOREIGN KEY (`ExamQuestionContent_idQuestionContent`)\n" +
                 "    REFERENCES `model_db`.`ExamQuestionContent` (`idQuestionContent`)\n" +
+                "    ON DELETE CASCADE\n" +
+                "    ON UPDATE NO ACTION,\n" +
+                "  CONSTRAINT `fk_ExamContentRightAnswer_ExamQuestionAnswer1`\n" +
+                "    FOREIGN KEY (`ExamQuestionAnswer_idAnswer`)\n" +
+                "    REFERENCES `model_db`.`ExamQuestionAnswer` (`idAnswer`)\n" +
+                "    ON DELETE CASCADE\n" +
+                "    ON UPDATE NO ACTION)\n" +
+                "ENGINE = InnoDB;\n" +
+                "\n" +
+                "\n" +
+                "-- -----------------------------------------------------\n" +
+                "-- Table `model_db`.`ContentRightAnswer`\n" +
+                "-- -----------------------------------------------------\n" +
+                "CREATE TABLE IF NOT EXISTS `model_db`.`ContentRightAnswer` (\n" +
+                "  `idQuestionContentRightAnswer` INT UNSIGNED NOT NULL AUTO_INCREMENT,\n" +
+                "  `QuestionContent_idQuestionContent` INT NOT NULL,\n" +
+                "  `QuestionAnswer_idAnswer` INT NOT NULL,\n" +
+                "  PRIMARY KEY (`idQuestionContentRightAnswer`),\n" +
+                "  UNIQUE INDEX `idExamQuestionContentRightAnswer_UNIQUE` (`idQuestionContentRightAnswer` ASC),\n" +
+                "  INDEX `fk_ExamContentRightAnswer_QuestionAnswer1_idx` (`QuestionAnswer_idAnswer` ASC),\n" +
+                "  INDEX `fk_ContentRightAnswer_QuestionContent1_idx` (`QuestionContent_idQuestionContent` ASC),\n" +
+                "  CONSTRAINT `fk_ExamContentRightAnswer_QuestionAnswer1`\n" +
+                "    FOREIGN KEY (`QuestionAnswer_idAnswer`)\n" +
+                "    REFERENCES `model_db`.`QuestionAnswer` (`idAnswer`)\n" +
+                "    ON DELETE CASCADE\n" +
+                "    ON UPDATE NO ACTION,\n" +
+                "  CONSTRAINT `fk_ContentRightAnswer_QuestionContent1`\n" +
+                "    FOREIGN KEY (`QuestionContent_idQuestionContent`)\n" +
+                "    REFERENCES `model_db`.`QuestionContent` (`idQuestionContent`)\n" +
                 "    ON DELETE CASCADE\n" +
                 "    ON UPDATE NO ACTION)\n" +
                 "ENGINE = InnoDB;\n" +
@@ -463,21 +516,21 @@ public class DBHandler {
                 "-- -----------------------------------------------------\n" +
                 "START TRANSACTION;\n" +
                 "USE `model_db`;\n" +
-                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (1, 'Faculty of Agriculture', 1);\n" +
-                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (2, 'Faculty of Applied Arts', 1);\n" +
-                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (3, 'Faculty of Arts', 1);\n" +
-                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (4, 'Faculty of Commerce', 1);\n" +
-                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (5, 'Faculty of Computers and Informatics', 1);\n" +
-                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (6, 'Faculty of Education', 1);\n" +
-                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (7, 'Faculty of Engineering, Benha', 1);\n" +
-                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (8, 'Faculty of Engineering, Shoubra', 1);\n" +
-                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (9, 'Faculty of Law', 1);\n" +
-                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (10, 'Faculty of Medicine', 1);\n" +
-                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (11, 'Faculty of Nursing', 1);\n" +
-                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (12, 'Faculty of Physical Education', 1);\n" +
-                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (13, 'Faculty of Science', 1);\n" +
-                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (14, 'Faculty of Specific Education', 1);\n" +
-                "INSERT INTO `model_db`.`College` (`idCollege`, `Name`, `University_idUniversity`) VALUES (15, 'Faculty of Veterinary Medicine', 1);\n" +
+                "INSERT INTO `model_db`.`College` (`idCollege`, `University_idUniversity`, `Name`, `AltName`) VALUES (1, 1, 'Faculty of Agriculture', NULL);\n" +
+                "INSERT INTO `model_db`.`College` (`idCollege`, `University_idUniversity`, `Name`, `AltName`) VALUES (2, 1, 'Faculty of Applied Arts', NULL);\n" +
+                "INSERT INTO `model_db`.`College` (`idCollege`, `University_idUniversity`, `Name`, `AltName`) VALUES (3, 1, 'Faculty of Arts', NULL);\n" +
+                "INSERT INTO `model_db`.`College` (`idCollege`, `University_idUniversity`, `Name`, `AltName`) VALUES (4, 1, 'Faculty of Commerce', NULL);\n" +
+                "INSERT INTO `model_db`.`College` (`idCollege`, `University_idUniversity`, `Name`, `AltName`) VALUES (5, 1, 'Faculty of Computers and Informatics', NULL);\n" +
+                "INSERT INTO `model_db`.`College` (`idCollege`, `University_idUniversity`, `Name`, `AltName`) VALUES (6, 1, 'Faculty of Education', NULL);\n" +
+                "INSERT INTO `model_db`.`College` (`idCollege`, `University_idUniversity`, `Name`, `AltName`) VALUES (7, 1, 'Faculty of Engineering, Benha', NULL);\n" +
+                "INSERT INTO `model_db`.`College` (`idCollege`, `University_idUniversity`, `Name`, `AltName`) VALUES (8, 1, 'Faculty of Engineering, Shoubra', NULL);\n" +
+                "INSERT INTO `model_db`.`College` (`idCollege`, `University_idUniversity`, `Name`, `AltName`) VALUES (9, 1, 'Faculty of Law', NULL);\n" +
+                "INSERT INTO `model_db`.`College` (`idCollege`, `University_idUniversity`, `Name`, `AltName`) VALUES (10, 1, 'Faculty of Medicine', NULL);\n" +
+                "INSERT INTO `model_db`.`College` (`idCollege`, `University_idUniversity`, `Name`, `AltName`) VALUES (11, 1, 'Faculty of Nursing', NULL);\n" +
+                "INSERT INTO `model_db`.`College` (`idCollege`, `University_idUniversity`, `Name`, `AltName`) VALUES (12, 1, 'Faculty of Physical Education', NULL);\n" +
+                "INSERT INTO `model_db`.`College` (`idCollege`, `University_idUniversity`, `Name`, `AltName`) VALUES (13, 1, 'Faculty of Science', NULL);\n" +
+                "INSERT INTO `model_db`.`College` (`idCollege`, `University_idUniversity`, `Name`, `AltName`) VALUES (14, 1, 'Faculty of Specific Education', NULL);\n" +
+                "INSERT INTO `model_db`.`College` (`idCollege`, `University_idUniversity`, `Name`, `AltName`) VALUES (15, 1, 'Faculty of Veterinary Medicine', NULL);\n" +
                 "\n" +
                 "COMMIT;\n" +
                 "\n" +
@@ -487,7 +540,7 @@ public class DBHandler {
                 "-- -----------------------------------------------------\n" +
                 "START TRANSACTION;\n" +
                 "USE `model_db`;\n" +
-                "INSERT INTO `model_db`.`Doctor` (`idDoctor`, `DoctorName`, `DoctorPassword`, `DoctorEmail`, `College_idCollege`, `DoctorDepartment`, `PreferredExamLayout`) VALUES (1, 'TestAccount', 'a', 'a', 8, 'Electrical Engineering Department ', 'English');\n" +
+                "INSERT INTO `model_db`.`Doctor` (`idDoctor`, `College_idCollege`, `DoctorName`, `DoctorPassword`, `DoctorEmail`, `DoctorDepartment`) VALUES (1, 8, 'TestAccount', 'a', 'a', 'Electrical Engineering Department ');\n" +
                 "\n" +
                 "COMMIT;\n" +
                 "\n" +
@@ -497,9 +550,9 @@ public class DBHandler {
                 "-- -----------------------------------------------------\n" +
                 "START TRANSACTION;\n" +
                 "USE `model_db`;\n" +
-                "INSERT INTO `model_db`.`Course` (`idCourse`, `Doctor_idDoctor`, `CourseLevel`, `CourseName`, `CourseCode`, `CourseYear`) VALUES (1, 1, 'Undergraduates', 'course1', 'EE1', '1st Year');\n" +
-                "INSERT INTO `model_db`.`Course` (`idCourse`, `Doctor_idDoctor`, `CourseLevel`, `CourseName`, `CourseCode`, `CourseYear`) VALUES (2, 1, 'Undergraduates', 'course2', 'EE2', '1st Year');\n" +
-                "INSERT INTO `model_db`.`Course` (`idCourse`, `Doctor_idDoctor`, `CourseLevel`, `CourseName`, `CourseCode`, `CourseYear`) VALUES (3, 1, 'Postgraduates', 'Field', 'EEF', '1st Year');\n" +
+                "INSERT INTO `model_db`.`Course` (`idCourse`, `Doctor_idDoctor`, `CourseLevel`, `CourseName`, `CourseCode`, `CourseYear`, `PreferredExamLayout`) VALUES (1, 1, 'Undergraduates', 'course1', 'EE1', '1st Year', 'English');\n" +
+                "INSERT INTO `model_db`.`Course` (`idCourse`, `Doctor_idDoctor`, `CourseLevel`, `CourseName`, `CourseCode`, `CourseYear`, `PreferredExamLayout`) VALUES (2, 1, 'Undergraduates', 'course2', 'EE2', '1st Year', 'English');\n" +
+                "INSERT INTO `model_db`.`Course` (`idCourse`, `Doctor_idDoctor`, `CourseLevel`, `CourseName`, `CourseCode`, `CourseYear`, `PreferredExamLayout`) VALUES (3, 1, 'Postgraduates', 'Field', 'EEF', '1st Year', 'English');\n" +
                 "\n" +
                 "COMMIT;\n" +
                 "\n" +

@@ -94,7 +94,7 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 int selection = exam_year.getSelectionModel().getSelectedIndex();
-                if(newValue.equals(Languages.ENGLISH)){
+                if (newValue.equals(Languages.ENGLISH)) {
                     exam_name_text.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
                     college_text.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
                     department_text.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
@@ -112,7 +112,7 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
                     years.add("6th Year");
                     exam_year.setItems(years);
                     exam_year.getSelectionModel().select(selection);
-                }else {
+                } else {
                     exam_name_text.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
                     college_text.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
                     department_text.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
@@ -134,7 +134,7 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
             }
         });
         exam_year.getSelectionModel().select(course.year);
-        exam_language.getSelectionModel().select(DashboardController.doctor.getPreferredExamLayout());
+        //exam_language.getSelectionModel().select(DashboardController.doctor.getPreferredExamLayout());
 
 
         combo_format.getSelectionModel().selectFirst();
@@ -194,7 +194,7 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
     }
 
     /* Todo: - Separate import exam to db from exporting to avoid db redundancy (word and pdf)
-             - Add Progressbar
+             - add Progressbar
      */
     public void onGenerateClicked(final ActionEvent e) {
 
@@ -243,7 +243,7 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
 
     private boolean generateExam(IFileExporter fileExporter, File selectedDirectory) {
         try {
-            List<ExamQuestion> exam_questions = getExamQuestionsList();
+            List<Question> exam_questions = getQuestionsList();
             Exam exam = new Exam();
             exam.setExamModelList(new ArrayList<>());
             if (exam_questions.size() > 0) {
@@ -251,20 +251,20 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
                     for (int i = 0; i < Integer.parseInt(number_of_models.getText()); i++) {
                         ExamModel examModel = new ExamModel();
                         examModel.setExamModelNumber((i + 1) + "");
-                        List<ExamQuestion> temp = new ArrayList<>(exam_questions);
+                        List<Question> temp = new ArrayList<>(exam_questions);
                         Collections.shuffle(temp);
-                        examModel.setExamQuestionsList(temp);
+                        examModel.setQuestionsList(temp);
                         exam.getExamModelList().add(examModel);
                     }
 
                 } else if (radio_different.isSelected() && Integer.parseInt(number_of_models.getText()) > 1) {
                     for (int i = 0; i < Integer.parseInt(number_of_models.getText()); i++) {
-                        exam_questions = getExamQuestionsList();
+                        exam_questions = getQuestionsList();
                         ExamModel examModel = new ExamModel();
                         examModel.setExamModelNumber((i + 1) + "");
-                        List<ExamQuestion> temp = new ArrayList<>(exam_questions);
+                        List<Question> temp = new ArrayList<>(exam_questions);
                         Collections.shuffle(temp);
-                        examModel.setExamQuestionsList(temp);
+                        examModel.setQuestionsList(temp);
                         exam.getExamModelList().add(examModel);
                     }
 
@@ -283,8 +283,8 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
         }
     }
 
-    private List<ExamQuestion> getExamQuestionsList() {
-        List<ExamQuestion> examQuestionList = new ArrayList<>();
+    private List<Question> getQuestionsList() {
+        List<Question> examQuestionList = new ArrayList<>();
         for (GenerateExamChapterRowController cRow : generateExamChapterRowControllerList) {
             if (cRow.isSelected.isSelected()) {
                 for (GenerateExamTopicRowController tRow : cRow.generateExamTopicRowControllerList) {
@@ -297,22 +297,28 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
 
                             Question qmodel = temp_list.get(i);
 
-                            ExamQuestion examQuestion = new ExamQuestion();
+                            Question examQuestion = new Question();
 
-                            examQuestion.setQuestionType(qmodel.getQuestion_type());
-                            examQuestion.setQuestionDifficulty(qmodel.getQuestion_diff());
-                            examQuestion.setQuestionWeight(qmodel.getQuestion_weight());
-                            examQuestion.setQuestionExpectedTime(qmodel.getExpected_time());
+                            examQuestion.setQuestion_type(qmodel.getQuestion_type());
+                            examQuestion.setQuestion_diff(qmodel.getQuestion_diff());
+                            examQuestion.setQuestion_weight(qmodel.getQuestion_weight());
+                            examQuestion.setExpected_time(qmodel.getExpected_time());
+
+                            //Todo: Check EMQ shuffled
+                            if (shuffle_answers.isSelected()) { //&& !(qmodel.getQuestion_type().equals(QuestionType.EXTENDED_MATCH))
+                                List<Answer> temp = new ArrayList<>(qmodel.getAnswers());
+                                Collections.shuffle(temp);
+                                qmodel.setAnswers(temp);
+                            }
+                            examQuestion.setAnswers(qmodel.getAnswers());
+
                             List<QuestionContent> questionContentTempList = new ArrayList<>();
-                            for(QuestionContent questionContent: qmodel.getContents()) {
+                            for (QuestionContent questionContent : qmodel.getContents()) {
 
-                                if (shuffle_answers.isSelected() && !(qmodel.getQuestion_type().equals(QuestionType.EXTENDED_MATCH))) {
-                                    List<Answer> temp = new ArrayList<>(questionContent.getAnswers());
-                                    Collections.shuffle(temp);
-                                    questionContent.setAnswers(temp);
-                                }
-                                //questionContent.setAnswers(questionContent.getAnswers());
                                 questionContentTempList.add(questionContent);
+                                i++;
+                                if (i == Integer.parseInt(tRow.topic_number_of_questions.getText()) - 1)
+                                    break;
                             }
                             examQuestion.setContents(questionContentTempList);
                             examQuestionList.add(examQuestion);
@@ -331,6 +337,7 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
                 || exam_name_text.getText().isEmpty()
                 || department_text.getText().isEmpty()
                 || exam_duration.getText().isEmpty()
+                || exam_year.getValue().isEmpty()
                 || exam_total_marks.getText().isEmpty()) {
             new Alert(Alert.AlertType.ERROR, "Please fill all fields").show();
             return false;

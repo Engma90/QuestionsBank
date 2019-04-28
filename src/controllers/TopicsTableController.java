@@ -71,10 +71,10 @@ public class TopicsTableController implements Initializable {
 
 
     public void onAddTopicClicked(ActionEvent e) {
-        AddTopicController addTopicController = new AddTopicController("Add", chapter, new Topic());
+        AddTopicController addTopicController = new AddTopicController("add", chapter, new Topic());
         EventHandler<WindowEvent> onClose = we -> {
             if(((IWindow)addTopicController).isSaveAndExitClicked()){
-            refresh(true, "Add");
+            refresh(true, "add");
             }
         };
         new WindowLoader().load(e, "/views/AddTopic.fxml", addTopicController, onClose, true, false, null);
@@ -125,7 +125,7 @@ public class TopicsTableController implements Initializable {
                         selection = 0;
                         break;
 
-                    case "Add":
+                    case "add":
                         selection = tempList.size()-1;
                         break;
                     case "Edit":

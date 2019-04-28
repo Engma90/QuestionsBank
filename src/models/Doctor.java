@@ -72,13 +72,13 @@ public class Doctor {
         this.department = department;
     }
 
-    public String getPreferredExamLayout() {
-        return preferredExamLayout;
-    }
+    //public String getPreferredExamLayout() {
+   //     return preferredExamLayout;
+    //}
 
-    public void setPreferredExamLayout(String preferredExamLayout) {
-        this.preferredExamLayout = preferredExamLayout;
-    }
+    //public void setPreferredExamLayout(String preferredExamLayout) {
+     //   this.preferredExamLayout = preferredExamLayout;
+    //}
 
     private String email;
     private String password;
@@ -87,7 +87,7 @@ public class Doctor {
 
 
 
-    private String preferredExamLayout;
+    //private String preferredExamLayout;
 
 
 

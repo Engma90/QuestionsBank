@@ -14,7 +14,7 @@
             <!--<Label text="Topic name"/>-->
             <TextField fx:id="topic_name" promptText="Topic name" />
         <!--</HBox>-->
-        <!--<Button text="Add" fx:id="add_topic" onAction="#onAddTopicClicked" styleClass="add-button"/>-->
+        <!--<Button text="add" fx:id="add_topic" onAction="#onAddTopicClicked" styleClass="add-button"/>-->
         <!--<Button text="Edit" fx:id="edit_topic" onAction="#onEditTopicClicked" styleClass="edit-button"/>-->
     </VBox>
     <HBox alignment="CENTER" AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.leftAnchor="0" minHeight="40"

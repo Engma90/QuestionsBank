@@ -43,9 +43,11 @@ public class Main extends Application {
     private void runWithSplash(final Stage splashStage) {
         final Pane root = new Pane();
 
-        ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream("/views/images/splash.png")));
+        ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream("/views/images/logo_circle.png")));
+        imageView.setFitWidth(300);
+        imageView.setFitHeight(300);
         root.getChildren().addAll(imageView);
-        Scene scene = new Scene(root, imageView.getImage().getWidth(), imageView.getImage().getHeight());
+        Scene scene = new Scene(root, imageView.getFitWidth(), imageView.getFitHeight());
         splashStage.setScene(scene);
         splashStage.initStyle(StageStyle.TRANSPARENT);
         scene.setFill(Color.TRANSPARENT);

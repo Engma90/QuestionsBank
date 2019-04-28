@@ -125,7 +125,7 @@ public class DashboardController implements Initializable, IWindow {
         if (selectedFile != null) {
             QBBackup qbBackup = new QBBackup();
             qbBackup.qbImport(selectedFile.getAbsolutePath());
-            coursesTableController.refresh("Add");
+            coursesTableController.refresh("add");
             coursesTableController.courses_table_view.getSelectionModel().selectLast();
         }
     }

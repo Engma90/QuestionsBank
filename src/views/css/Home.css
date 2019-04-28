@@ -1,10 +1,28 @@
-#container{
+#main_node{
     -fx-background-image:url('/views/images/bg.png');
     -fx-background-repeat: no-repeat;
-    -fx-background-size: 100% 100%;
+
+    -fx-overflow: hidden;
+        -fx-position: absolute;
+          -fx-right: 0;
+          -fx-bottom: 0;
+          -fx-left: 0;
+
+           -fx-float:left;
+
+        -fx-background-position:center  center;
 }
 #footer{
     -fx-background-image:url('/views/images/bg_footer.png');
     -fx-background-repeat: no-repeat;
-    -fx-background-size: 100% 100%;
+
+    -fx-overflow: hidden;
+    -fx-position: absolute;
+      -fx-right: 0;
+      -fx-bottom: 0;
+      -fx-left: 0;
+      -fx-height: 423px;
+       -fx-float:left;
+       -fx-min-width: 1024px;
+    -fx-background-position:center  center;
 }

@@ -223,127 +223,127 @@ public class FileExporterLibreOffice implements IFileExporter {
 
 
     private void htmlExamWriter(Exam model, ExamModel examModel) {
-
-        try {
-            generateQRCodeImage(model.getId() + "-" + examModel.getId(), "./" + TEMP_DIR + "/QR_" + examModel.getExamModelNumber() + ".png");
-        } catch (WriterException e) {
-            System.out.println("Could not generate QR Code, WriterException :: " + e.getMessage());
-        } catch (IOException e) {
-            System.out.println("Could not generate QR Code, IOException :: " + e.getMessage());
-        }
-
-        String university = (model.getExamLanguage().equals(FileExporterFactory.ENGLISH)) ?
-                DashboardController.doctor.getUniversity().toUpperCase():
-                DashboardController.doctor.getAltUniversity().toUpperCase();
-        String collage = model.getCollege();
-        String department = model.getDepartment();
-        String year = model.getYear();
-        String type = model.getExamType();
-        String name =  ((model.getExamLanguage().equals(FileExporterFactory.ENGLISH)) ?"Subject: ":"المادة: ") +
-                model.getExamName();
-        String date = ((model.getExamLanguage().equals(FileExporterFactory.ENGLISH)) ?"Date: ":"التاريخ: ") +
-                model.getDate();
-        String duration = ((model.getExamLanguage().equals(FileExporterFactory.ENGLISH)) ?"Duration: ":"الزمن: ") +
-                model.getDuration();
-        String totalMarks = ((model.getExamLanguage().equals(FileExporterFactory.ENGLISH)) ?"Total Marks: ":"المجموع: ") +
-                model.getTotalMarks();
-
-
-        String htmlHeaderToRemove = "<html dir=\"ltr\"><head></head><body contenteditable=\"true\"><p>";
-        String htmlFooterToRemove = "</p></body></html>";
-        String examHeader2 = "<html dir=\"" +
-                (model.getExamLanguage().equals(FileExporterFactory.ENGLISH) ? "ltr" : "rtl") + "\">" +
-                "<head>" +
-                "<style>td{ font-size: 0.9em; margin:0;} body{ margin:0 0 0 0;}" +
-                ".avoid-page-break{}" +
-                "</style>" +
-                "<meta charset=\"utf-8\"/>" +
-                "</head>\n" +
-                "<body>\n" +
-                "<table width=\"100%\">\n" +
-                "    <tr>\n" +
-                "        <td width=\"35%\">\n" +
-                "            " + university + "<br/>\n" +
-                "            " + collage + "<br/>\n" +
-                "            " + department + "<br/>\n" +
-                "            " + year + "\n" +
-                "        </td>\n" +
-                "\n" +
-                "        <td align=\"center\" width=\"30%\">\n" +
-                "            <img align=\"center\" src=\"" + getImageBase64("./" + TEMP_DIR + "/logo.png") + "\" height=\"64\" width=\"64\"/>\n" +
-                "            <br />\n" +
-                "            <img align=\"center\" src=\"" + getImageBase64("./" + TEMP_DIR + "/QR_" + examModel.getExamModelNumber() + ".png") + "\" height=\"32\" width=\"32\"/>\n" +
-                "            <br />\n" +
-                "            " + type + "\n" +
-                "        </td>\n" +
-                "\n" +
-                "        <td width=\"35%\">\n" +
-                "            " + name + "<br/>\n" +
-                "            " + date + "<br/>\n" +
-                "            " + duration + "<br/>\n" +
-                "            " + totalMarks + "<br/>\n" +
-                "        </td>\n" +
-                "    </tr>\n" +
-                "</table>" +
-                "<hr/>" + model.getNote() + (model.getNote().isEmpty() ? "" : "<hr/>");
-        StringBuilder body = new StringBuilder();
-
-        String footer = "</body></html>";
-        int q_counter = 1;
-        for (ExamQuestion qm : examModel.getExamQuestionsList()) {
-
-            if(qm.getQuestionType().equals(Vars.QuestionType.EXTENDED_MATCH)){
-                int i = 0;
-                body.append("<div class=\"avoid-page-break\">");
-                for (Answer answer : qm.getContents().get(0).getAnswers()) {
-                    body.append("<div class=\"avoid-page-break\">");
-                    body.append((char) (65 + i));
-                    body.append(") ");
-                    body.append(answer.answer_text.replace(htmlHeaderToRemove, "").replace(htmlFooterToRemove, ""));
-                    //body.append("<br />");
-                    body.append("</div>");
-                    i++;
-                }
-                body.append("</div>");
-            }
-
-            for (QuestionContent questionContent : qm.getContents()) {
-                body.append("<div class=\"avoid-page-break\">");
-                body.append("<b><font size=\"4\">");
-                body.append(model.getExamLanguage().equals(Vars.Languages.ENGLISH)?"Q ":"س ");
-                body.append((q_counter++));
-                body.append(": </font></b>");
-                body.append("<div class=\"avoid-page-break\">");
-
-                body.append(questionContent.getContent().replace(htmlHeaderToRemove, "").replace(htmlFooterToRemove, ""));
-                body.append("</div>");
-
-                if(!qm.getQuestionType().equals(Vars.QuestionType.EXTENDED_MATCH)) {
-                    int i = 0;
-                    body.append("<div class=\"avoid-page-break\">");
-                    for (Answer answer : questionContent.getAnswers()) {
-                        body.append("<div class=\"avoid-page-break\">");
-                        body.append((char) (65 + i));
-                        body.append(") ");
-                        body.append(answer.answer_text.replace(htmlHeaderToRemove, "").replace(htmlFooterToRemove, ""));
-                        //body.append("<br />");
-                        body.append("</div>");
-                        i++;
-                    }
-                    body.append("</div>");
-                }
-                body.append("</div>");
-            }
-            body.append("<hr/>");
-        }
-
-        String html = examHeader2 + body.toString() + footer;
-        try {
-            Save_to_file(html, "./" + TEMP_DIR + "/" + model.getExamName() + "_"
-                    + examModel.getExamModelNumber() + ".html");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//
+//        try {
+//            generateQRCodeImage(model.getId() + "-" + examModel.getId(), "./" + TEMP_DIR + "/QR_" + examModel.getExamModelNumber() + ".png");
+//        } catch (WriterException e) {
+//            System.out.println("Could not generate QR Code, WriterException :: " + e.getMessage());
+//        } catch (IOException e) {
+//            System.out.println("Could not generate QR Code, IOException :: " + e.getMessage());
+//        }
+//
+//        String university = (model.getExamLanguage().equals(FileExporterFactory.ENGLISH)) ?
+//                DashboardController.doctor.getUniversity().toUpperCase():
+//                DashboardController.doctor.getAltUniversity().toUpperCase();
+//        String collage = model.getCollege();
+//        String department = model.getDepartment();
+//        String year = model.getYear();
+//        String type = model.getExamType();
+//        String name =  ((model.getExamLanguage().equals(FileExporterFactory.ENGLISH)) ?"Subject: ":"المادة: ") +
+//                model.getExamName();
+//        String date = ((model.getExamLanguage().equals(FileExporterFactory.ENGLISH)) ?"Date: ":"التاريخ: ") +
+//                model.getDate();
+//        String duration = ((model.getExamLanguage().equals(FileExporterFactory.ENGLISH)) ?"Duration: ":"الزمن: ") +
+//                model.getDuration();
+//        String totalMarks = ((model.getExamLanguage().equals(FileExporterFactory.ENGLISH)) ?"Total Marks: ":"المجموع: ") +
+//                model.getTotalMarks();
+//
+//
+//        String htmlHeaderToRemove = "<html dir=\"ltr\"><head></head><body contenteditable=\"true\"><p>";
+//        String htmlFooterToRemove = "</p></body></html>";
+//        String examHeader2 = "<html dir=\"" +
+//                (model.getExamLanguage().equals(FileExporterFactory.ENGLISH) ? "ltr" : "rtl") + "\">" +
+//                "<head>" +
+//                "<style>td{ font-size: 0.9em; margin:0;} body{ margin:0 0 0 0;}" +
+//                ".avoid-page-break{}" +
+//                "</style>" +
+//                "<meta charset=\"utf-8\"/>" +
+//                "</head>\n" +
+//                "<body>\n" +
+//                "<table width=\"100%\">\n" +
+//                "    <tr>\n" +
+//                "        <td width=\"35%\">\n" +
+//                "            " + university + "<br/>\n" +
+//                "            " + collage + "<br/>\n" +
+//                "            " + department + "<br/>\n" +
+//                "            " + year + "\n" +
+//                "        </td>\n" +
+//                "\n" +
+//                "        <td align=\"center\" width=\"30%\">\n" +
+//                "            <img align=\"center\" src=\"" + getImageBase64("./" + TEMP_DIR + "/logo.png") + "\" height=\"64\" width=\"64\"/>\n" +
+//                "            <br />\n" +
+//                "            <img align=\"center\" src=\"" + getImageBase64("./" + TEMP_DIR + "/QR_" + examModel.getExamModelNumber() + ".png") + "\" height=\"32\" width=\"32\"/>\n" +
+//                "            <br />\n" +
+//                "            " + type + "\n" +
+//                "        </td>\n" +
+//                "\n" +
+//                "        <td width=\"35%\">\n" +
+//                "            " + name + "<br/>\n" +
+//                "            " + date + "<br/>\n" +
+//                "            " + duration + "<br/>\n" +
+//                "            " + totalMarks + "<br/>\n" +
+//                "        </td>\n" +
+//                "    </tr>\n" +
+//                "</table>" +
+//                "<hr/>" + model.getNote() + (model.getNote().isEmpty() ? "" : "<hr/>");
+//        StringBuilder body = new StringBuilder();
+//
+//        String footer = "</body></html>";
+//        int q_counter = 1;
+//        for (ExamQuestion qm : examModel.getExamQuestionsList()) {
+//
+//            if(qm.getQuestionType().equals(Vars.QuestionType.EXTENDED_MATCH)){
+//                int i = 0;
+//                body.append("<div class=\"avoid-page-break\">");
+//                for (Answer answer : qm.getContents().get(0).getAnswers()) {
+//                    body.append("<div class=\"avoid-page-break\">");
+//                    body.append((char) (65 + i));
+//                    body.append(") ");
+//                    body.append(answer.answer_text.replace(htmlHeaderToRemove, "").replace(htmlFooterToRemove, ""));
+//                    //body.append("<br />");
+//                    body.append("</div>");
+//                    i++;
+//                }
+//                body.append("</div>");
+//            }
+//
+//            for (QuestionContent questionContent : qm.getContents()) {
+//                body.append("<div class=\"avoid-page-break\">");
+//                body.append("<b><font size=\"4\">");
+//                body.append(model.getExamLanguage().equals(Vars.Languages.ENGLISH)?"Q ":"س ");
+//                body.append((q_counter++));
+//                body.append(": </font></b>");
+//                body.append("<div class=\"avoid-page-break\">");
+//
+//                body.append(questionContent.getContent().replace(htmlHeaderToRemove, "").replace(htmlFooterToRemove, ""));
+//                body.append("</div>");
+//
+//                if(!qm.getQuestionType().equals(Vars.QuestionType.EXTENDED_MATCH)) {
+//                    int i = 0;
+//                    body.append("<div class=\"avoid-page-break\">");
+//                    for (Answer answer : questionContent.getAnswers()) {
+//                        body.append("<div class=\"avoid-page-break\">");
+//                        body.append((char) (65 + i));
+//                        body.append(") ");
+//                        body.append(answer.answer_text.replace(htmlHeaderToRemove, "").replace(htmlFooterToRemove, ""));
+//                        //body.append("<br />");
+//                        body.append("</div>");
+//                        i++;
+//                    }
+//                    body.append("</div>");
+//                }
+//                body.append("</div>");
+//            }
+//            body.append("<hr/>");
+//        }
+//
+//        String html = examHeader2 + body.toString() + footer;
+//        try {
+//            Save_to_file(html, "./" + TEMP_DIR + "/" + model.getExamName() + "_"
+//                    + examModel.getExamModelNumber() + ".html");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     private String getImageBase64(String imgPath) {

@@ -12,5 +12,6 @@
         <MyHtmlEditor fx:id="txt_answer" HBox.hgrow="ALWAYS" stylesheets="@css/modena/modena.css"/>
         <!--<TextFlow prefWidth="500" fx:id="content" ></TextFlow>-->
         <CheckBox fx:id="checkbox_right_answer"/>
+        <RadioButton fx:id="radio_right_answer" visible="false" managed="false"/>
         <Button text="" fx:id="remove_answer" onAction="#onRemoveClicked" styleClass="delete-button"/>
 </HBox>

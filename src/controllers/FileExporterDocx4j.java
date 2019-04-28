@@ -194,6 +194,8 @@ public class FileExporterDocx4j implements IFileExporter {
 
         String htmlHeaderToRemove = "<html dir=\"ltr\"><head></head><body contenteditable=\"true\"><p>";
         String htmlFooterToRemove = "</p></body></html>";
+        String htmlHeaderToRemoveAlt = "<html dir=\"ltr\"><head></head><body contenteditable=\"true\">";
+        String htmlFooterToRemoveAlt = "</body></html>";
         String examHeader2 =
                 "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"\n" +
                         "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">" +
@@ -235,16 +237,18 @@ public class FileExporterDocx4j implements IFileExporter {
 
         String footer = "</body></html>";
         int q_counter = 1;
-        for (ExamQuestion qm : examModel.getExamQuestionsList()) {
+        for (Question qm : examModel.getQuestionsList()) {
 
-            if (qm.getQuestionType().equals(Vars.QuestionType.EXTENDED_MATCH)) {
+            if (qm.getQuestion_type().equals(Vars.QuestionType.EXTENDED_MATCH)) {
                 int i = 0;
                 body.append("<div class=\"avoid-page-break\">");
-                for (Answer answer : qm.getContents().get(0).getAnswers()) {
+                for (Answer answer : qm.getAnswers()) {
                     body.append("<div class=\"avoid-page-break\">");
                     body.append((char) (65 + i));
                     body.append(") ");
-                    body.append(answer.answer_text.replace(htmlHeaderToRemove, "").replace(htmlFooterToRemove, ""));
+                    String finalAnswer = answer.answer_text.replace(htmlHeaderToRemove, "").replace(htmlFooterToRemove, "");
+                    finalAnswer = finalAnswer.replace(htmlHeaderToRemoveAlt, "").replace(htmlFooterToRemoveAlt, "");
+                    body.append(finalAnswer);
                     //body.append("<br />");
                     body.append("</div>");
                     i++;
@@ -263,14 +267,16 @@ public class FileExporterDocx4j implements IFileExporter {
                 body.append(questionContent.getContent().replace(htmlHeaderToRemove, "").replace(htmlFooterToRemove, ""));
                 body.append("</div>");
 
-                if (!qm.getQuestionType().equals(Vars.QuestionType.EXTENDED_MATCH)) {
+                if (!qm.getQuestion_type().equals(Vars.QuestionType.EXTENDED_MATCH)) {
                     int i = 0;
                     body.append("<div class=\"avoid-page-break\">");
-                    for (Answer answer : questionContent.getAnswers()) {
+                    for (Answer answer : qm.getAnswers()) {
                         body.append("<div class=\"avoid-page-break\">");
                         body.append((char) (65 + i));
                         body.append(") ");
-                        body.append(answer.answer_text.replace(htmlHeaderToRemove, "").replace(htmlFooterToRemove, ""));
+                        String finalAnswer = answer.answer_text.replace(htmlHeaderToRemove, "").replace(htmlFooterToRemove, "");
+                        finalAnswer = finalAnswer.replace(htmlHeaderToRemoveAlt, "").replace(htmlFooterToRemoveAlt, "");
+                        body.append(finalAnswer);
                         //body.append("<br />");
                         body.append("</div>");
                         i++;

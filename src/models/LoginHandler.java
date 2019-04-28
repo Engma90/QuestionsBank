@@ -44,7 +44,7 @@ public class LoginHandler {
                 doctor.setName(rs.getString("DoctorName"));
                 doctor.setEmail(rs.getString("DoctorEmail"));
                 doctor.setDepartment(rs.getString("DoctorDepartment"));
-                doctor.setPreferredExamLayout(rs.getString("PreferredExamLayout"));
+                //doctor.setPreferredExamLayout(rs.getString("PreferredExamLayout"));
 
                 int College_idCollege = rs.getInt("College_idCollege");
                 sql = MessageFormat.format(

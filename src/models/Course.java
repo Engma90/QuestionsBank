@@ -1,12 +1,14 @@
 package models;
 
+import controllers.Vars;
+
 public class Course {
     public String id;
     public String name;
     public String code;
     public String level;
-
     public String year;
+    private String preferredExamLayout = Vars.Languages.ENGLISH;
 
     public Course(){
         this("-1", "", "","","");
@@ -63,6 +65,14 @@ public class Course {
 
     public void setYear(String year) {
         this.year = year;
+    }
+
+    public String getPreferredExamLayout() {
+        return preferredExamLayout;
+    }
+
+    public void setPreferredExamLayout(String preferredExamLayout) {
+        this.preferredExamLayout = preferredExamLayout;
     }
 
 }

@@ -33,15 +33,15 @@ public class CoursesListHandler {
     public int Add(Course course) {
         //DBHandler db = new DBHandler();
         String sql =
-                "insert into Course (CourseLevel, CourseName, CourseCode, CourseYear,Doctor_idDoctor) values (?, ?, ?, ?, ?) ;";
-                String[] params = new String[]{ course.level, course.name, course.code,course.year, DashboardController.doctor.getId()};
+                "insert into Course (CourseLevel, CourseName, CourseCode, CourseYear,Doctor_idDoctor, PreferredExamLayout) values (?, ?, ?, ?, ?, ?) ;";
+                String[] params = new String[]{ course.level, course.name, course.code,course.year, DashboardController.doctor.getId(), course.getPreferredExamLayout()};
        return DBHandler.getInstance().execute_PreparedStatement(sql, params);
     }
     public boolean Edit(Course course) {
         //DBHandler db = new DBHandler();
         String sql = MessageFormat.format(
-                "UPDATE Course SET CourseName =\"{0}\" , CourseCode = \"{1}\", CourseLevel = \"{2}\", CourseYear = \"{3}\"  WHERE idCourse = {4}  ;"
-                ,course.name, course.code, course.level, course.year, course.id);
+                "UPDATE Course SET CourseName =\"{0}\" , CourseCode = \"{1}\", CourseLevel = \"{2}\", CourseYear = \"{3}\", PreferredExamLayout = \"{4}\"  WHERE idCourse = {5}  ;"
+                ,course.name, course.code, course.level, course.year, course.getPreferredExamLayout(), course.id);
         return DBHandler.getInstance().execute_sql(sql);
     }
     public boolean Delete(String id) {
@@ -70,7 +70,11 @@ public class CoursesListHandler {
         try {
             while (rs.next())
             {
-                coursesList.add(new Course(rs.getInt("idCourse")+"",rs.getString("CourseName"),rs.getString("CourseCode"),rs.getString("CourseLevel"),rs.getString("CourseYear")));
+                Course c = new Course(rs.getInt("idCourse")+"",
+                        rs.getString("CourseName"),rs.getString("CourseCode"),
+                        rs.getString("CourseLevel"),rs.getString("CourseYear"));
+                c.setPreferredExamLayout(rs.getString("PreferredExamLayout"));
+                coursesList.add(c);
             }
             return coursesList;
 

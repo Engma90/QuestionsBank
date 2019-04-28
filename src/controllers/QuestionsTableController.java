@@ -40,7 +40,7 @@ public class QuestionsTableController implements Initializable {
         //questionsTableHandler = new QuestionsTableHandler();
         //QuestionsTableHandler.getInstance();
         //refresh();
-//        MenuItem add = new MenuItem("Add");
+//        MenuItem add = new MenuItem("add");
 //        add.setOnAction(new EventHandler<ActionEvent>() {
 //            public void handle(ActionEvent e) {
 //                onAddClicked(e);
@@ -101,7 +101,8 @@ public class QuestionsTableController implements Initializable {
     }
 
     public void onEditClicked(Event e) {
-        AddQuestionController addQuestionController = new AddQuestionController(OperationType.EDIT, topic, questions_table.getSelectionModel().getSelectedItem());
+
+        AddQuestionController addQuestionController = new AddQuestionController(OperationType.EDIT, topic, questions_table.getSelectionModel().getSelectedItem().clone());
         EventHandler<WindowEvent> onClose = new EventHandler<WindowEvent>() {
             public void handle(WindowEvent we) {
                 IWindow window = (IWindow) addQuestionController;

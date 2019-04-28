@@ -5,29 +5,22 @@
 <?import javafx.scene.image.Image?>
 <?import controllers.MyButton?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.geometry.Insets?>
-<!--<AnchorPane xmlns="http://javafx.com/javafx"-->
-<!--xmlns:fx="http://javafx.com/fxml"-->
-<!--fx:controller="controllers.HomeController"-->
-<!--prefHeight="600.0" prefWidth="700.0"-->
-<!--stylesheets="@css/Home.css" fx:id="container">-->
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="controllers.HomeController"
             stylesheets="@css/Home.css" maxWidth="Infinity"  fx:id="main_node">
-    <!--<VBox AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">-->
-        <!--<AnchorPane AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0"-->
-                <!--VBox.Vgrow="ALWAYS" maxHeight="Infinity"/>-->
-    <AnchorPane fx:id="container" AnchorPane.bottomAnchor="145" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0"/>
-    <HBox alignment="CENTER" spacing="50" prefHeight="145" maxHeight="145" fx:id="footer"
-          AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
-        <MyButton imageUrl="/views/images/btnAbout.png" fx:id="about"
+    <!--<AnchorPane fx:id="container" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0"/>-->
+    <StackPane alignment="BOTTOM_CENTER" minHeight="423" fx:id="footer" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+    <HBox  spacing="50" alignment="BOTTOM_CENTER"
+          AnchorPane.bottomAnchor="50" VBox.Vgrow="NEVER" maxHeight="150">
+        <MyButton imageUrl="/views/images/btnAbout.png" fx:id="about" AnchorPane.bottomAnchor="0"
                   prefWidth="56" prefHeight="73"/>
-        <MyButton imageUrl="/views/images/btnSignup.png" fx:id="signup" onMouseClicked="#onSignupClicked"
+        <MyButton imageUrl="/views/images/btnSignup.png" fx:id="signup" onMouseClicked="#onSignupClicked" AnchorPane.bottomAnchor="0"
                   prefWidth="66" prefHeight="76"/>
-        <MyButton imageUrl="/views/images/btnLogin.png" fx:id="login" onMouseClicked="#onSigninClicked"
+        <MyButton imageUrl="/views/images/btnLogin.png" fx:id="login" onMouseClicked="#onSigninClicked" AnchorPane.bottomAnchor="0"
                   prefWidth="49" prefHeight="71"/>
     </HBox>
+    </StackPane>
 
         <VBox spacing="10" fx:id="login_form" AnchorPane.bottomAnchor="110" AnchorPane.leftAnchor="530"
               AnchorPane.rightAnchor="0">
@@ -51,9 +44,4 @@
             </HBox>
         </VBox>
 
-
-
-
-
-    <!--</VBox>-->
 </AnchorPane>
