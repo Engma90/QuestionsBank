@@ -51,6 +51,7 @@ class QBBackup {
         int question_content_id = 0;
         int answer_id = 0;
         int right_answer_id = 0;
+        int accum_answer_id = 0;
 
         for (Course course : coursesList) {
             add_row(CourseCSVList,
@@ -88,8 +89,10 @@ class QBBackup {
                         }
 
                         List<QuestionContent> questionContentsList = question.getContents();
+
                         for (QuestionContent questionContent : questionContentsList) {
-                            //Todo: Accumelative rightAnswer_ID
+
+                            //Todo: Accumulative rightAnswer_ID
                             add_row(QuestionContentCSVList,
                                     new String[]{(question_content_id++ + 1) + "", (question_id) + "",
                                             questionContent.getContent()
@@ -99,12 +102,13 @@ class QBBackup {
                             for (Answer rightAnswer : rightAnswersList) {
                                 add_row(RightAnswerCSVList,
                                         new String[]{(right_answer_id++ + 1) + "", (question_content_id) + "",
-                                                (question.getAnswers().indexOf(rightAnswer) +1) + ""
+                                                (question.getAnswers().indexOf(rightAnswer) + accum_answer_id +1) + ""
                                         });
                             }
 
-                        }
 
+                        }
+                        accum_answer_id += question.getAnswers().size();
                     }
                 }
             }
@@ -172,6 +176,7 @@ class QBBackup {
                 course.code = course_data[2];
                 course.level = course_data[3];
                 course.year = course_data[4];
+                course.setPreferredExamLayout(course_data[5]);
                 course.id = CoursesListHandler.getInstance().Add(course) + "";
                 for (String[] chapter_data : ChapterCSVList) {
                     //String fake_chapter_id = chapter_data[0];
@@ -199,7 +204,7 @@ class QBBackup {
                                         for (String[] answer_data : AnswerCSVList) {
                                             if (question_data[0].equals(answer_data[1])) {
                                                 Answer answer = new Answer();
-                                                answer.id = answer_data[1];
+                                                answer.id = answer_data[0];
                                                 answer.answer_text = answer_data[2];
                                                 temp_answer_list.add(answer);
                                             }
@@ -219,11 +224,9 @@ class QBBackup {
                                                 List<Answer> temp_right_answer_list = new ArrayList<>();
                                                 for (String[] right_answer_data : RightAnswerCSVList) {
                                                     if (content_data[0].equals(right_answer_data[1])) {
-                                                        Answer answer = new Answer();
-                                                        answer.id = right_answer_data[2];
-                                                        for(Answer answer1:question.getAnswers()){
-                                                            if (answer.id.equals(answer1.id)){
-                                                                temp_right_answer_list.add(answer1);
+                                                        for(Answer answer:question.getAnswers()){
+                                                            if (right_answer_data[2].equals(answer.id)){
+                                                                temp_right_answer_list.add(answer);
                                                             }
                                                         }
 
