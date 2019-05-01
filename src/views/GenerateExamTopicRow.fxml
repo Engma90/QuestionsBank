@@ -8,10 +8,14 @@
 <HBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="controllers.GenerateExamTopicRowController"
-      spacing="10" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+      spacing="10" HBox.hgrow="ALWAYS" maxWidth="Infinity" alignment="CENTER_LEFT">
         <Rectangle width="20" HBox.hgrow="NEVER"/>
-        <CheckBox fx:id="isSelected" prefWidth="20" HBox.hgrow="NEVER"></CheckBox>
-        <Label fx:id="lbl_topic_name" prefWidth="200" HBox.hgrow="ALWAYS" maxWidth="Infinity"></Label>
-        <NumberField fx:id="diff_max_level" prefWidth="150" HBox.hgrow="NEVER"></NumberField>
-        <NumberField fx:id="topic_number_of_questions" prefWidth="150" HBox.hgrow="NEVER"></NumberField>
+        <CheckBox fx:id="isSelected" prefWidth="20" HBox.hgrow="NEVER"/>
+        <Label fx:id="lbl_topic_name" prefWidth="200" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+
+        <NumberField fx:id="diff_max_level" prefWidth="75" HBox.hgrow="NEVER"/>
+        <Label fx:id="lbl_diff_max_level" prefWidth="75" HBox.hgrow="NEVER" text=" / 0" />
+
+        <NumberField fx:id="topic_number_of_questions" prefWidth="75" HBox.hgrow="NEVER" />
+        <Label fx:id="lbl_topic_number_of_questions" prefWidth="75" HBox.hgrow="NEVER" text=" / 0"/>
 </HBox>

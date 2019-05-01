@@ -242,6 +242,10 @@ public class FileExporterDocx4j implements IFileExporter {
             if (qm.getQuestion_type().equals(Vars.QuestionType.EXTENDED_MATCH)) {
                 int i = 0;
                 body.append("<div class=\"avoid-page-break\">");
+                body.append("<div class=\"avoid-page-break\"><b>");
+                body.append("For each question below, choose the right answer(s) from the following list of options.<br/>" +
+                        "Each option may be used once, more than once, or not at all.");
+                body.append("</b></div>");
                 for (Answer answer : qm.getAnswers()) {
                     body.append("<div class=\"avoid-page-break\">");
                     body.append((char) (65 + i));

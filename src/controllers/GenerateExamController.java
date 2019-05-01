@@ -45,6 +45,7 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
     public ProgressBar progress_bar;
 
 
+
     public TextField college_text, exam_duration, department_text,
             exam_total_marks, exam_name_text;
     public DatePicker exam_date;
@@ -293,7 +294,7 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
 
                         Collections.shuffle(temp_list);
                         //get only desired number & convert to examQuestion
-                        for (int i = 0; i < Integer.parseInt(tRow.topic_number_of_questions.getText()); i++) {
+                        for (int i = 0; i < Integer.parseInt(tRow.topic_number_of_questions.getText());) {
 
                             Question qmodel = temp_list.get(i);
 
@@ -317,7 +318,7 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
 
                                 questionContentTempList.add(questionContent);
                                 i++;
-                                if (i == Integer.parseInt(tRow.topic_number_of_questions.getText()) - 1)
+                                if (i == Integer.parseInt(tRow.topic_number_of_questions.getText()))
                                     break;
                             }
                             examQuestion.setContents(questionContentTempList);
@@ -390,15 +391,16 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
             if (gecrc.isSelected.isSelected()) {
                 for (GenerateExamTopicRowController getrc : gecrc.generateExamTopicRowControllerList) {
                     if (getrc.isSelected.isSelected()) {
-                        int questions_less_than_level = 0;
+                        int questions_less_than_selected_level = 0;
                         for (Question q : getrc.topic.AllQuestionsList) {
                             if (Integer.parseInt(q.getQuestion_diff()) <= Integer.parseInt(getrc.diff_max_level.getText())) {
-                                questions_less_than_level++;
+                                questions_less_than_selected_level += q.getContents().size();
                             }
                         }
                         getrc.topic_number_of_questions.setMax(
-                                questions_less_than_level
+                                questions_less_than_selected_level
                         );
+                        getrc.lbl_topic_number_of_questions.setText(" / " + questions_less_than_selected_level);
                         sum += Integer.parseInt(getrc.topic_number_of_questions.getText());
                     }
                 }

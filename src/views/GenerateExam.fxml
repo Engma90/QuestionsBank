@@ -6,6 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import java.lang.*?>
+<?import javafx.scene.shape.Rectangle?>
 <VBox spacing="10" xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="controllers.GenerateExamController" stylesheets="@css/SimpleForm.css" fx:id="container"
@@ -71,16 +72,18 @@
             </HBox>
         </HBox>
         <Separator/>
-        <HBox spacing="10">
+        <HBox spacing="10" alignment="CENTER_LEFT">
             <padding>
                 <Insets left="10"/>
             </padding>
-            <Label text="Exam chapters and topics" prefWidth="270" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
-            <Label text="Max Difficulty level" prefWidth="150"/>
-            <Label text="Number of questions" prefWidth="150"/>
+            <Label text="Exam chapters and topics" prefWidth="200" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+            <Label text="Max Difficulty level" prefWidth="150" minWidth="150" HBox.hgrow="NEVER"/>
+            <Rectangle HBox.hgrow="NEVER"/>
+            <Label text="Number of questions" prefWidth="150" minWidth="150" HBox.hgrow="NEVER"/>
+            <Rectangle width="20" HBox.hgrow="NEVER"/>
         </HBox>
         <VBox VBox.vgrow="ALWAYS">
-            <ScrollPane maxHeight="Infinity" fitToWidth="true" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
+            <ScrollPane maxHeight="Infinity" fitToWidth="true" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS" vbarPolicy="ALWAYS">
                 <padding>
                     <Insets top="10" right="10" bottom="10" left="10"/>
                 </padding>
@@ -94,9 +97,10 @@
                 </padding>
                 <Label HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
                 <!--<HBox HBox.hgrow="ALWAYS" maxWidth="Infinity" alignment="CENTER_RIGHT">-->
-                <Label text="Total number of questions:"  minWidth="150" textAlignment="RIGHT"/>
+                <Label text="Total number of questions:"  minWidth="150" textAlignment="RIGHT" HBox.hgrow="NEVER"/>
                 <!--</HBox>-->
-                <NumberField disable="true" fx:id="lbl_sum" prefWidth="150"/>
+                <NumberField disable="true" fx:id="lbl_sum" prefWidth="75" HBox.hgrow="NEVER"/>
+                <Rectangle width="98" HBox.hgrow="NEVER"/>
             </HBox>
         </VBox>
     </VBox>

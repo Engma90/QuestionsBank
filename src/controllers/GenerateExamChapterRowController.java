@@ -83,6 +83,7 @@ public class GenerateExamChapterRowController implements Initializable,IUpdatabl
             generateExamTopicRowControllerList.add((loader.getController()));
             ((GenerateExamTopicRowController) loader.getController()).topic_number_of_questions.setMax(max_question);
             ((GenerateExamTopicRowController) loader.getController()).diff_max_level.setMax(max_diff);
+            ((GenerateExamTopicRowController) loader.getController()).lbl_diff_max_level.setText(" / " + max_diff);
             ((GenerateExamTopicRowController) loader.getController()).initUI(topic, this);
             content.getChildren().add((p));
         } catch (IOException e) {

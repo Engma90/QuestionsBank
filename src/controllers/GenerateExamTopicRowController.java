@@ -16,6 +16,8 @@ public class GenerateExamTopicRowController implements Initializable {
 //    String topic_name;
     public Topic topic;
     public NumberField diff_max_level, topic_number_of_questions;
+    public Label lbl_diff_max_level, lbl_topic_number_of_questions;
+
     public IUpdatable parent;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -35,11 +37,6 @@ public class GenerateExamTopicRowController implements Initializable {
         isSelected.setSelected(true);
         isSelected.setOnAction(e ->{
             parent.update();
-//            if(((CheckBox)e.getSource()).isSelected()){
-//                parent.update();
-//            }else {
-//                parent.update();
-//            }
         });
     }
 
