@@ -1,5 +1,6 @@
 package controllers;
 
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,6 +13,7 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
@@ -24,6 +26,15 @@ import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import org.jsoup.Jsoup;
 
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
@@ -55,9 +66,11 @@ public class MyHtmlEditor extends HBox {
     private final ToolBar mTopToolBar;
     private final ToolBar mBottomToolBar;
     //private final Button mRTL,mLTR;
+    private static final int MAX_IMAGE_WIDTH = 400;
+    private static final int MAX_IMAGE_HEIGHT = 400;
 
 
-    public MyHtmlEditor(){
+    public MyHtmlEditor() {
         //Todo: handle drag and drop image
         this.setSpacing(1);
         //this.setPrefWidth(1000);
@@ -74,17 +87,14 @@ public class MyHtmlEditor extends HBox {
         this.getChildren().add(htmlEditor);
 
 
-
-
         this.getChildren().add(button);
         hideToolbars(this.htmlEditor);
-        button.setOnAction(e ->{
-            if(isShown){
+        button.setOnAction(e -> {
+            if (isShown) {
                 button.setText("^");
                 hideToolbars(this.htmlEditor);
                 htmlEditor.setPrefHeight(25);
-            }
-            else {
+            } else {
                 button.setText("<");
                 htmlEditor.setPrefHeight(300);
                 showToolbars(this.htmlEditor);
@@ -95,7 +105,7 @@ public class MyHtmlEditor extends HBox {
 
         mWebView = (WebView) this.htmlEditor.lookup(WEB_VIEW);
 
-        HBox.setHgrow(htmlEditor,Priority.ALWAYS);
+        HBox.setHgrow(htmlEditor, Priority.ALWAYS);
         //HBox.setHgrow(mWebView,Priority.ALWAYS);
         mTopToolBar = (ToolBar) this.htmlEditor.lookup(TOP_TOOLBAR);
         mBottomToolBar = (ToolBar) this.htmlEditor.lookup(BOTTOM_TOOLBAR);
@@ -125,11 +135,11 @@ public class MyHtmlEditor extends HBox {
         //setRTL(true);
     }
 
-    private void setRTL(boolean val){
+    private void setRTL(boolean val) {
 
-        if(val) {
+        if (val) {
             htmlEditor.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
-        }else {
+        } else {
             htmlEditor.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
         }
         mTopToolBar.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
@@ -174,7 +184,14 @@ public class MyHtmlEditor extends HBox {
         ImageView graphic = new ImageView(new Image("/views/images/insert-image.png"));
         Button mImportFileButton = new Button("", graphic);
         mImportFileButton.setTooltip(new Tooltip("Import Image"));
-        mImportFileButton.setOnAction((event) -> onImportFileButtonAction());
+        mImportFileButton.setOnAction((event) -> {
+            try {
+                onImportFileButtonAction();
+            } catch (IOException e) {
+                new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+                //e.printStackTrace();
+            }
+        });
 
         //add to top toolbar
 //        ObservableList<Node> buttons = FXCollections.observableArrayList();
@@ -191,7 +208,7 @@ public class MyHtmlEditor extends HBox {
 
     }
 
-    private void onImportFileButtonAction() {
+    private void onImportFileButtonAction() throws IOException {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select a file to import");
         fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("All Files", "*.*"));
@@ -201,30 +218,127 @@ public class MyHtmlEditor extends HBox {
         }
     }
 
-    private void importDataFile(File file) {
-        try {
-            //check if file is too big
-            if (file.length() > 1024 * 1024) {
-                throw new VerifyError("File is too big.");
-            }
-            //get mime type of the file
-            String type = java.nio.file.Files.probeContentType(file.toPath());
-            //get html exam_content
-            byte[] data = org.apache.commons.io.FileUtils.readFileToByteArray(file);
-            String base64data = java.util.Base64.getEncoder().encodeToString(data);
+    private void importDataFile(File file) throws IOException {
+//        try {
+        //check if file is too big
+//        if (file.length() > 1024 * 1024) {
+//            throw new IOException("File is too big.");
+//        }
+        //get mime type of the file
+        String type = java.nio.file.Files.probeContentType(file.toPath());
+        if (type == null || !type.toLowerCase().contains("image")) {
+            throw new IOException("File not Supported");
+        }
+
+        //get html exam_content
+//            byte[] data = org.apache.commons.io.FileUtils.readFileToByteArray(file);
+//            String base64data = java.util.Base64.getEncoder().encodeToString(data);
+
+        String base64data = getResizedImage(file);
+
+
 //            System.out.println(base64data);
 //            System.out.println(type);
-            String htmlData = String.format(
-                    //"<a href=""></a>",
-                    "<img src=\"data:%s;base64,%s\"/>",
-                    type, base64data);
-            //System.out.println(htmlData);
-            //insert html
-            insertHtmlAfterCursor(htmlData);
-            //htmlEditor.setHtmlText(htmlData);
-        } catch (IOException ex) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
+        String htmlData = String.format(
+                //"<a href=""></a>",
+                "<img src=\"data:%s;base64,%s\"/>",
+                type, base64data);
+        //System.out.println(htmlData);
+        //insert html
+        insertHtmlAfterCursor(htmlData);
+        //htmlEditor.setHtmlText(htmlData);
+//        } catch (IOException ex) {
+//            Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
+//        }
+    }
+
+    private String getResizedImage(File file) throws IOException {
+        BufferedImage originalImage = ImageIO.read(file);
+        int w = originalImage.getWidth();
+        int h = originalImage.getHeight();
+        double WIDTH_HEIGHT_RATIO = (double) w / (double)h;
+
+        double newWidth, newHeight;
+        BufferedImage finalImage;
+
+        if (h <= MAX_IMAGE_HEIGHT && w <= MAX_IMAGE_WIDTH) {
+            finalImage = originalImage;
+        } else {
+            if (h >= w) {
+                newHeight = (double) MAX_IMAGE_HEIGHT;
+                newWidth = WIDTH_HEIGHT_RATIO * newHeight;
+                finalImage = scale(originalImage, (int)newWidth, (int)newHeight);
+//              double scale = (newWidth / newHeight) / WIDTH_HEIGHT_RATIO
+//                finalImage = scale1(originalImage,(newWidth/(double)w));
+            } else {
+                newWidth = (double) MAX_IMAGE_WIDTH;
+                newHeight = newWidth / WIDTH_HEIGHT_RATIO;
+                finalImage = scale(originalImage, (int)newWidth, (int)newHeight);
+//                finalImage = scale1(originalImage, (newHeight/(double)h));
+            }
         }
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write( finalImage, (originalImage.getTransparency() == Transparency.OPAQUE) ? "jpg" : "png", baos );
+        baos.flush();
+        byte[] imageInByte = baos.toByteArray();
+        baos.close();
+
+        return java.util.Base64.getEncoder().encodeToString(imageInByte);
+    }
+
+    private BufferedImage scale(BufferedImage img, int targetWidth, int targetHeight) {
+
+        int type = (img.getTransparency() == Transparency.OPAQUE) ? BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
+        BufferedImage ret = img;
+        BufferedImage scratchImage = null;
+        Graphics2D g2 = null;
+
+        int w = img.getWidth();
+        int h = img.getHeight();
+
+        int prevW = w;
+        int prevH = h;
+
+        do {
+            if (w > targetWidth) {
+                w /= 2;
+                w = (w < targetWidth) ? targetWidth : w;
+            }
+
+            if (h > targetHeight) {
+                h /= 2;
+                h = (h < targetHeight) ? targetHeight : h;
+            }
+
+            if (scratchImage == null) {
+                scratchImage = new BufferedImage(w, h, type);
+                g2 = scratchImage.createGraphics();
+            }
+
+            g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+                    RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            g2.drawImage(ret, 0, 0, w, h, 0, 0, prevW, prevH, null);
+
+            prevW = w;
+            prevH = h;
+            ret = scratchImage;
+        } while (w != targetWidth || h != targetHeight);
+
+        if (g2 != null) {
+            g2.dispose();
+        }
+
+        if (targetWidth != ret.getWidth() || targetHeight != ret.getHeight()) {
+            scratchImage = new BufferedImage(targetWidth, targetHeight, type);
+            g2 = scratchImage.createGraphics();
+            g2.drawImage(ret, 0, 0, null);
+            g2.dispose();
+            ret = scratchImage;
+        }
+
+        return ret;
+
     }
 
 
@@ -279,25 +393,24 @@ public class MyHtmlEditor extends HBox {
 //        this.htmlEditor.setHtmlText(text);
 //    }
 
-    public String getHtmlText(){
+    public String getHtmlText() {
         return this.htmlEditor.getHtmlText();
     }
-    public String getRawText(){
+
+    public String getRawText() {
         return Jsoup.parse(getHtmlText()).text();
     }
 
-    public void setHtmlText(String text){
+    public void setHtmlText(String text) {
         this.htmlEditor.setHtmlText(text);
     }
 
 
-    private void showToolbars(final HTMLEditor editor)
-    {
+    private void showToolbars(final HTMLEditor editor) {
         editor.setVisible(false);
         Platform.runLater(() -> {
             Node[] nodes = editor.lookupAll(".tool-bar").toArray(new Node[0]);
-            for(Node node : nodes)
-            {
+            for (Node node : nodes) {
                 node.setVisible(true);
                 node.setManaged(true);
             }
@@ -305,13 +418,11 @@ public class MyHtmlEditor extends HBox {
         });
     }
 
-    private void hideToolbars(final HTMLEditor editor)
-    {
+    private void hideToolbars(final HTMLEditor editor) {
         editor.setVisible(false);
         Platform.runLater(() -> {
             Node[] nodes = editor.lookupAll(".tool-bar").toArray(new Node[0]);
-            for(Node node : nodes)
-            {
+            for (Node node : nodes) {
                 node.setVisible(false);
                 node.setManaged(false);
 
@@ -320,12 +431,12 @@ public class MyHtmlEditor extends HBox {
         });
     }
 
-    public void setToggleModeEnabled(boolean val){
-        if(val){
+    public void setToggleModeEnabled(boolean val) {
+        if (val) {
             this.hideToolbars(this.htmlEditor);
             this.button.setVisible(true);
             this.button.setManaged(true);
-        }else {
+        } else {
             this.showToolbars(this.htmlEditor);
             this.button.setVisible(false);
             this.button.setManaged(false);
