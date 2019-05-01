@@ -394,7 +394,7 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
                         int questions_less_than_selected_level = 0;
                         for (Question q : getrc.topic.AllQuestionsList) {
                             if (Integer.parseInt(q.getQuestion_diff()) <= Integer.parseInt(getrc.diff_max_level.getText())) {
-                                questions_less_than_selected_level += q.getContents().size();
+                                questions_less_than_selected_level += 1; //q.getContents().size()
                             }
                         }
                         getrc.topic_number_of_questions.setMax(
