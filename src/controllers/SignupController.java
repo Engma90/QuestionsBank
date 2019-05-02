@@ -24,7 +24,7 @@ public class SignupController implements Initializable, IWindow {
     public TextField full_name,email,department;
     public PasswordField password,re_password;
     public MyButton signup;
-    public ComboBox<String> combo_college,preferredExamLayout;
+    public ComboBox<String> combo_college;
     private SignupHandler signupHandler;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -47,10 +47,6 @@ public class SignupController implements Initializable, IWindow {
 
     @Override
     public Object setWindowData(Stage stage, Object initObject) {
-//        stage.setMinWidth(600);
-//        stage.setMaxWidth(600);
-//        stage.setMinHeight(500);
-//        stage.setMaxHeight(500);
         stage.setMinHeight(700);
         stage.setMinWidth(800);
         stage.setMaximized(true);
@@ -64,7 +60,7 @@ public class SignupController implements Initializable, IWindow {
             if(signupHandler.
                     Signup(full_name.getText(), email.getText(), password.getText(),
                             (combo_college.getSelectionModel().getSelectedIndex()+1)+"",
-                            department.getText(),preferredExamLayout.getValue())){
+                            department.getText())){
 
                 if(LoginHandler.getInstance().login(email.getText(), password.getText())){
                     new WindowLoader().load(e,"/views/Dashboard.fxml",null,null,false,true,null);
@@ -91,9 +87,6 @@ public class SignupController implements Initializable, IWindow {
     //Todo: validate Preferred layout
     boolean validate(){
         if(!isValidEmail(email.getText())){
-            return false;
-        }
-        if (preferredExamLayout.getValue().equals("Preferred Exam Layout")){
             return false;
         }
         if(full_name.getText().isEmpty() || email.getText().isEmpty()

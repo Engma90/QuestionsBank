@@ -9,11 +9,11 @@ import java.sql.SQLException;
 import java.text.MessageFormat;
 
 public class SignupHandler {
-    public boolean Signup(String name, String email, String password, String college, String department, String PreferredExamLayout) {
+    public boolean Signup(String name, String email, String password, String college, String department) {
         //DBHandler db = new DBHandler();
         String sql = MessageFormat.format(
-                "insert into Doctor (DoctorName, DoctorPassword, DoctorEmail, College_idCollege, DoctorDepartment, PreferredExamLayout) values (\"{0}\",\"{1}\",\"{2}\",{3},\"{4}\",\"{5}\");"
-                , name, password, email, college, department, PreferredExamLayout);
+                "insert into Doctor (DoctorName, DoctorPassword, DoctorEmail, College_idCollege, DoctorDepartment) values (\"{0}\",\"{1}\",\"{2}\",{3},\"{4}\");"
+                , name, password, email, college, department);
         return DBHandler.getInstance().execute_sql(sql);
     }
 
