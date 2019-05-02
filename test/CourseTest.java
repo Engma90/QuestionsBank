@@ -1,4 +1,6 @@
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.ComboBoxListCell;
 import javafx.scene.input.KeyCode;
 import models.Course;
 import org.junit.FixMethodOrder;
@@ -21,14 +23,19 @@ public class CourseTest extends TestBaseSkipLogin {
     private final String BUTTON_EDIT = "#btn_edit";
     private final String BUTTON_DELETE = "#btn_delete";
 
+    private final String ADD_WINDOWCONTAINER = "#container";
     private final String COURSE_CODE = "EEP";
     private final String COURSE_NAME = "Programming";
+    private final String PREFERRED_EXAM_LAYOUT_COMBO = "#preferredExamLayout";
+
     private final String COURSE_CODE_EDITED = "EEP2";
     private final String COURSE_NAME_EDITED = "ProgrammingEdited";
     private final String COURSE_CODE_FIELD = "#course_code";
     private final String COURSE_NAME_FIELD = "#course_name";
     private final String COURSE_WINDOW_ADD_BUTTON = "#add_course";
-    private final String COURSE_WINDOW_EDIT_BUTTON = "#edit_course";
+    private final String COURSE_WINDOW_EDIT_BUTTON = "Edit";
+    private ComboBox preferredExamLayout;
+
 
 
     private TableView<Course> tableView;
@@ -53,8 +60,15 @@ public class CourseTest extends TestBaseSkipLogin {
     @Test
     public void Test1AddCourse(){
         clickOn(CONTAINER + " " + BUTTON_ADD);
+
         clickOn(COURSE_CODE_FIELD).write(COURSE_CODE);
         clickOn(COURSE_NAME_FIELD).write(COURSE_NAME);
+
+        preferredExamLayout = lookup(ADD_WINDOWCONTAINER).lookup(PREFERRED_EXAM_LAYOUT_COMBO).query();
+        clickOn(preferredExamLayout);
+        type(KeyCode.DOWN);
+        type(KeyCode.ENTER);
+
         clickOn(COURSE_WINDOW_ADD_BUTTON);
         tableView = lookup(CONTAINER).lookup(TABLE).query();
         Course last = tableView.getItems().get(tableView.getItems().size() - 1);
@@ -74,6 +88,11 @@ public class CourseTest extends TestBaseSkipLogin {
 
         clickOn(COURSE_CODE_FIELD).write(COURSE_CODE_EDITED);
         clickOn(COURSE_NAME_FIELD).write(COURSE_NAME_EDITED);
+
+        preferredExamLayout = lookup(ADD_WINDOWCONTAINER).lookup(PREFERRED_EXAM_LAYOUT_COMBO).query();
+        type(KeyCode.DOWN);
+        type(KeyCode.ENTER);
+
         clickOn(COURSE_WINDOW_EDIT_BUTTON);
 
         tableView = lookup(CONTAINER).lookup(TABLE).query();
