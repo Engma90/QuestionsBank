@@ -7,17 +7,23 @@ public class DBHandler {
     private static volatile DBHandler instance = null;
     private static volatile Connection connection;
 
-    private static final String SERVER = "localhost";
-    private static final String PORT = "3306";
-    private static final String DB_NAME = "questionbank";
-    private static final String USER = "root";
-    private static final String PASS = "Root@1234";
+//    private static final String SERVER = "localhost";
+//    private static final String PORT = "3306";
+//    private static final String DB_NAME = "questionbank";
+//    private static final String USER = "root";
+//    private static final String PASS = "Root@1234";
 
 //    private static final String SERVER = "remotemysql.com";
 //    private static final String PORT = "3306";
 //    private static final String DB_NAME = "9OIidHK4UF";
 //    private static final String USER = "9OIidHK4UF";
 //    private static final String PASS = "NGr5dSWL9z";
+
+    private static final String SERVER = "196.221.207.37";
+    private static final String PORT = "3306";
+    private static final String DB_NAME = "questionbank_sara";
+    private static final String USER = "root";
+    private static final String PASS = "Root@1234";
 
 
     private DBHandler() {
