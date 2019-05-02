@@ -51,7 +51,7 @@ public class Main extends Application {
         splashStage.setScene(scene);
         splashStage.initStyle(StageStyle.TRANSPARENT);
         scene.setFill(Color.TRANSPARENT);
-        splashStage.setAlwaysOnTop(true);
+        //splashStage.setAlwaysOnTop(true);
         splashStage.setOnShown(event -> {
             FadeTransition fadeIn = new FadeTransition(Duration.seconds(1), root);
             fadeIn.setOnFinished(event1 -> Platform.runLater(() -> {
