@@ -39,14 +39,7 @@
         <TextField fx:id="email" promptText="Email"/>
         <PasswordField fx:id="password" promptText="Password"/>
         <PasswordField fx:id="re_password" promptText="Confirm Password"/>
-        <ComboBox value="Preferred Exam Layout" fx:id="preferredExamLayout" maxWidth="Infinity">
-            <items>
-                <FXCollections fx:factory="observableArrayList">
-                    <String fx:value="English"/>
-                    <String fx:value="Arabic"/>
-                </FXCollections>
-            </items>
-        </ComboBox>
+
 
         <HBox alignment="CENTER_LEFT">
         <MyButton prefWidth="131" prefHeight="49"

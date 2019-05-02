@@ -8,7 +8,7 @@ public class Course {
     public String code;
     public String level;
     public String year;
-    private String preferredExamLayout = Vars.Languages.ENGLISH;
+    private String preferredExamLayout;
 
     public Course(){
         this("-1", "", "","","");

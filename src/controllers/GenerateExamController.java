@@ -90,7 +90,7 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
         generate.setDisable(true);
         progress_bar.setVisible(false);
 
-
+        //Todo: implement in a better way (bundles)
         exam_language.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -102,7 +102,6 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
                     note_text.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
                     exam_duration.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
                     exam_total_marks.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
-                    //Todo: fix this on change language
                     ObservableList<String> years = FXCollections.observableArrayList();
                     years.add("Prep Year");
                     years.add("1st Year");
@@ -112,7 +111,6 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
                     years.add("5th Year");
                     years.add("6th Year");
                     exam_year.setItems(years);
-                    exam_year.getSelectionModel().select(selection);
                 } else {
                     exam_name_text.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
                     college_text.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
@@ -120,7 +118,6 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
                     note_text.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
                     exam_duration.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
                     exam_total_marks.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
-                    //Todo: implement in a better way (bundles)
                     ObservableList<String> years = FXCollections.observableArrayList();
                     years.add("الفرقة الاعدادية");
                     years.add("الفرقة الاولى");
@@ -135,22 +132,13 @@ public class GenerateExamController implements Initializable, IUpdatable, IWindo
             }
         });
         exam_year.getSelectionModel().select(course.year);
-        //exam_language.getSelectionModel().select(DashboardController.doctor.getPreferredExamLayout());
+        exam_language.getSelectionModel().select(course.getPreferredExamLayout());
 
 
         combo_format.getSelectionModel().selectFirst();
 
         chapterList = ChaptersListHandler.getInstance().getList(course);
         for (Chapter c : chapterList) {
-            //System.out.println("----------------------1");
-            //List<Question> questionList = QuestionsTableHandler.getInstance().getQuestionList(c.id);
-            //System.out.println("----------------------2");
-            //List<String> l = new ArrayList<String>();
-//            for (Question q : questionList) {
-//                if (!l.contains(q.getQuestion_diff())) {
-//                    l.add(q.getQuestion_diff());
-//                }
-//            }
             if (QuestionsTableHandler.getInstance().getQuestionList(c).size() > 0)
                 addRow(c);
         }

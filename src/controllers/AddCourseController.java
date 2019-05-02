@@ -24,7 +24,7 @@ public class AddCourseController implements Initializable, IWindow {
     public Button add_course, edit_course;
     private String operation_type;
     private Course model;
-    public ComboBox<String> course_level,year;
+    public ComboBox<String> course_level,year, preferredExamLayout;
 
     private boolean isADDorEdeitClicked = false;
 
@@ -35,7 +35,7 @@ public class AddCourseController implements Initializable, IWindow {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        if (this.operation_type.contains("add")) {
+        if (this.operation_type.contains(Vars.OperationType.ADD)) {
             edit_course.setVisible(false);
             edit_course.setManaged(false);
             add_course.setVisible(true);
@@ -50,6 +50,8 @@ public class AddCourseController implements Initializable, IWindow {
             course_code.setText(model.code);
             course_level.setValue(model.level);
             year.setValue(model.year);
+            preferredExamLayout.setValue(model.getPreferredExamLayout());
+
             edit_course.setDefaultButton(true);
         }
 
@@ -63,6 +65,7 @@ public class AddCourseController implements Initializable, IWindow {
             course.code = course_code.getText();
             course.level = course_level.getValue();
             course.year = year.getValue();
+            course.setPreferredExamLayout(preferredExamLayout.getValue());
             int success = CoursesListHandler.getInstance().Add(course);
             if (success == -1) {
                 new Alert(Alert.AlertType.ERROR, "Operation Failed").show();
@@ -81,6 +84,7 @@ public class AddCourseController implements Initializable, IWindow {
             model.name= course_name.getText();
             model.level = course_level.getValue();
             model.year = year.getValue();
+            model.setPreferredExamLayout(preferredExamLayout.getValue());
             boolean success = CoursesListHandler.getInstance().Edit(model);
             if (!success) {
                 new Alert(Alert.AlertType.ERROR, "Operation Failed").show();
@@ -93,7 +97,9 @@ public class AddCourseController implements Initializable, IWindow {
     }
 
     private boolean validate() {
-        return !course_code.getText().isEmpty() && !course_name.getText().isEmpty();
+        return !course_code.getText().isEmpty()
+                && !course_name.getText().isEmpty()
+                && !preferredExamLayout.getValue().equals("Preferred Exam Layout");
     }
 
     private void close(ActionEvent e) {
