@@ -28,7 +28,7 @@
                             <!--stylesheets="@css/modena/modena.css"/>-->
 
                         </VBox>
-                        <Button fx:id="add_question_content" text="Add sub question" onAction="#onAddContentClicked"
+                        <Button fx:id="add_question_content" text="Sub question" onAction="#onAddContentClicked"
                                 styleClass="add-button" visible="false"/>
                     </VBox>
 
@@ -77,7 +77,7 @@
                 <StackPane styleClass="transparent" VBox.vgrow="ALWAYS">
                     <VBox fx:id="mcq_ui_group" spacing="10" styleClass="transparent" VBox.vgrow="ALWAYS">
                         <VBox fx:id="ui_answers_list" spacing="10" styleClass="transparent" VBox.vgrow="ALWAYS"/>
-                        <Button fx:id="add_answer" text="Add Answer" onAction="#onAddAnswerClicked"
+                        <Button fx:id="add_answer" text="Answer" onAction="#onAddAnswerClicked"
                                 styleClass="add-button"/>
                     </VBox>
                 </StackPane>
@@ -85,9 +85,9 @@
         </VBox>
     </SplitPane>
     <HBox alignment="BOTTOM_CENTER">
-        <Button fx:id="add_question" text="Add" onAction="#onAddClicked" maxHeight="50" styleClass="add-button"/>
+        <Button fx:id="add_question" text="Add" onAction="#onAddClicked" maxHeight="50" styleClass="add-button, main-button"/>
         <Button fx:id="edit_question" text="Edit" onAction="#onEditClicked" maxHeight="50"
-                styleClass="edit-button"/>
+                styleClass="edit-button, main-button"/>
     </HBox>
 
 </VBox>

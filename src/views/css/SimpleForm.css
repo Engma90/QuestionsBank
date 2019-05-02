@@ -70,6 +70,10 @@ CheckBox{
     -fx-background-image: url('/views/images/delete_icon.png');
 }
 
+.main-button{
+    -fx-background-color:#e33068;
+}
+
 .combo-box .cell{
     -fx-text-fill: #FFFFFF;
     -fx-font: 16px "Arial";

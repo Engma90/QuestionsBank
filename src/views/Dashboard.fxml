@@ -39,12 +39,12 @@
         </padding>
 
         <HBox spacing="10">
-            <VBox opacity="0.9" minWidth="300" maxWidth="300" fx:id="courses"/>
-            <VBox opacity="0.9" spacing="10" minWidth="300" maxWidth="300">
+            <VBox opacity="0.9" minWidth="325" maxWidth="325" fx:id="courses"/>
+            <VBox opacity="0.9" spacing="10" minWidth="325" maxWidth="325">
                 <VBox fx:id="chapters"/>
                 <VBox fx:id="topics"/>
             </VBox>
-            <VBox opacity="0.9" HBox.hgrow="ALWAYS" fx:id="right_content"/>
+            <VBox opacity="0.9" HBox.hgrow="ALWAYS" fx:id="right_content" minWidth="300"/>
         </HBox>
     </VBox>
     <VBox>

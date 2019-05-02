@@ -15,6 +15,8 @@ import javafx.stage.WindowEvent;
 import models.*;
 import org.jsoup.Jsoup;
 import controllers.Vars.*;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 import java.io.*;
 import java.net.URL;
@@ -356,20 +358,21 @@ public class AddQuestionController implements Initializable, IWindow {
 
 
                 for (int i = 0; i < answerRowControllers.size(); i++) {
-                    String finalText = "";
+                    String innerText = "";
                     if (i == 0) {
-                        finalText = "True";
+                        innerText = "True";
                     } else if (i == 1) {
-                        finalText = "False";
+                        innerText = "False";
                     } else {
-                        continue;
+                        break;
                     }
-                    String onlyBody = Jsoup.parse(answerRowControllers.get(i).txt_answer.getHtmlText()).body().html();
-                    System.out.println("onlyBody " + onlyBody);
                     String full = answerRowControllers.get(i).txt_answer.getHtmlText();
-                    finalText = full.replace(onlyBody, finalText);
-                    System.out.println("finalText " + finalText);
-                    answerRowControllers.get(i).txt_answer.setHtmlText(finalText);
+                    Document html = Jsoup.parse(full);
+                    Element body = html.body();
+                    body.children().clear();
+                    body.html(innerText);
+                    System.out.println(html.html());
+                    answerRowControllers.get(i).txt_answer.setHtmlText(html.html());
                     answerRowControllers.get(i).txt_answer.setDisable(true);
                     answerRowControllers.get(i).remove_answer.setVisible(false);
                     answerRowControllers.get(i).remove_answer.setManaged(false);

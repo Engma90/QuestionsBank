@@ -19,8 +19,8 @@
     </VBox>
     <HBox alignment="CENTER" AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.leftAnchor="0" minHeight="40"
           style="-fx-background-color:#221936;">
-        <Button text="Add" fx:id="add_topic" onAction="#onAddTopicClicked" styleClass="add-button"/>
-        <Button text="Edit" fx:id="edit_topic" onAction="#onEditTopicClicked" styleClass="edit-button"/>
+        <Button text="Add" fx:id="add_topic" onAction="#onAddTopicClicked" styleClass="add-button, main-button"/>
+        <Button text="Edit" fx:id="edit_topic" onAction="#onEditTopicClicked" styleClass="edit-button, main-button"/>
     </HBox>
 
 </AnchorPane>

@@ -71,6 +71,9 @@ RadioButton{
     -fx-background-image: url('/views/images/delete_icon.png');
     -fx-padding:5px 15px 5px 30px;
 }
+.main-button{
+    -fx-background-color:#e33068;
+}
 
 .combo-box .cell{
     -fx-text-fill: #FFFFFF;

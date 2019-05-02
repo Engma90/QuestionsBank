@@ -25,8 +25,8 @@
 
     <HBox alignment="CENTER" AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.leftAnchor="0" minHeight="40"
           style="-fx-background-color:#221936;">
-        <Button text="Add" fx:id="add_chapter" onAction="#onAddChapterClicked" styleClass="add-button"/>
-        <Button text="Edit" fx:id="edit_chapter" onAction="#onEditChapterClicked" styleClass="edit-button"/>
+        <Button text="Add" fx:id="add_chapter" onAction="#onAddChapterClicked" styleClass="add-button, main-button"/>
+        <Button text="Edit" fx:id="edit_chapter" onAction="#onEditChapterClicked" styleClass="edit-button, main-button"/>
     </HBox>
 
 </AnchorPane>

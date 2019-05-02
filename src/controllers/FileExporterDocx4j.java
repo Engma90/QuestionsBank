@@ -19,6 +19,7 @@ import org.docx4j.relationships.Relationship;
 import org.docx4j.wml.Body;
 import org.docx4j.wml.CTAltChunk;
 import org.docx4j.wml.SectPr;
+import org.jsoup.Jsoup;
 
 import java.awt.*;
 import java.io.*;
@@ -192,10 +193,10 @@ public class FileExporterDocx4j implements IFileExporter {
                 model.getTotalMarks();
 
 
-        String htmlHeaderToRemove = "<html dir=\"ltr\"><head></head><body contenteditable=\"true\"><p>";
-        String htmlFooterToRemove = "</p></body></html>";
-        String htmlHeaderToRemoveAlt = "<html dir=\"ltr\"><head></head><body contenteditable=\"true\">";
-        String htmlFooterToRemoveAlt = "</body></html>";
+//        String htmlHeaderToRemove = "<html dir=\"ltr\"><head></head><body contenteditable=\"true\"><p>";
+//        String htmlFooterToRemove = "</p></body></html>";
+//        String htmlHeaderToRemoveAlt = "<html dir=\"ltr\"><head></head><body contenteditable=\"true\">";
+//        String htmlFooterToRemoveAlt = "</body></html>";
         String examHeader2 =
                 "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"\n" +
                         "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">" +
@@ -250,8 +251,10 @@ public class FileExporterDocx4j implements IFileExporter {
                     body.append("<div class=\"avoid-page-break\">");
                     body.append((char) (65 + i));
                     body.append(") ");
-                    String finalAnswer = answer.answer_text.replace(htmlHeaderToRemove, "").replace(htmlFooterToRemove, "");
-                    finalAnswer = finalAnswer.replace(htmlHeaderToRemoveAlt, "").replace(htmlFooterToRemoveAlt, "");
+                    String finalAnswer = Jsoup.parse(answer.answer_text).body().html()
+                            .replace("<p>","").replace("</p>","");
+//                    String finalAnswer = answer.answer_text.replace(htmlHeaderToRemove, "").replace(htmlFooterToRemove, "");
+//                    finalAnswer = finalAnswer.replace(htmlHeaderToRemoveAlt, "").replace(htmlFooterToRemoveAlt, "");
                     body.append(finalAnswer);
                     //body.append("<br />");
                     body.append("</div>");
@@ -267,8 +270,9 @@ public class FileExporterDocx4j implements IFileExporter {
                 body.append((q_counter++));
                 body.append(": </font></b>");
                 body.append("<div class=\"avoid-page-break\">");
-
-                body.append(questionContent.getContent().replace(htmlHeaderToRemove, "").replace(htmlFooterToRemove, ""));
+                body.append(Jsoup.parse(questionContent.getContent()).body().html()
+                        .replace("<p>","").replace("</p>",""));
+//                body.append(questionContent.getContent().replace(htmlHeaderToRemove, "").replace(htmlFooterToRemove, ""));
                 body.append("</div>");
 
                 if (!qm.getQuestion_type().equals(Vars.QuestionType.EXTENDED_MATCH)) {
@@ -278,8 +282,11 @@ public class FileExporterDocx4j implements IFileExporter {
                         body.append("<div class=\"avoid-page-break\">");
                         body.append((char) (65 + i));
                         body.append(") ");
-                        String finalAnswer = answer.answer_text.replace(htmlHeaderToRemove, "").replace(htmlFooterToRemove, "");
-                        finalAnswer = finalAnswer.replace(htmlHeaderToRemoveAlt, "").replace(htmlFooterToRemoveAlt, "");
+                        String finalAnswer = Jsoup.parse(answer.answer_text).body().html()
+                                .replace("<p>","").replace("</p>","");
+                        System.out.println(finalAnswer);
+//                        String finalAnswer = answer.answer_text.replace(htmlHeaderToRemove, "").replace(htmlFooterToRemove, "");
+//                        finalAnswer = finalAnswer.replace(htmlHeaderToRemoveAlt, "").replace(htmlFooterToRemoveAlt, "");
                         body.append(finalAnswer);
                         //body.append("<br />");
                         body.append("</div>");
