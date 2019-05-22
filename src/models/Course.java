@@ -6,6 +6,7 @@ public class Course {
     public String id;
     public String name;
     public String code;
+    public String program;
     public String level;
     public String year;
     private String preferredExamLayout;
@@ -49,6 +50,14 @@ public class Course {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getProgram() {
+        return program;
+    }
+
+    public void setProgram(String program) {
+        this.program = program;
     }
 
     public String getLevel() {

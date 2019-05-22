@@ -20,7 +20,7 @@ import java.util.ResourceBundle;
 
 public class AddCourseController implements Initializable, IWindow {
 
-    public TextField course_name, course_code;
+    public TextField course_name, course_code, course_program;
     public Button add_course, edit_course;
     private String operation_type;
     private Course model;
@@ -47,6 +47,7 @@ public class AddCourseController implements Initializable, IWindow {
             edit_course.setVisible(true);
             edit_course.setManaged(true);
             course_name.setText(model.name);
+            course_program.setText(model.program);
             course_code.setText(model.code);
             course_level.setValue(model.level);
             year.setValue(model.year);
@@ -62,6 +63,7 @@ public class AddCourseController implements Initializable, IWindow {
             isADDorEdeitClicked = true;
             Course course = new Course();
             course.name = course_name.getText();
+            course.program = course_program.getText();
             course.code = course_code.getText();
             course.level = course_level.getValue();
             course.year = year.getValue();
@@ -82,6 +84,7 @@ public class AddCourseController implements Initializable, IWindow {
             isADDorEdeitClicked = true;
             model.code=course_code.getText();
             model.name= course_name.getText();
+            model.program = course_program.getText();
             model.level = course_level.getValue();
             model.year = year.getValue();
             model.setPreferredExamLayout(preferredExamLayout.getValue());
@@ -99,6 +102,7 @@ public class AddCourseController implements Initializable, IWindow {
     private boolean validate() {
         return !course_code.getText().isEmpty()
                 && !course_name.getText().isEmpty()
+                && !course_program.getText().isEmpty()
                 && !preferredExamLayout.getValue().equals("Preferred Exam Layout");
     }
 
@@ -123,9 +127,9 @@ public class AddCourseController implements Initializable, IWindow {
     @Override
     public Object setWindowData(Stage stage, Object initObject) {
         stage.setTitle(this.operation_type + " Course");
-        stage.setMinHeight(400);
+        stage.setMinHeight(450);
         stage.setMinWidth(500);
-        stage.setMaxHeight(400);
+        stage.setMaxHeight(450);
         stage.setMaxWidth(500);
 
         return this;
