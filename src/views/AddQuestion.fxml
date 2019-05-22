@@ -41,6 +41,7 @@
                 <RadioButton text="MCQ" fx:id="radio_mcq"/>
                 <RadioButton text="True/False" fx:id="radio_true_false"/>
                 <RadioButton text="Extended match" fx:id="radio_ext_match"/>
+                <RadioButton text="Essay" fx:id="radio_essay"/>
 
             </HBox>
             <HBox spacing="35" alignment="CENTER_LEFT" style="-fx-font-size:18px;">

@@ -5,6 +5,7 @@ public class Vars {
         public static final String EXTENDED_MATCH = "EMQ";
         public static final String MCQ = "MCQ";
         public static final String TRUE_FALSE = "True/False";
+        public static final String ESSAY = "Essay";
     }
 
     public static class OperationType{

@@ -29,6 +29,7 @@ public class AddQuestionController implements Initializable, IWindow {
     public RadioButton radio_mcq;
     public RadioButton radio_true_false;
     public RadioButton radio_ext_match;
+    public RadioButton radio_essay;
 
     final ToggleGroup type_group = new ToggleGroup();
     final ToggleGroup questionContentToggleGroup = new ToggleGroup();
@@ -40,7 +41,7 @@ public class AddQuestionController implements Initializable, IWindow {
 
     private List<AddQuestionAnswerRowController> answerRowControllers;
     final ContentHepler contentHepler = new ContentHepler();
-    ;
+
     private String operation_type;
     private Question model;
     private Topic topic;
@@ -74,11 +75,14 @@ public class AddQuestionController implements Initializable, IWindow {
         radio_mcq.setToggleGroup(type_group);
         radio_true_false.setToggleGroup(type_group);
         radio_ext_match.setToggleGroup(type_group);
+        radio_essay.setToggleGroup(type_group);
+
 
         //Todo: show warning before change.
         radio_mcq.selectedProperty().addListener(MCQListener);
         radio_true_false.selectedProperty().addListener(TrueFalseListener);
         radio_ext_match.selectedProperty().addListener(extendedMatchListener);
+        radio_essay.selectedProperty().addListener(essayListener);
 
         if (this.operation_type.contains(OperationType.ADD)) {
             edit_question.setVisible(false);
@@ -134,6 +138,8 @@ public class AddQuestionController implements Initializable, IWindow {
             radio_true_false.setSelected(true);
         else if (model.getQuestion_type().equals(QuestionType.EXTENDED_MATCH))
             radio_ext_match.setSelected(true);
+        else if (model.getQuestion_type().equals(QuestionType.ESSAY))
+            radio_essay.setSelected(true);
     }
 
     public void onAddClicked(ActionEvent e) {
@@ -304,8 +310,10 @@ public class AddQuestionController implements Initializable, IWindow {
                     return false;
             }
             if (questionContent.getRightAnswers().size() == 0) {
-                System.out.println("No right Answer");
-                return false;
+                if(! model.getQuestion_type().equals(QuestionType.ESSAY)) {
+                    System.out.println("No right Answer");
+                    return false;
+                }
             }
         }
         return true;
@@ -346,6 +354,23 @@ public class AddQuestionController implements Initializable, IWindow {
         }
     };
 
+    private final ChangeListener<Boolean> essayListener = new ChangeListener<Boolean>() {
+        @Override
+        public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean isNowSelected) {
+            add_answer.setVisible(!isNowSelected);
+            add_answer.setManaged(!isNowSelected);
+
+            if (isNowSelected) {
+                model.setQuestion_type(QuestionType.ESSAY);
+                for (int i = answerRowControllers.size() -1 ; i >= 0; i--) {
+                    removeAnswerRow(answerRowControllers.get(i));
+                }
+            }
+            else {
+
+            }
+        }
+    };
 
     private final ChangeListener<Boolean> TrueFalseListener = new ChangeListener<Boolean>() {
         @Override
@@ -354,9 +379,16 @@ public class AddQuestionController implements Initializable, IWindow {
             add_answer.setManaged(!isNowSelected);
             if (isNowSelected) {
                 model.setQuestion_type(QuestionType.TRUE_FALSE);
-//                questionContentAnswerToggleGroup.getToggles().clear();
-
-
+                int size = answerRowControllers.size();
+                if(size < 2 ){
+                    for(int i = 0; i < (2 - size); i++ ) {
+                        try {
+                            addAnswerRow(null);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
                 for (int i = 0; i < answerRowControllers.size(); i++) {
                     String innerText = "";
                     if (i == 0) {
