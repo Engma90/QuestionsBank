@@ -43,7 +43,7 @@ public class AddQuestionContentRowController implements Initializable {
         select.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                System.out.println(newValue);
+//                System.out.println(newValue);
                 parent.updateContentRowAnswersUI(thisReference, newValue);
             }
         });

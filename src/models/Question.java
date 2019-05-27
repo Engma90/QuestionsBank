@@ -27,6 +27,16 @@ public class Question {
     private List<Answer> answers = new ArrayList<>();
     private List<QuestionContent> contents = new ArrayList<>();
 
+    public List<ILO> getIlos() {
+        return ilos;
+    }
+
+    public void setIlos(List<ILO> ilos) {
+        this.ilos = ilos;
+    }
+
+    private List<ILO> ilos = new ArrayList<>();
+
     public String getId() {
         return id;
     }
@@ -92,7 +102,7 @@ public class Question {
 //        } catch (CloneNotSupportedException e) {
 //            //e.printStackTrace();
 //        }
-        System.out.println("rightAnswerslist.size1: " + getContents().get(0).getRightAnswers().size());
+//        System.out.println("rightAnswerslist.size1: " + getContents().get(0).getRightAnswers().size());
         Question tempModel = new Question();
         tempModel.setId(this.getId());
         tempModel.setQuestion_diff(this.getQuestion_diff());
@@ -129,8 +139,18 @@ public class Question {
             tempModel.getContents().get(getContents().indexOf(questionContent)).setRightAnswers(rightAnswers);
         }
 
+        List<ILO> Ilos = new ArrayList<>();
+        for (ILO ilo : this.getIlos()) {
+            ILO ilo1 = new ILO();
+            ilo1.setId(ilo.getId());
+            ilo1.setCode(ilo.getCode());
+            ilo1.setDescription(ilo.getDescription());
+            Ilos.add(ilo1);
+        }
+        tempModel.setIlos(Ilos);
 
-        System.out.println("rightAnswerslist.size2: " + tempModel.getContents().get(0).getRightAnswers().size());
+
+//        System.out.println("rightAnswerslist.size2: " + tempModel.getContents().get(0).getRightAnswers().size());
         return tempModel;
     }
 }

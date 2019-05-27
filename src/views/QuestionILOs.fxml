@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            prefHeight="600.0" prefWidth="600.0" fx:id="container" stylesheets="@css/SimpleForm.css">
+    <ScrollPane AnchorPane.topAnchor="0" AnchorPane.rightAnchor="0"
+                AnchorPane.bottomAnchor="40" AnchorPane.leftAnchor="0">
+        <padding>
+            <Insets right="10" left="10" top="10" bottom="10"/>
+        </padding>
+    <VBox fx:id="ILOsRows" spacing="20">
+    </VBox>
+    </ScrollPane>
+    <HBox alignment="CENTER" AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.leftAnchor="0" minHeight="40"
+          style="-fx-background-color:#221936;">
+        <Button text="Save" fx:id="save" onAction="#onSaveClicked" styleClass="save-button, main-button"/>
+    </HBox>
+
+</AnchorPane>

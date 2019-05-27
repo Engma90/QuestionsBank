@@ -4,14 +4,7 @@
 <?import javafx.scene.layout.*?>
 
 <?import javafx.collections.FXCollections?>
-<?import models.Question?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
-<?import javafx.scene.web.HTMLEditor?>
-<!--<AnchorPane xmlns="http://javafx.com/javafx"-->
-<!--xmlns:fx="http://javafx.com/fxml"-->
-<!--fx:controller="controllers.QuestionsTableController"-->
-<!--&gt;-->
-
 <VBox spacing="10" xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="controllers.QuestionsTableController">
@@ -36,10 +29,6 @@
                         <PropertyValueFactory property="question_diff"/>
                     </cellValueFactory>
                 </TableColumn>
-                <!--<TableColumn text="Weight" fx:id="col_question_weight">-->
-                <!--<cellValueFactory><PropertyValueFactory property="question_weight" />-->
-                <!--</cellValueFactory>-->
-                <!--</TableColumn>-->
             </columns>
             <items>
                 <FXCollections fx:factory="observableArrayList">
@@ -48,12 +37,11 @@
             </items>
         </TableView>
         <HBox spacing="20" alignment="CENTER">
-            <Button fx:id="btn_add" text="Add" onAction="#onAddClicked" styleClass="add-button"></Button>
-            <Button fx:id="btn_edit" text="Edit" onAction="#onEditClicked" styleClass="edit-button"></Button>
-            <Button fx:id="btn_delete" onAction="#onDeleteQuestionClicked" text="Delete" styleClass="delete-button"></Button>
+            <Button fx:id="btn_add" text="Add" onAction="#onAddClicked" styleClass="add-button"/>
+            <Button fx:id="btn_edit" text="Edit" onAction="#onEditClicked" styleClass="edit-button"/>
+            <Button fx:id="btn_delete" onAction="#onDeleteQuestionClicked" text="Delete" styleClass="delete-button"/>
 
 
         </HBox>
     </VBox>
 </VBox>
-        <!--</AnchorPane>-->

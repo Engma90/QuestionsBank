@@ -66,6 +66,15 @@ public class QuestionsTableHandler {
             }
 
         }
+
+
+        for (ILO ilo : model.getIlos()) {
+            sql = "insert into QuestionILO (CourseILOs_idCourseILOs, Question_idQuestion) values (?,?);";
+            int last_inserted_ilo_id = DBHandler.getInstance().execute_PreparedStatement(sql, new String[]
+                    {ilo.getId(), last_inserted_question_id + ""});
+            ilo.setId(last_inserted_ilo_id+"");
+        }
+
         return last_inserted_question_id;
     }
 
@@ -113,6 +122,17 @@ public class QuestionsTableHandler {
             }
 
         }
+
+        sql = MessageFormat.format("DELETE FROM QuestionILO WHERE Question_idQuestion = {0};", model.getId());
+        boolean success2 = DBHandler.getInstance().execute_sql(sql);
+        for (ILO ilo : model.getIlos()) {
+            sql = "insert into QuestionILO (CourseILOs_idCourseILOs, Question_idQuestion) values (?,?);";
+            int last_inserted_ilo_id = DBHandler.getInstance().execute_PreparedStatement(sql, new String[]
+                    {ilo.getId(), model.getId() + ""});
+            ilo.setId(last_inserted_ilo_id+"");
+        }
+
+
         return true;
 
     }
@@ -182,6 +202,7 @@ public class QuestionsTableHandler {
             for (Question question:temp){
                 question.setAnswers(parseQuestionAnswerList(question));
                 question.setContents(parseQuestionContentList(question));
+                question.setIlos(parseQuestionIlosList(question));
                 for (QuestionContent questionContent:question.getContents()){
                     questionContent.setRightAnswers(parseQuestionContentRightAnswerList(question, questionContent));
                 }
@@ -226,6 +247,30 @@ public class QuestionsTableHandler {
         return temp;
     }
 
+    private List<ILO> parseQuestionIlosList(Question question) throws SQLException {
+        List<ILO> temp = FXCollections.observableArrayList();
+        String sql = MessageFormat.format(
+                "SELECT * FROM  QuestionILO WHERE Question_idQuestion = {0};"
+                , question.getId());
+        ResultSet rs2 = DBHandler.getInstance().execute_query(sql);
+        while (rs2.next()) {
+            sql = MessageFormat.format(
+                    "SELECT * FROM  CourseILO WHERE idCourseILOs = {0};"
+                    , rs2.getInt("CourseILOs_idCourseILOs") + "");
+            ResultSet rs3 = DBHandler.getInstance().execute_query(sql);
+            while (rs3.next()) {
+                ILO ilo = new ILO();
+                ilo.setId(rs3.getInt("idCourseILOs") + "");
+                ilo.setCode(rs3.getString("Code") + "");
+                ilo.setDescription(rs3.getString("Description") + "");
+                temp.add(ilo);
+            }
+        }
+//        System.out.println("ILO Size = " + temp.size());
+        return temp;
+    }
+
+
     private List<QuestionContent> parseQuestionContentList(Question question) throws SQLException {
         List<QuestionContent> temp = FXCollections.observableArrayList();
         String sql = MessageFormat.format(
@@ -257,80 +302,6 @@ public class QuestionsTableHandler {
         }
         return temp;
     }
-
-//
-//    private boolean parseResultSet(ResultSet rs){
-//        try {
-//            while (rs.next()) {
-//
-//                Question model = new Question();
-//                model.setId(rs.getInt("idQuestion") + "");
-//                model.setQuestion_diff(rs.getString("QuestionDifficulty"));
-//                model.setQuestion_type(rs.getString("QuestionType"));
-//                model.setQuestion_weight(rs.getString("QuestionWeight"));
-//                model.setExpected_time(rs.getString("QuestionExpectedTime"));
-//
-//                String sql = MessageFormat.format(
-//                        "SELECT * FROM QuestionAnswer where Question_idQuestion = {0};"
-//                        , model.getId());
-//                ResultSet rs3 = DBHandler.getInstance().execute_query(sql);
-//                List<Answer> temp_array;
-//                temp_array = new ArrayList<>();
-//                while (rs3.next()) {
-//                    Answer answer = new Answer();
-//                    answer.id = rs3.getInt("idAnswer") + "";
-//                    answer.answer_text = rs3.getString("AnswerContent");
-//                    temp_array.add(answer);
-//                }
-//                model.setAnswers(temp_array);
-//
-//                sql = MessageFormat.format(
-//                        "SELECT * FROM  QuestionContent WHERE Question_idQuestion = {0};"
-//                        , model.getId());
-//                ResultSet rs2 = DBHandler.getInstance().execute_query(sql);
-//                List<QuestionContent> temp_content_array;
-//                temp_content_array = new ArrayList<>();
-//                while (rs2.next()) {
-//                    QuestionContent questionContent = new QuestionContent();
-//                    questionContent.setId(rs2.getInt("idQuestionContent") + "");
-//                    questionContent.setContent(rs2.getString("QuestionContent") + "");
-//                    temp_content_array.add(questionContent);
-//
-//
-//                    sql = MessageFormat.format(
-//                            "SELECT * FROM  ContentRightAnswer WHERE QuestionContent_idQuestionContent = {0};"
-//                            , questionContent.getId());
-//                    ResultSet rs4 = DBHandler.getInstance().execute_query(sql);
-//                    List<Answer> temp_Right_answers_array;
-//                    temp_Right_answers_array = new ArrayList<>();
-//                    while (rs4.next()) {
-//                        //Answer answer = new Answer();
-//                        //answer.id = rs4.getInt("QuestionAnswer_idAnswer") + "";
-//                        for (Answer answer1:model.getAnswers()){
-//                            if(answer1.id.equals(rs4.getInt("QuestionAnswer_idAnswer") + "")){
-//                                temp_Right_answers_array.add(answer1);
-//                            }
-//                        }
-//                        //temp_Right_answers_array.add(answer);
-//                    }
-//                    questionContent.setRightAnswers(temp_Right_answers_array);
-//                }
-//                model.setContents(temp_content_array);
-//                model.setRaw_text(((Jsoup.parse(model.getContents().get(0).getContent()).text())));
-//                questionList.add(model);
-//            }
-//
-//
-//
-//            return true;
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            return false;
-//        }
-//    }
-
-
 
     public ObservableList<Question> getCachedList() {
         return this.questionList;

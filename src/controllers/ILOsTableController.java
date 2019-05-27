@@ -8,44 +8,39 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import models.*;
-import controllers.Vars.*;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class QuestionsTableController implements Initializable {
-    public TableColumn col_question_text, col_question_type, col_question_diff, col_question_weight;
-    public TableView<Question> questions_table;
+public class ILOsTableController implements Initializable, IWindow {
+    public TableColumn col_code, col_description;
+    public TableView<ILO> ilo_table;
     public Button btn_add, btn_edit, btn_delete;
 
-    public Topic topic;
+    public Course course;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        topic = new Topic();
-        col_question_text.prefWidthProperty().bind(questions_table.widthProperty().divide(10).multiply(8)); // w * 1/4
-        col_question_type.prefWidthProperty().bind(questions_table.widthProperty().divide(10));
-        col_question_diff.prefWidthProperty().bind(questions_table.widthProperty().divide(10));
+        //course = new Course();
+        col_code.prefWidthProperty().bind(ilo_table.widthProperty().divide(10).multiply(2));
+        col_description.prefWidthProperty().bind(ilo_table.widthProperty().divide(10).multiply(8));
 
 
-        questions_table.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Question>() {
+        ilo_table.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<ILO>() {
             @Override
-            public void changed(ObservableValue<? extends Question> observable, Question oldValue, Question newValue) {
-                int current_selected_index = questions_table.getSelectionModel().getSelectedIndex();
+            public void changed(ObservableValue<? extends ILO> observable, ILO oldValue, ILO newValue) {
+                int current_selected_index = ilo_table.getSelectionModel().getSelectedIndex();
                 if (current_selected_index >= 0) {
-
                 } else {
                 }
             }
         });
 
-        questions_table.setRowFactory(tv -> {
-            TableRow<Question> row = new TableRow<>();
+        ilo_table.setRowFactory(tv -> {
+            TableRow<ILO> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && (!row.isEmpty())) {
                     onEditClicked(event);
@@ -53,14 +48,18 @@ public class QuestionsTableController implements Initializable {
             });
             return row;
         });
+        refresh(true, Vars.OperationType.INIT);
+    }
 
+    public ILOsTableController(Course course){
+        this.course = course;
     }
 
     public void onAddClicked(ActionEvent e) {
-        AddQuestionController addQuestionController = new AddQuestionController(OperationType.ADD, topic, new Question());
+        AddILOController addILOController = new AddILOController(Vars.OperationType.ADD, course, new ILO());
         EventHandler<WindowEvent> onClose = new EventHandler<WindowEvent>() {
             public void handle(WindowEvent we) {
-                IWindow window = (IWindow) addQuestionController;
+                IWindow window = (IWindow) addILOController;
                 if (window.isSaveOnCloseRequired() && !window.isSaveAndExitClicked()) {
                     if (Dialog.CreateDialog("Confirmation", "Do you want to close without Saving?",
                             "Yes", "No")) {
@@ -69,18 +68,19 @@ public class QuestionsTableController implements Initializable {
                     }
                 }
                 if (window.isSaveAndExitClicked()) {
-                    refresh(true, OperationType.ADD);
+                    refresh(true, Vars.OperationType.ADD);
                 }
             }
         };
-        new WindowLoader().load(e, "/views/AddQuestion.fxml", addQuestionController, onClose, true, false, null);
+        new WindowLoader().load(e, "/views/AddILO.fxml", addILOController, onClose, true, false, null);
     }
 
     public void onEditClicked(Event e) {
-        AddQuestionController addQuestionController = new AddQuestionController(OperationType.EDIT, topic, questions_table.getSelectionModel().getSelectedItem().clone());
+
+        AddILOController addILOController = new AddILOController(Vars.OperationType.EDIT, course, ilo_table.getSelectionModel().getSelectedItem());
         EventHandler<WindowEvent> onClose = new EventHandler<WindowEvent>() {
             public void handle(WindowEvent we) {
-                IWindow window = (IWindow) addQuestionController;
+                IWindow window = (IWindow) addILOController;
                 if (window.isSaveOnCloseRequired() && !window.isSaveAndExitClicked()) {
                     if (Dialog.CreateDialog("Confirmation", "Do you want to close without Saving?",
                             "Yes", "No")) {
@@ -88,19 +88,19 @@ public class QuestionsTableController implements Initializable {
                         we.consume();
                     }
                 }
-                if (window.isSaveAndExitClicked()) { //window.isSaveAndExitClicked() //till fix bug (#4)
-                    refresh(true, OperationType.EDIT);
+                if (window.isSaveAndExitClicked()) {
+                    refresh(true, Vars.OperationType.EDIT);
                 }
             }
         };
-        new WindowLoader().load(e, "/views/AddQuestion.fxml", addQuestionController, onClose, true, false, null);
+        new WindowLoader().load(e, "/views/AddILO.fxml", addILOController, onClose, true, false, null);
     }
 
-    public void onDeleteQuestionClicked(ActionEvent e) {
+    public void onDeleteClicked(ActionEvent e) {
         if (Dialog.CreateDialog("Confirmation", "Are you sure?", "Yes", "No")) {
-            Question model = questions_table.getSelectionModel().getSelectedItem();
-            QuestionsTableHandler.getInstance().Delete(model);
-            refresh(true, OperationType.DELETE);
+            ILO model = ilo_table.getSelectionModel().getSelectedItem();
+            ILOsTableHandler.getInstance().Delete(model.getId());
+            refresh(true, Vars.OperationType.DELETE);
         }
     }
 
@@ -108,15 +108,15 @@ public class QuestionsTableController implements Initializable {
 
     void refresh(boolean parent_has_items, String Operation) {
         if (!parent_has_items) {
-            questions_table.getItems().clear();
+            ilo_table.getItems().clear();
             btn_edit.setDisable(true);
             btn_delete.setDisable(true);
             btn_add.setDisable(true);
         } else {
             btn_add.setDisable(false);
-            int selection = questions_table.getSelectionModel().getSelectedIndex();
-            ObservableList<Question> tempList = QuestionsTableHandler.getInstance().getQuestionList(topic);
-            questions_table.setItems(tempList);
+            int selection = ilo_table.getSelectionModel().getSelectedIndex();
+            ObservableList<ILO> tempList = ILOsTableHandler.getInstance().getList(course);
+            ilo_table.setItems(tempList);
 
             if (tempList.size() == 0) {
                 btn_edit.setDisable(true);
@@ -125,17 +125,17 @@ public class QuestionsTableController implements Initializable {
                 btn_edit.setDisable(false);
                 btn_delete.setDisable(false);
                 switch (Operation) {
-                    case OperationType.INIT:
+                    case Vars.OperationType.INIT:
                         selection = 0;
                         break;
 
-                    case OperationType.ADD:
+                    case Vars.OperationType.ADD:
                         selection = tempList.size() - 1;
                         break;
-                    case OperationType.EDIT:
+                    case Vars.OperationType.EDIT:
                         //No change
                         break;
-                    case OperationType.DELETE:
+                    case Vars.OperationType.DELETE:
                         selection--;
                         break;
                 }
@@ -146,10 +146,31 @@ public class QuestionsTableController implements Initializable {
 
                 int finalSelection = selection;
                 Platform.runLater(() -> {
-                    questions_table.getSelectionModel().select(finalSelection);
+                    ilo_table.getSelectionModel().select(finalSelection);
                 });
             }
         }
     }
 
+    @Override
+    public boolean isSaveOnCloseRequired() {
+        return false;
+    }
+
+    @Override
+    public boolean isSaveAndExitClicked() {
+        return true;
+    }
+
+    @Override
+    public Object setWindowData(Stage stage, Object initObject) {
+
+        stage.setTitle("ILOs Editor");
+        stage.setMinHeight(450);
+        stage.setMinWidth(500);
+//        stage.setMaxHeight(450);
+//        stage.setMaxWidth(500);
+
+        return this;
+    }
 }

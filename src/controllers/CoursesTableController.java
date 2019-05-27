@@ -19,7 +19,7 @@ public class CoursesTableController implements Initializable {
     private ChaptersTableController chaptersTableController;
     public TableColumn col_course_name,col_course_code,col_course_level;
     public ComboBox<String> course_level_filter;
-    public Button btn_edit,btn_delete;
+    public Button btn_edit,btn_delete, btn_ilos;
     public Button export_csv, generate_exam;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -89,6 +89,16 @@ public class CoursesTableController implements Initializable {
             CoursesListHandler.getInstance().Delete(courses_table_view.getSelectionModel().getSelectedItem().id);
             refresh("Delete");
         }
+    }
+
+    public void onILOClicked(ActionEvent e){
+        ILOsTableController addILOController =new ILOsTableController(courses_table_view.getSelectionModel().getSelectedItem());
+//        EventHandler<WindowEvent> onClose = we -> {
+//            if(((IWindow)addILOController).isSaveAndExitClicked()){
+//                refresh("Edit");
+//            }
+//        };
+        new WindowLoader().load(e,"/views/ILOsTable.fxml",addILOController,null,true,false,null);
     }
 
 

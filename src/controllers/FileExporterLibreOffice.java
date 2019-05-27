@@ -58,7 +58,7 @@ public class FileExporterLibreOffice implements IFileExporter {
                 Scanner s = new Scanner(process.getInputStream());
                 while (s.hasNextLine()) {
                     String outputLine = s.nextLine();
-                    System.out.println(outputLine);
+//                    System.out.println(outputLine);
                     if (outputLine.startsWith("LibreOffice")) {
                         selectedBinaryPath = possibleBinaryPath.get(0);
                         return true;

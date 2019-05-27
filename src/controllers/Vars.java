@@ -4,7 +4,7 @@ public class Vars {
     public static class QuestionType{
         public static final String EXTENDED_MATCH = "EMQ";
         public static final String MCQ = "MCQ";
-        public static final String TRUE_FALSE = "True/False";
+        public static final String TRUE_FALSE = "TFQ";
         public static final String ESSAY = "Essay";
     }
 

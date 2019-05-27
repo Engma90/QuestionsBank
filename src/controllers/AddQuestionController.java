@@ -190,6 +190,10 @@ public class AddQuestionController implements Initializable, IWindow {
         }
     }
 
+    public void onILOClicked(ActionEvent e) {
+        new WindowLoader().load(e, "/views/QuestionILOs.fxml", new QuestionILOsController(topic, model), null, true, false, null);
+    }
+
     private void updateModelData() {
         model.setQuestion_diff(txt_q_diff.getText());
         model.setQuestion_weight(txt_q_weight.getText());
@@ -310,7 +314,7 @@ public class AddQuestionController implements Initializable, IWindow {
                     return false;
             }
             if (questionContent.getRightAnswers().size() == 0) {
-                if(! model.getQuestion_type().equals(QuestionType.ESSAY)) {
+                if (!model.getQuestion_type().equals(QuestionType.ESSAY)) {
                     System.out.println("No right Answer");
                     return false;
                 }
@@ -362,11 +366,10 @@ public class AddQuestionController implements Initializable, IWindow {
 
             if (isNowSelected) {
                 model.setQuestion_type(QuestionType.ESSAY);
-                for (int i = answerRowControllers.size() -1 ; i >= 0; i--) {
+                for (int i = answerRowControllers.size() - 1; i >= 0; i--) {
                     removeAnswerRow(answerRowControllers.get(i));
                 }
-            }
-            else {
+            } else {
 
             }
         }
@@ -380,8 +383,8 @@ public class AddQuestionController implements Initializable, IWindow {
             if (isNowSelected) {
                 model.setQuestion_type(QuestionType.TRUE_FALSE);
                 int size = answerRowControllers.size();
-                if(size < 2 ){
-                    for(int i = 0; i < (2 - size); i++ ) {
+                if (size < 2) {
+                    for (int i = 0; i < (2 - size); i++) {
                         try {
                             addAnswerRow(null);
                         } catch (IOException e) {
@@ -403,7 +406,7 @@ public class AddQuestionController implements Initializable, IWindow {
                     Element body = html.body();
                     body.children().clear();
                     body.html(innerText);
-                    System.out.println(html.html());
+//                    System.out.println(html.html());
                     answerRowControllers.get(i).txt_answer.setHtmlText(html.html());
                     answerRowControllers.get(i).txt_answer.setDisable(true);
                     answerRowControllers.get(i).remove_answer.setVisible(false);
@@ -412,7 +415,7 @@ public class AddQuestionController implements Initializable, IWindow {
 
                 }
 
-                for (int i = answerRowControllers.size() -1 ; i > 1; i--) {
+                for (int i = answerRowControllers.size() - 1; i > 1; i--) {
                     removeAnswerRow(answerRowControllers.get(i));
                 }
 

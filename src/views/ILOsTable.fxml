@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.geometry.Insets?>
+<VBox spacing="10" xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      VBox.vgrow="ALWAYS" fx:id="container" stylesheets="@css/SimpleForm.css">
+
+
+    <TableView fx:id="ilo_table" VBox.vgrow="ALWAYS" opacity="0.95">
+
+        <columns>
+            <TableColumn text="Code" fx:id="col_code">
+                <cellValueFactory>
+                    <PropertyValueFactory property="Code"/>
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn text="Description" fx:id="col_description">
+                <cellValueFactory>
+                    <PropertyValueFactory property="Description"/>
+                </cellValueFactory>
+            </TableColumn>
+        </columns>
+        <items>
+            <FXCollections fx:factory="observableArrayList">
+
+            </FXCollections>
+        </items>
+    </TableView>
+    <HBox spacing="20" alignment="CENTER">
+        <padding>
+            <Insets bottom="10"/>
+        </padding>
+        <Button fx:id="btn_add" text="Add" onAction="#onAddClicked" styleClass="add-button"/>
+        <Button fx:id="btn_edit" text="Edit" onAction="#onEditClicked" styleClass="edit-button"/>
+        <Button fx:id="btn_delete" onAction="#onDeleteClicked" text="Delete" styleClass="delete-button"/>
+    </HBox>
+
+</VBox>

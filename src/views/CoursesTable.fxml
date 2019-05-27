@@ -62,6 +62,7 @@
             <Button fx:id="btn_add" onAction="#onAddCourseClicked" text="Add" styleClass="add-button"/>
             <Button fx:id="btn_edit" text="Edit" onAction="#onEditCourseClicked" styleClass="edit-button"/>
             <Button fx:id="btn_delete" text="Delete" onAction="#onDeleteCourseClicked" styleClass="delete-button"/>
+            <Button fx:id="btn_ilos" text="ILOs" onAction="#onILOClicked" styleClass="ilo-button"/>
 
 
             <!--<Button fx:id="previous_exam" onAction="#onGenerateExamClicked" text="Previous exams" />-->

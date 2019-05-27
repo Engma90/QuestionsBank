@@ -9,7 +9,7 @@ public class DBHandler {
 
     private static final String SERVER = "localhost";
     private static final String PORT = "3306";
-    private static final String DB_NAME = "questionbank_v1_alpha";
+    private static final String DB_NAME = "model_db";//"questionbank_v1_alpha";
     private static final String USER = "root";
     private static final String PASS = "Root@1234";
 
@@ -109,7 +109,7 @@ public class DBHandler {
         }
         try {
             Statement stmt = connection.createStatement();
-            System.out.println(sql);
+//            System.out.println(sql);
             stmt.execute(sql);
 
             return true;
@@ -126,7 +126,7 @@ public class DBHandler {
         }
         try {
             Statement stmt = connection.createStatement();
-            System.out.println(sql);
+//            System.out.println(sql);
             return stmt.executeQuery(sql);
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
@@ -144,11 +144,11 @@ public class DBHandler {
             for (int i = 0; i < params.length; i++)
                 pstmt.setString(i + 1, params[i]);
 
-            System.out.println(sql);
-            for (String s:params){
-                System.out.print(s + ",  ");
-            }
-            System.out.println();
+//            System.out.println(sql);
+//            for (String s:params){
+//                System.out.print(s + ",  ");
+//            }
+//            System.out.println();
 
             pstmt.executeUpdate();
             ResultSet rs = pstmt.getGeneratedKeys();

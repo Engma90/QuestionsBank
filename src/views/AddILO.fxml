@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-
             prefHeight="250.0" prefWidth="300.0" fx:id="container" stylesheets="@css/SimpleForm.css">
     <VBox spacing="20" AnchorPane.topAnchor="20" AnchorPane.rightAnchor="20"
           AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="20" alignment="CENTER">
-            <TextField fx:id="topic_name" promptText="Topic name" />
+        <TextField fx:id="ilo_code" promptText="Code" />
+        <TextField fx:id="ilo_description" promptText="Description" />
     </VBox>
     <HBox alignment="CENTER" AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.leftAnchor="0" minHeight="40"
           style="-fx-background-color:#221936;">
-        <Button text="Add" fx:id="add_topic" onAction="#onAddTopicClicked" styleClass="add-button, main-button"/>
-        <Button text="Edit" fx:id="edit_topic" onAction="#onEditTopicClicked" styleClass="edit-button, main-button"/>
+        <Button text="Add" fx:id="add_ilo" onAction="#onAddILOClicked" styleClass="add-button, main-button"/>
+        <Button text="Edit" fx:id="edit_ilo" onAction="#onEditILOClicked" styleClass="edit-button, main-button"/>
     </HBox>
 
 </AnchorPane>

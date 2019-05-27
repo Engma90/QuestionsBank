@@ -44,24 +44,26 @@
                 <RadioButton text="Essay" fx:id="radio_essay"/>
 
             </HBox>
-            <HBox spacing="35" alignment="CENTER_LEFT" style="-fx-font-size:18px;">
-                <HBox alignment="CENTER_LEFT" spacing="5">
+            <HBox spacing="35" alignment="CENTER_LEFT" >
+                <HBox alignment="CENTER_LEFT" spacing="5" style="-fx-font-size:18px;">
                     <Label text="Difficulty"/>
                     <NumberField fx:id="txt_q_diff" prefWidth="50"/>
                     <Label text="/ 100"/>
                 </HBox>
 
-                <HBox alignment="CENTER_LEFT" spacing="5">
+                <HBox alignment="CENTER_LEFT" spacing="5" style="-fx-font-size:18px;">
                     <Label text="Weight" />
                     <NumberField fx:id="txt_q_weight" prefWidth="50"/>
                     <Label text="/ 10"/>
                 </HBox>
 
-                <HBox alignment="CENTER_LEFT" spacing="5">
+                <HBox alignment="CENTER_LEFT" spacing="5" style="-fx-font-size:18px;">
                     <Label text="Expected Time"/>
                     <NumberField fx:id="txt_q_exp_time" prefWidth="50"/>
                     <Label text="Min"/>
                 </HBox>
+
+                <Button fx:id="ilos" text="ILOs" onAction="#onILOClicked"/>
             </HBox>
         </VBox>
 

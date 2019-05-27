@@ -38,6 +38,7 @@ import java.util.logging.Logger;
 //Todo: cleanup after finish
 public class FileExporterDocx4j implements IFileExporter {
     private static final String TEMP_DIR_NAME = "export_temp";
+    private static final String EXAM_LOGO = "exam_logo.png";
     private static final String APP_LOCATION = new File(FileExporterDocx4j.class
             .getProtectionDomain()
             .getCodeSource()
@@ -57,7 +58,7 @@ public class FileExporterDocx4j implements IFileExporter {
     static String readFile(String path)
             throws IOException {
         byte[] encoded = Files.readAllBytes(Paths.get(path));
-        System.out.println(new String(encoded, StandardCharsets.UTF_8));
+//        System.out.println(new String(encoded, StandardCharsets.UTF_8));
         return new String(encoded, StandardCharsets.UTF_8);
     }
 
@@ -119,19 +120,19 @@ public class FileExporterDocx4j implements IFileExporter {
             if (done) {
                 try {
                     File copied = new File(
-                            tmp.getAbsolutePath() + File.separator + "logo.png");
+                            tmp.getAbsolutePath() + File.separator + EXAM_LOGO);
                     String logoLocation = new File(FileExporterDocx4j.class
                             .getProtectionDomain()
                             .getCodeSource()
                             .getLocation()
-                            .getPath()).getParent() + File.separator + "logo.png";
+                            .getPath()).getParent() + File.separator + EXAM_LOGO;
                     File original = new File(logoLocation);
                     if (!original.exists()) {
                         logoLocation = new File(FileExporterDocx4j.class
                                 .getProtectionDomain()
                                 .getCodeSource()
                                 .getLocation()
-                                .getPath()) + File.separator + "logo.png";
+                                .getPath()) + File.separator + EXAM_LOGO;
                         original = new File(logoLocation);
                     }
                     FileUtils.copyFile(original, copied);
@@ -220,7 +221,7 @@ public class FileExporterDocx4j implements IFileExporter {
                 "        </td>\n" +
                 "\n" +
                 "        <td align=\"center\" width=\"30%\">\n" +
-                "            <img alt=\"\" height=\"64px\" width=\"64px\" src=\"" + getImageBase64(TEMP_DIR_LOCATION + "/logo.png") + "\" />\n" +
+                "            <img alt=\"\" height=\"64px\" width=\"64px\" src=\"" + getImageBase64(TEMP_DIR_LOCATION + "/exam_logo.png") + "\" />\n" +
                 "            <br />\n" +
                 "            <img alt=\"\" height=\"64px\" width=\"64px\" src=\"" + getImageBase64(TEMP_DIR_LOCATION + "/QR_" + examModel.getExamModelNumber() + ".png") + "\"/>\n" +
                 "        </td>\n" +
@@ -284,7 +285,7 @@ public class FileExporterDocx4j implements IFileExporter {
                         body.append(") ");
                         String finalAnswer = Jsoup.parse(answer.answer_text).body().html()
                                 .replace("<p>","").replace("</p>","");
-                        System.out.println(finalAnswer);
+//                        System.out.println(finalAnswer);
 //                        String finalAnswer = answer.answer_text.replace(htmlHeaderToRemove, "").replace(htmlFooterToRemove, "");
 //                        finalAnswer = finalAnswer.replace(htmlHeaderToRemoveAlt, "").replace(htmlFooterToRemoveAlt, "");
                         body.append(finalAnswer);

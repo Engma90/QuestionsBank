@@ -80,6 +80,22 @@ public class TopicListHandler {
 
     }
 
+    public String getParentCourseId(Topic topic){
+        String sql = MessageFormat.format("select Course_idCourse from \n" +
+                "(Topic a JOIN Chapter c ON a.Chapter_idChapter = c.idChapter)\n" +
+                "where idTopic = {0};", topic.id);
+        ResultSet rs = DBHandler.getInstance().execute_query(sql);
+        try {
+            if (rs.next()) {
+                QuestionContent questionContent = new QuestionContent();
+                return rs.getInt("Course_idCourse") + "";
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public ObservableList<Topic> getCachedList(){
         return this.topicList;
     }
